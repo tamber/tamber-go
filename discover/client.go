@@ -23,7 +23,7 @@ func (e Engine) Recommended(params *tamber.DiscoverParams) (*tamber.Discoveries,
 	discoveries := &tamber.Discoveries{}
 	var err error
 
-	if len(params.tamber.Actor) > 0 {
+	if len(params.Actor) > 0 {
 		err = e.S.Call("POST", "", e.Key, object, "getRecs", body, discoveries)
 	} else {
 		err = errors.New("Invalid discover params: actor needs to be set")
@@ -61,7 +61,7 @@ func (e Engine) RecommendedSimilar(params *tamber.DiscoverParams) (*tamber.Disco
 	discoveries := &tamber.Discoveries{}
 	var err error
 
-	if len(params.tamber.Actor) > 0 && len(params.Item) > 0 {
+	if len(params.Actor) > 0 && len(params.Item) > 0 {
 		err = e.S.Call("POST", "", e.Key, object, "getRecommendedSimilar", body, discoveries)
 	} else {
 		err = errors.New("Invalid discover params: actor and item need to be set")
