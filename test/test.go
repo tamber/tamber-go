@@ -22,13 +22,15 @@ func Test() {
 	})
 	if err != nil {
 		fmt.Println(err)
+	} else {
+		fmt.Printf("%v", a)
 	}
 }
 
 func EngieVarTest() {
 	e := &engine.API{}
 	e.Init("UJVoOJrSoU4FfXpmM9R6", nil)
-	a, err := e.actor.Create(&tamber.ActorParams{
+	a, err := e.Actors.Create(&tamber.ActorParams{
 		Id: "68753A444D6F",
 		Behaviors: &[]tamber.ActorBehavior{
 			tamber.ActorBehavior{
@@ -41,5 +43,7 @@ func EngieVarTest() {
 	})
 	if err != nil {
 		fmt.Println(err)
+	} else {
+		fmt.Printf("%v", a)
 	}
 }
