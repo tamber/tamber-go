@@ -6,6 +6,11 @@ import (
 	"net/url"
 )
 
+type Engine struct {
+	S   *tamber.SessionConfig
+	Key string
+}
+
 var object = "property"
 
 func Create(params *tamber.PropertyParams) (*tamber.Property, error) {

@@ -6,6 +6,11 @@ import (
 	"net/url"
 )
 
+type Engine struct {
+	S   *tamber.SessionConfig
+	Key string
+}
+
 var object = "item"
 
 func Create(params *tamber.ItemParams) (*tamber.Item, error) {
@@ -23,7 +28,6 @@ func (e Engine) Create(params *tamber.ItemParams) (*tamber.Item, error) {
 	} else {
 		err = errors.New("Invalid item params: id needs to be set")
 	}
-
 	return item, err
 }
 
