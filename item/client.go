@@ -46,7 +46,7 @@ func (e Engine) AddProperties(params *tamber.ItemParams) (*tamber.Item, error) {
 	} else {
 		err = errors.New("Invalid item params: id and properties need to be set")
 	}
-	return item, nil
+	return item, err
 }
 
 func RemoveProperties(params *tamber.ItemParams) (*tamber.Item, error) {
@@ -64,7 +64,7 @@ func (e Engine) RemoveProperties(params *tamber.ItemParams) (*tamber.Item, error
 	} else {
 		err = errors.New("Invalid item params: id and properties need to be set")
 	}
-	return item, nil
+	return item, err
 }
 
 func AddTags(params *tamber.ItemParams) (*tamber.Item, error) {
@@ -81,7 +81,7 @@ func (e Engine) AddTags(params *tamber.ItemParams) (*tamber.Item, error) {
 	} else {
 		err = errors.New("Invalid item params: id and tags need to be set")
 	}
-	return item, nil
+	return item, err
 }
 
 func RemoveTags(params *tamber.ItemParams) (*tamber.Item, error) {
@@ -99,7 +99,7 @@ func (e Engine) RemoveTags(params *tamber.ItemParams) (*tamber.Item, error) {
 	} else {
 		err = errors.New("Invalid item params: id and tags need to be set")
 	}
-	return item, nil
+	return item, err
 }
 
 func Retrieve(params *tamber.ItemParams) (*tamber.Item, error) {
