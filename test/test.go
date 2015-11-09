@@ -2,15 +2,15 @@ package test
 
 import (
 	"fmt"
-	"github.com/tamber/tamber-go"
+	tamber "github.com/tamber/tamber-go"
 	"github.com/tamber/tamber-go/actor"
 )
 
 func Test() {
 	tamber.DefaultKey = "UJVoOJrSoU4FfXpmM9R6"
-	a, err := actor.Create(&ActorParams{
+	a, err := actor.Create(&tamber.ActorParams{
 		Id: "68753A444D6F",
-		Behaviors: &[]ActorBehavior{
+		Behaviors: &[]tamber.ActorBehavior{
 			ActorBehavior{
 				Behavior: "like",
 				Item:     "9F45B8EK",
@@ -26,7 +26,7 @@ func Test() {
 
 func EngieVarTest() {
 	myengie := tamber.NewEngie("UJVoOJrSoU4FfXpmM9R6")
-	a, err := myengie.actor.Create(&ActorParams{
+	a, err := myengie.actor.Create(&tamber.ActorParams{
 		Id: "68753A444D6F",
 		Behaviors: &[]ActorBehavior{
 			ActorBehavior{
