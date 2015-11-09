@@ -1,9 +1,9 @@
 package discover
 
 import (
+	. "github.com/tamber/tamber-go"
 	"net/url"
 	"strconv"
-	. "tamber-go-master"
 )
 
 var object = "discover"

@@ -2,7 +2,8 @@ package test
 
 import (
 	"fmt"
-	"tamber-go-master/actor"
+	"github.com/tamber/tamber-go"
+	"github.com/tamber/tamber-go/actor"
 )
 
 func Test() {

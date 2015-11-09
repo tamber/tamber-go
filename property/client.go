@@ -1,9 +1,9 @@
 package property
 
 import (
+	. "github.com/tamber/tamber-go"
 	"net/url"
 	"strconv"
-	. "tamber-go-master"
 )
 
 var object = "property"
