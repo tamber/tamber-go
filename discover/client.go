@@ -99,5 +99,5 @@ func (e Engine) Hot(params *tamber.DiscoverParams) (*tamber.Discoveries, error) 
 }
 
 func getEngine() Engine {
-	return Engine{GetDefaultSessionConfig(), DefaultKey}
+	return Engine{tamber.GetDefaultSessionConfig(), tamber.DefaultKey}
 }

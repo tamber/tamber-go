@@ -71,5 +71,5 @@ func (e Engine) Remove(params *tamber.BehaviorParams) (*tamber.Behavior, error) 
 }
 
 func getEngine() Engine {
-	return Engine{GetDefaultSessionConfig(), DefaultKey}
+	return Engine{tamber.GetDefaultSessionConfig(), tamber.DefaultKey}
 }

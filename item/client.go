@@ -32,15 +32,16 @@ func (e Engine) Create(params *tamber.ItemParams) (*tamber.Item, error) {
 }
 
 func AddProperties(params *tamber.ItemParams) (*tamber.Item, error) {
-	return getEngine().AddBehaviors(params)
+	return getEngine().AddProperties(params)
 }
+
 func (e Engine) AddProperties(params *tamber.ItemParams) (*tamber.Item, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	item := &tamber.Item{}
 	var err error
 
-	if len(params.Id) > 0 && lan(params.Properties) > 0 {
+	if len(params.Id) > 0 && len(params.Properties) > 0 {
 		err = e.S.Call("POST", "", e.Key, object, "addProperties", body, item)
 	} else {
 		err = errors.New("Invalid item params: id and properties need to be set")
@@ -49,7 +50,7 @@ func (e Engine) AddProperties(params *tamber.ItemParams) (*tamber.Item, error) {
 }
 
 func RemoveProperties(params *tamber.ItemParams) (*tamber.Item, error) {
-	return getEngine().RemoveBehaviors(params)
+	return getEngine().RemoveProperties(params)
 }
 
 func (e Engine) RemoveProperties(params *tamber.ItemParams) (*tamber.Item, error) {
@@ -58,7 +59,7 @@ func (e Engine) RemoveProperties(params *tamber.ItemParams) (*tamber.Item, error
 	item := &tamber.Item{}
 	var err error
 
-	if len(params.Id) > 0 && lan(params.Properties) > 0 {
+	if len(params.Id) > 0 && len(params.Properties) > 0 {
 		err = e.S.Call("POST", "", e.Key, object, "removeProperties", body, item)
 	} else {
 		err = errors.New("Invalid item params: id and properties need to be set")
@@ -67,7 +68,7 @@ func (e Engine) RemoveProperties(params *tamber.ItemParams) (*tamber.Item, error
 }
 
 func AddTags(params *tamber.ItemParams) (*tamber.Item, error) {
-	return getEngine().AddBehaviors(params)
+	return getEngine().AddTags(params)
 }
 func (e Engine) AddTags(params *tamber.ItemParams) (*tamber.Item, error) {
 	body := &url.Values{}
@@ -75,7 +76,7 @@ func (e Engine) AddTags(params *tamber.ItemParams) (*tamber.Item, error) {
 	item := &tamber.Item{}
 	var err error
 
-	if len(params.Id) > 0 && lan(params.Tags) > 0 {
+	if len(params.Id) > 0 && len(params.Tags) > 0 {
 		err = e.S.Call("POST", "", e.Key, object, "addTags", body, item)
 	} else {
 		err = errors.New("Invalid item params: id and tags need to be set")
@@ -84,7 +85,7 @@ func (e Engine) AddTags(params *tamber.ItemParams) (*tamber.Item, error) {
 }
 
 func RemoveTags(params *tamber.ItemParams) (*tamber.Item, error) {
-	return getEngine().RemoveBehaviors(params)
+	return getEngine().RemoveTags(params)
 }
 
 func (e Engine) RemoveTags(params *tamber.ItemParams) (*tamber.Item, error) {
@@ -93,7 +94,7 @@ func (e Engine) RemoveTags(params *tamber.ItemParams) (*tamber.Item, error) {
 	item := &tamber.Item{}
 	var err error
 
-	if len(params.Id) > 0 && lan(params.Tags) > 0 {
+	if len(params.Id) > 0 && len(params.Tags) > 0 {
 		err = e.S.Call("POST", "", e.Key, object, "removeTags", body, item)
 	} else {
 		err = errors.New("Invalid item params: id and tags need to be set")
@@ -139,5 +140,5 @@ func (e Engine) Remove(params *tamber.ItemParams) (*tamber.Item, error) {
 }
 
 func getEngine() Engine {
-	return Engine{GetDefaultSessionConfig(), DefaultKey}
+	return Engine{tamber.GetDefaultSessionConfig(), tamber.DefaultKey}
 }
