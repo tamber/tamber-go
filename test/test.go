@@ -4,6 +4,7 @@ import (
 	"fmt"
 	tamber "github.com/tamber/tamber-go"
 	"github.com/tamber/tamber-go/actor"
+	"github.com/tamber/tamber-go/engine"
 )
 
 func Test() {
@@ -11,7 +12,7 @@ func Test() {
 	a, err := actor.Create(&tamber.ActorParams{
 		Id: "68753A444D6F",
 		Behaviors: &[]tamber.ActorBehavior{
-			ActorBehavior{
+			tamber.ActorBehavior{
 				Behavior: "like",
 				Item:     "9F45B8EK",
 				Value:    0.23,
@@ -25,11 +26,12 @@ func Test() {
 }
 
 func EngieVarTest() {
-	myengie := tamber.NewEngie("UJVoOJrSoU4FfXpmM9R6")
-	a, err := myengie.actor.Create(&tamber.ActorParams{
+	e := &engine.API{}
+	e.Init("UJVoOJrSoU4FfXpmM9R6", nil)
+	a, err := e.actor.Create(&tamber.ActorParams{
 		Id: "68753A444D6F",
-		Behaviors: &[]ActorBehavior{
-			ActorBehavior{
+		Behaviors: &[]tamber.ActorBehavior{
+			tamber.ActorBehavior{
 				Behavior: "like",
 				Item:     "9F45B8EK",
 				Value:    0.23,

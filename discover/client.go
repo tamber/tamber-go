@@ -1,24 +1,29 @@
 package discover
 
 import (
-	. "github.com/tamber/tamber-go"
+	"errors"
+	tamber "github.com/tamber/tamber-go"
 	"net/url"
-	"strconv"
 )
+
+type Engine struct {
+	S   *tamber.SessionConfig
+	Key string
+}
 
 var object = "discover"
 
-func Recommended(params *DiscoverParams) (*Discoveries, error) {
+func Recommended(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
 	return getEngine().Recommended(params)
 }
 
-func (e Engine) Recommended(params *DiscoverParams) (*Discoveries, error) {
+func (e Engine) Recommended(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	discoveries := &Discoveries{}
+	discoveries := &tamber.Discoveries{}
 	var err error
 
-	if len(params.Actor) > 0 {
+	if len(params.tamber.Actor) > 0 {
 		err = e.S.Call("POST", "", e.Key, object, "getRecs", body, discoveries)
 	} else {
 		err = errors.New("Invalid discover params: actor needs to be set")
@@ -27,14 +32,14 @@ func (e Engine) Recommended(params *DiscoverParams) (*Discoveries, error) {
 	return discoveries, err
 }
 
-func Similar(params *DiscoverParams) (*Discoveries, error) {
+func Similar(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
 	return getEngine().Similar(params)
 }
 
-func (e Engine) Similar(params *DiscoverParams) (*Discoveries, error) {
+func (e Engine) Similar(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	discoveries := &Discoveries{}
+	discoveries := &tamber.Discoveries{}
 	var err error
 
 	if len(params.Item) > 0 {
@@ -46,17 +51,17 @@ func (e Engine) Similar(params *DiscoverParams) (*Discoveries, error) {
 	return discoveries, err
 }
 
-func RecommendedSimilar(params *DiscoverParams) (*Discoveries, error) {
+func RecommendedSimilar(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
 	return getEngine().RecommendedSimilar(params)
 }
 
-func (e Engine) RecommendedSimilar(params *DiscoverParams) (*Discoveries, error) {
+func (e Engine) RecommendedSimilar(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	discoveries := &Discoveries{}
+	discoveries := &tamber.Discoveries{}
 	var err error
 
-	if len(params.Actor) > 0 && len(params.Item) > 0 {
+	if len(params.tamber.Actor) > 0 && len(params.Item) > 0 {
 		err = e.S.Call("POST", "", e.Key, object, "getRecommendedSimilar", body, discoveries)
 	} else {
 		err = errors.New("Invalid discover params: actor and item need to be set")
@@ -65,29 +70,29 @@ func (e Engine) RecommendedSimilar(params *DiscoverParams) (*Discoveries, error)
 	return discoveries, err
 }
 
-func Popular(params *DiscoverParams) (*Discoveries, error) {
+func Popular(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
 	return getEngine().Popular(params)
 }
 
-func (e Engine) Popular(params *DiscoverParams) (*Discoveries, error) {
+func (e Engine) Popular(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 
-	discoveries := &Discoveries{}
+	discoveries := &tamber.Discoveries{}
 	err := e.S.Call("POST", "", e.Key, object, "getPopular", body, discoveries)
 
 	return discoveries, err
 }
 
-func Hot(params *DiscoverParams) (*Discoveries, error) {
+func Hot(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
 	return getEngine().Hot(params)
 }
 
-func (e Engine) Hot(params *DiscoverParams) (*Discoveries, error) {
+func (e Engine) Hot(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 
-	discoveries := &Discoveries{}
+	discoveries := &tamber.Discoveries{}
 	err := e.S.Call("POST", "", e.Key, object, "getHot", body, discoveries)
 
 	return discoveries, err

@@ -1,21 +1,21 @@
 package property
 
 import (
-	. "github.com/tamber/tamber-go"
+	"errors"
+	tamber "github.com/tamber/tamber-go"
 	"net/url"
-	"strconv"
 )
 
 var object = "property"
 
-func Create(params *PropertyParams) (*Property, error) {
+func Create(params *tamber.PropertyParams) (*tamber.Property, error) {
 	return getEngine().Create(params)
 }
 
-func (e Engine) Create(params *PropertyParams) (*Property, error) {
+func (e Engine) Create(params *tamber.PropertyParams) (*tamber.Property, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	property := &Property{}
+	property := &tamber.Property{}
 	var err error
 
 	if len(params.Name) > 0 && len(params.Type) > 0 {
@@ -27,14 +27,14 @@ func (e Engine) Create(params *PropertyParams) (*Property, error) {
 	return property, err
 }
 
-func Retrieve(params *PropertyParams) (*Property, error) {
+func Retrieve(params *tamber.PropertyParams) (*tamber.Property, error) {
 	return getEngine().Create(params)
 }
 
-func (e Engine) Retrieve(params *PropertyParams) (*Property, error) {
+func (e Engine) Retrieve(params *tamber.PropertyParams) (*tamber.Property, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	property := &Property{}
+	property := &tamber.Property{}
 	var err error
 
 	if len(params.Name) > 0 {
@@ -46,14 +46,14 @@ func (e Engine) Retrieve(params *PropertyParams) (*Property, error) {
 	return property, err
 }
 
-func Remove(params *PropertyParams) (*Property, error) {
+func Remove(params *tamber.PropertyParams) (*tamber.Property, error) {
 	return getEngine().Create(params)
 }
 
-func (e Engine) Remove(params *PropertyParams) (*Property, error) {
+func (e Engine) Remove(params *tamber.PropertyParams) (*tamber.Property, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	property := &Property{}
+	property := &tamber.Property{}
 	var err error
 
 	if len(params.Name) > 0 {

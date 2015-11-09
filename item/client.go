@@ -1,21 +1,21 @@
 package item
 
 import (
-	. "github.com/tamber/tamber-go"
+	"errors"
+	tamber "github.com/tamber/tamber-go"
 	"net/url"
-	"strconv"
 )
 
 var object = "item"
 
-func Create(params *ItemParams) (*Item, error) {
+func Create(params *tamber.ItemParams) (*tamber.Item, error) {
 	return getEngine().Create(params)
 }
 
-func (e Engine) Create(params *ItemParams) (*Item, error) {
+func (e Engine) Create(params *tamber.ItemParams) (*tamber.Item, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	item := &Item{}
+	item := &tamber.Item{}
 	var err error
 
 	if len(params.Id) > 0 {
@@ -27,13 +27,13 @@ func (e Engine) Create(params *ItemParams) (*Item, error) {
 	return item, err
 }
 
-func AddProperties(params *ItemParams) (*Item, error) {
+func AddProperties(params *tamber.ItemParams) (*tamber.Item, error) {
 	return getEngine().AddBehaviors(params)
 }
-func (e Engine) AddProperties(params *ItemParams) (*Item, error) {
+func (e Engine) AddProperties(params *tamber.ItemParams) (*tamber.Item, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	item := &Item{}
+	item := &tamber.Item{}
 	var err error
 
 	if len(params.Id) > 0 && lan(params.Properties) > 0 {
@@ -44,14 +44,14 @@ func (e Engine) AddProperties(params *ItemParams) (*Item, error) {
 	return item, nil
 }
 
-func RemoveProperties(params *ItemParams) (*Item, error) {
+func RemoveProperties(params *tamber.ItemParams) (*tamber.Item, error) {
 	return getEngine().RemoveBehaviors(params)
 }
 
-func (e Engine) RemoveProperties(params *ItemParams) (*Item, error) {
+func (e Engine) RemoveProperties(params *tamber.ItemParams) (*tamber.Item, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	item := &Item{}
+	item := &tamber.Item{}
 	var err error
 
 	if len(params.Id) > 0 && lan(params.Properties) > 0 {
@@ -62,13 +62,13 @@ func (e Engine) RemoveProperties(params *ItemParams) (*Item, error) {
 	return item, nil
 }
 
-func AddTags(params *ItemParams) (*Item, error) {
+func AddTags(params *tamber.ItemParams) (*tamber.Item, error) {
 	return getEngine().AddBehaviors(params)
 }
-func (e Engine) AddTags(params *ItemParams) (*Item, error) {
+func (e Engine) AddTags(params *tamber.ItemParams) (*tamber.Item, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	item := &Item{}
+	item := &tamber.Item{}
 	var err error
 
 	if len(params.Id) > 0 && lan(params.Tags) > 0 {
@@ -79,14 +79,14 @@ func (e Engine) AddTags(params *ItemParams) (*Item, error) {
 	return item, nil
 }
 
-func RemoveTags(params *ItemParams) (*Item, error) {
+func RemoveTags(params *tamber.ItemParams) (*tamber.Item, error) {
 	return getEngine().RemoveBehaviors(params)
 }
 
-func (e Engine) RemoveTags(params *ItemParams) (*Item, error) {
+func (e Engine) RemoveTags(params *tamber.ItemParams) (*tamber.Item, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	item := &Item{}
+	item := &tamber.Item{}
 	var err error
 
 	if len(params.Id) > 0 && lan(params.Tags) > 0 {
@@ -97,14 +97,14 @@ func (e Engine) RemoveTags(params *ItemParams) (*Item, error) {
 	return item, nil
 }
 
-func Retrieve(params *ItemParams) (*Item, error) {
+func Retrieve(params *tamber.ItemParams) (*tamber.Item, error) {
 	return getEngine().Retrieve(params)
 }
 
-func (e Engine) Retrieve(params *ItemParams) (*Item, error) {
+func (e Engine) Retrieve(params *tamber.ItemParams) (*tamber.Item, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	item := &Item{}
+	item := &tamber.Item{}
 	var err error
 
 	if len(params.Id) > 0 {
@@ -116,14 +116,14 @@ func (e Engine) Retrieve(params *ItemParams) (*Item, error) {
 	return item, err
 }
 
-func Remove(params *ItemParams) (*Item, error) {
+func Remove(params *tamber.ItemParams) (*tamber.Item, error) {
 	return getEngine().Remove(params)
 }
 
-func (e Engine) Remove(params *ItemParams) (*Item, error) {
+func (e Engine) Remove(params *tamber.ItemParams) (*tamber.Item, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	item := &Item{}
+	item := &tamber.Item{}
 	var err error
 
 	if len(params.Id) > 0 {

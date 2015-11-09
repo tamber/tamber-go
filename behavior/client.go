@@ -1,21 +1,26 @@
 package behavior
 
 import (
-	. "github.com/tamber/tamber-go"
+	"errors"
+	tamber "github.com/tamber/tamber-go"
 	"net/url"
-	"strconv"
 )
+
+type Engine struct {
+	S   *tamber.SessionConfig
+	Key string
+}
 
 var object = "behavior"
 
-func Create(params *BehaviorParams) (*Behavior, error) {
+func Create(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
 	return getEngine().Create(params)
 }
 
-func (e Engine) Create(params *BehaviorParams) (*Behavior, error) {
+func (e Engine) Create(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	behavior := &Behavior{}
+	behavior := &tamber.Behavior{}
 	var err error
 
 	if len(params.Name) > 0 && len(params.Type) > 0 && params.Desirability > 0 {
@@ -27,14 +32,14 @@ func (e Engine) Create(params *BehaviorParams) (*Behavior, error) {
 	return behavior, err
 }
 
-func Retrieve(params *BehaviorParams) (*Behavior, error) {
+func Retrieve(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
 	return getEngine().Create(params)
 }
 
-func (e Engine) Retrieve(params *BehaviorParams) (*Behavior, error) {
+func (e Engine) Retrieve(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	behavior := &Behavior{}
+	behavior := &tamber.Behavior{}
 	var err error
 
 	if len(params.Name) > 0 {
@@ -46,14 +51,14 @@ func (e Engine) Retrieve(params *BehaviorParams) (*Behavior, error) {
 	return behavior, err
 }
 
-func Remove(params *BehaviorParams) (*Behavior, error) {
+func Remove(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
 	return getEngine().Create(params)
 }
 
-func (e Engine) Remove(params *BehaviorParams) (*Behavior, error) {
+func (e Engine) Remove(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	behavior := &Behavior{}
+	behavior := &tamber.Behavior{}
 	var err error
 
 	if len(params.Name) > 0 {
