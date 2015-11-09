@@ -1,10 +1,14 @@
 package actor
 
 import (
-	. "github.com/tamber/tamber-go"
+	"errors"
+	tamber "github.com/tamber/tamber-go"
 	"net/url"
-	"strconv"
 )
+
+type Engine struct {
+	*tamber.Engine
+}
 
 var object = "actor"
 
@@ -18,7 +22,7 @@ func (e Engine) Create(params *ActorParams) (*Actor, error) {
 	actor := &Actor{}
 	var err error
 
-	if len(params.Id) > 0 && lan(params.Behaviors) > 0 {
+	if len(params.Id) > 0 && len(params.Behaviors) > 0 {
 		err = e.S.Call("POST", "", e.Key, object, "create", body, actor)
 	} else {
 		err = errors.New("Invalid actor params: either id or behaviors need to be set")
