@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	apiUrl = "https://api.tamber.com/v1"
+	apiUrl = "https://dev.tamber.com/v1"
 )
 
 // apiversion is the currently supported API version
