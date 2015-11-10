@@ -20,6 +20,13 @@ type Behavior struct {
 	Created      int64                  `json:"created"`
 }
 
+type BehaviorResponse struct {
+	Succ   bool     `json:"success"`
+	Result Behavior `json:"result"`
+	Error  string   `json:"error"`
+	Time   float64  `json:"time"`
+}
+
 func (params *BehaviorParams) AppendToBody(v *url.Values) {
 	v.Add("name", params.Name)
 	if len(params.Type) > 0 {
@@ -30,18 +37,4 @@ func (params *BehaviorParams) AppendToBody(v *url.Values) {
 	}
 	bParams, _ := json.Marshal(params.Params)
 	v.Add("params", string(bParams))
-}
-
-// Custom unmarshaling is needed because the result
-// may be a name or the full struct.
-func (b *Behavior) UnmarshalJSON(data []byte) error {
-	var behavior Behavior
-	err := json.Unmarshal(data, &behavior)
-	if err == nil {
-		*b = behavior
-	} else {
-		// the name is surrounded by "\" characters, so strip them
-		b.Name = string(data[1 : len(data)-1])
-	}
-	return nil
 }

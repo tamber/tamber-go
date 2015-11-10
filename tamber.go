@@ -3,7 +3,7 @@ package tamber
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
+	// "errors"
 	"io"
 	"io/ioutil"
 	"log"
@@ -65,6 +65,8 @@ func GetDefaultSessionConfig() *SessionConfig {
 func (s *SessionConfig) Call(method, path, key, object, command string, form *url.Values, resp interface{}) error {
 	var body io.Reader
 	if form != nil && len(*form) > 0 {
+		form.Add("object", object)
+		form.Add("command", command)
 		data := form.Encode()
 		if strings.ToUpper(method) == "GET" {
 			path += "?" + data
@@ -88,9 +90,9 @@ func (s *SessionConfig) Call(method, path, key, object, command string, form *ur
 // NewRequest is used by Call to generate an http.Request. It handles encoding
 // parameters and attaching the appropriate headers.
 func (s *SessionConfig) NewRequest(method, path, key, contentType string, body io.Reader) (*http.Request, error) {
-	if !strings.HasPrefix(path, "/") {
-		path = "/" + path
-	}
+	// if !strings.HasPrefix(path, "/") {
+	// 	path = "/" + path
+	// }
 
 	path = s.URL + path
 
@@ -128,24 +130,11 @@ func (s *SessionConfig) Do(req *http.Request, v interface{}) error {
 		s.errFunc("Cannot parse Tamber response", err)
 		return err
 	}
-
-	result := map[string]string{}
-	err = json.Unmarshal(resBody, result)
-	// if val, ok := result["time"]; ok {
-	// 	//todo: add a way to get/log the time
-	// }
-	if val, ok := result["result"]; ok {
-		if v != nil {
-			return json.Unmarshal([]byte(val), v)
-		}
-	} else {
-		if val, ok := result["error"]; ok {
-			return errors.New(val)
-		}
-		err = errors.New(string(resBody))
-		s.errFunc("Cannot parse Tamber response", err)
-		return err
+	err = json.Unmarshal(resBody, v)
+	if err != nil {
+		s.errFunc("Json error", err)
 	}
+	s.errFunc("", v)
 
 	return nil
 }
@@ -157,5 +146,5 @@ func (s *SessionConfig) SetErrFunc(errFunc SessionErrFunction) {
 }
 
 func defaultErrFunc(exp string, err interface{}) {
-	log.Printf("%s: %v\n", exp, err)
+	log.Printf("\n%s: %v\n", exp, err)
 }

@@ -1,12 +1,12 @@
 package tamber
 
 import (
-	"encoding/json"
 	"net/url"
 )
 
 type PropertyParams struct {
-	Name, Type string
+	Name string `json:"name"`
+	Type string `json:"type"`
 }
 
 type Property struct {
@@ -15,24 +15,16 @@ type Property struct {
 	Created int64  `json:"created"`
 }
 
+type PropertyResponse struct {
+	Succ   bool     `json:"success"`
+	Result Property `json:"result"`
+	Error  string   `json:"error"`
+	Time   float64  `json:"time"`
+}
+
 func (params *PropertyParams) AppendToBody(v *url.Values) {
 	v.Add("name", params.Name)
 	if len(params.Type) > 0 {
 		v.Add("type", params.Type)
 	}
-}
-
-// Custom unmarshaling is needed because the result
-// may be a name or the full struct.
-func (p *Property) UnmarshalJSON(data []byte) error {
-	var property Property
-	err := json.Unmarshal(data, &property)
-	if err == nil {
-		*p = property
-	} else {
-		// the name is surrounded by "\" characters, so strip them
-		p.Name = string(data[1 : len(data)-1])
-	}
-
-	return nil
 }

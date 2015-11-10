@@ -20,7 +20,7 @@ func Create(params *tamber.PropertyParams) (*tamber.Property, error) {
 func (e Engine) Create(params *tamber.PropertyParams) (*tamber.Property, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	property := &tamber.Property{}
+	property := &tamber.PropertyResponse{}
 	var err error
 
 	if len(params.Name) > 0 && len(params.Type) > 0 {
@@ -29,7 +29,10 @@ func (e Engine) Create(params *tamber.PropertyParams) (*tamber.Property, error) 
 		err = errors.New("Invalid property params: name and type need to be set")
 	}
 
-	return property, err
+	if !property.Succ {
+		err = errors.New(property.Error)
+	}
+	return &property.Result, err
 }
 
 func Retrieve(params *tamber.PropertyParams) (*tamber.Property, error) {
@@ -39,7 +42,7 @@ func Retrieve(params *tamber.PropertyParams) (*tamber.Property, error) {
 func (e Engine) Retrieve(params *tamber.PropertyParams) (*tamber.Property, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	property := &tamber.Property{}
+	property := &tamber.PropertyResponse{}
 	var err error
 
 	if len(params.Name) > 0 {
@@ -48,7 +51,10 @@ func (e Engine) Retrieve(params *tamber.PropertyParams) (*tamber.Property, error
 		err = errors.New("Invalid property params: name needs to be set")
 	}
 
-	return property, err
+	if !property.Succ {
+		err = errors.New(property.Error)
+	}
+	return &property.Result, err
 }
 
 func Remove(params *tamber.PropertyParams) (*tamber.Property, error) {
@@ -58,7 +64,7 @@ func Remove(params *tamber.PropertyParams) (*tamber.Property, error) {
 func (e Engine) Remove(params *tamber.PropertyParams) (*tamber.Property, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	property := &tamber.Property{}
+	property := &tamber.PropertyResponse{}
 	var err error
 
 	if len(params.Name) > 0 {
@@ -67,7 +73,10 @@ func (e Engine) Remove(params *tamber.PropertyParams) (*tamber.Property, error) 
 		err = errors.New("Invalid property params: name needs to be set")
 	}
 
-	return property, err
+	if !property.Succ {
+		err = errors.New(property.Error)
+	}
+	return &property.Result, err
 }
 
 func getEngine() Engine {

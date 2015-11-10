@@ -20,7 +20,7 @@ func Recommended(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
 func (e Engine) Recommended(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	discoveries := &tamber.Discoveries{}
+	discoveries := &tamber.DiscoverResponse{}
 	var err error
 
 	if len(params.Actor) > 0 {
@@ -29,7 +29,10 @@ func (e Engine) Recommended(params *tamber.DiscoverParams) (*tamber.Discoveries,
 		err = errors.New("Invalid discover params: actor needs to be set")
 	}
 
-	return discoveries, err
+	if !discoveries.Succ {
+		err = errors.New(discoveries.Error)
+	}
+	return &discoveries.Result, err
 }
 
 func Similar(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
@@ -39,7 +42,7 @@ func Similar(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
 func (e Engine) Similar(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	discoveries := &tamber.Discoveries{}
+	discoveries := &tamber.DiscoverResponse{}
 	var err error
 
 	if len(params.Item) > 0 {
@@ -48,7 +51,10 @@ func (e Engine) Similar(params *tamber.DiscoverParams) (*tamber.Discoveries, err
 		err = errors.New("Invalid discover params: item needs to be set")
 	}
 
-	return discoveries, err
+	if !discoveries.Succ {
+		err = errors.New(discoveries.Error)
+	}
+	return &discoveries.Result, err
 }
 
 func RecommendedSimilar(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
@@ -58,7 +64,7 @@ func RecommendedSimilar(params *tamber.DiscoverParams) (*tamber.Discoveries, err
 func (e Engine) RecommendedSimilar(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	discoveries := &tamber.Discoveries{}
+	discoveries := &tamber.DiscoverResponse{}
 	var err error
 
 	if len(params.Actor) > 0 && len(params.Item) > 0 {
@@ -67,7 +73,10 @@ func (e Engine) RecommendedSimilar(params *tamber.DiscoverParams) (*tamber.Disco
 		err = errors.New("Invalid discover params: actor and item need to be set")
 	}
 
-	return discoveries, err
+	if !discoveries.Succ {
+		err = errors.New(discoveries.Error)
+	}
+	return &discoveries.Result, err
 }
 
 func Popular(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
@@ -78,10 +87,13 @@ func (e Engine) Popular(params *tamber.DiscoverParams) (*tamber.Discoveries, err
 	body := &url.Values{}
 	params.AppendToBody(body)
 
-	discoveries := &tamber.Discoveries{}
+	discoveries := &tamber.DiscoverResponse{}
 	err := e.S.Call("POST", "", e.Key, object, "getPopular", body, discoveries)
 
-	return discoveries, err
+	if !discoveries.Succ {
+		err = errors.New(discoveries.Error)
+	}
+	return &discoveries.Result, err
 }
 
 func Hot(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
@@ -92,10 +104,13 @@ func (e Engine) Hot(params *tamber.DiscoverParams) (*tamber.Discoveries, error) 
 	body := &url.Values{}
 	params.AppendToBody(body)
 
-	discoveries := &tamber.Discoveries{}
+	discoveries := &tamber.DiscoverResponse{}
 	err := e.S.Call("POST", "", e.Key, object, "getHot", body, discoveries)
 
-	return discoveries, err
+	if !discoveries.Succ {
+		err = errors.New(discoveries.Error)
+	}
+	return &discoveries.Result, err
 }
 
 func getEngine() Engine {

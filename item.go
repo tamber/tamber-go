@@ -8,17 +8,24 @@ import (
 
 type ItemParams struct {
 	Id         string
-	Properties map[string]interface{}
-	Tags       []string
+	Properties *map[string]interface{}
+	Tags       *[]string
 	Created    int64
 	// GetSimilar DiscoverParams //Coming soon, not yet supported
 }
 
 type Item struct {
-	Id         string
-	Properties map[string]interface{}
-	Tags       []string
-	Created    int64
+	Id         string                 `json:"id"`
+	Properties map[string]interface{} `json:"properties"`
+	Tags       []string               `json:"tags"`
+	Created    int64                  `json:"created"`
+}
+
+type ItemResponse struct {
+	Succ   bool    `json:"success"`
+	Result Item    `json:"result"`
+	Error  string  `json:"error"`
+	Time   float64 `json:"time"`
 }
 
 func (params *ItemParams) AppendToBody(v *url.Values) {
@@ -34,19 +41,4 @@ func (params *ItemParams) AppendToBody(v *url.Values) {
 	if params.Created > 0 {
 		v.Add("created", strconv.FormatInt(params.Created, 10))
 	}
-}
-
-// Custom unmarshaling is needed because the result
-// may be an id or the full struct.
-func (i *Item) UnmarshalJSON(data []byte) error {
-	var item Item
-	err := json.Unmarshal(data, &item)
-	if err == nil {
-		*i = item
-	} else {
-		// the id is surrounded by "\" characters, so strip them
-		i.Id = string(data[1 : len(data)-1])
-	}
-
-	return nil
 }

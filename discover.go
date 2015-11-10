@@ -7,9 +7,11 @@ import (
 )
 
 type DiscoverParams struct {
-	Actor, Item  string //When setting ActorParams.GetRecs, Actor is not needed and wll be ignored if set.
-	Number, Page int
-	Filter       map[string]string
+	Actor  string             `json:"actor"` //When setting ActorParams.GetRecs, Actor is not needed and wll be ignored if set.
+	Item   string             `json:"item"`
+	Number int                `json:"number"`
+	Page   int                `json:"page"`
+	Filter *map[string]string `json:"filter"`
 }
 
 type Discovery struct {
@@ -20,13 +22,14 @@ type Discovery struct {
 	Created    int64   `json:"created"`
 }
 
-type Discoveries []Discovery
+type DiscoverResponse struct {
+	Succ   bool        `json:"success"`
+	Result Discoveries `json:"result"`
+	Error  string      `json:"error"`
+	Time   float64     `json:"time"`
+}
 
-// type DiscoverReturn struct {
-// 	Succ   bool
-// 	Result []Discovery
-// 	Time   float64
-// }
+type Discoveries []Discovery
 
 func (params *DiscoverParams) AppendToBody(v *url.Values) {
 	if len(params.Actor) > 0 {
@@ -43,19 +46,4 @@ func (params *DiscoverParams) AppendToBody(v *url.Values) {
 	}
 	filter, _ := json.Marshal(params.Filter)
 	v.Add("tags", string(filter))
-}
-
-// Custom unmarshaling is needed because the result
-// may be an id or the full struct.
-func (d *Discovery) UnmarshalJSON(data []byte) error {
-	var discovery Discovery
-	err := json.Unmarshal(data, &discovery)
-	if err == nil {
-		*d = discovery
-	} else {
-		// the id is surrounded by "\" characters, so strip them
-		d.Id = string(data[1 : len(data)-1])
-	}
-
-	return nil
 }

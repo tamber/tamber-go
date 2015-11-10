@@ -20,7 +20,7 @@ func Create(params *tamber.ActorParams) (*tamber.Actor, error) {
 func (e Engine) Create(params *tamber.ActorParams) (*tamber.Actor, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	actor := &tamber.Actor{}
+	actor := &tamber.ActorResponse{}
 	var err error
 
 	if len(params.Id) > 0 {
@@ -29,7 +29,10 @@ func (e Engine) Create(params *tamber.ActorParams) (*tamber.Actor, error) {
 		err = errors.New("Invalid actor params: id needs to be set")
 	}
 
-	return actor, err
+	if !actor.Succ {
+		err = errors.New(actor.Error)
+	}
+	return &actor.Result, err
 }
 
 func AddBehaviors(params *tamber.ActorParams) (*tamber.Actor, error) {
@@ -38,7 +41,7 @@ func AddBehaviors(params *tamber.ActorParams) (*tamber.Actor, error) {
 func (e Engine) AddBehaviors(params *tamber.ActorParams) (*tamber.Actor, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	actor := &tamber.Actor{}
+	actor := &tamber.ActorResponse{}
 	var err error
 
 	if len(params.Id) > 0 && len(*params.Behaviors) > 0 {
@@ -46,7 +49,10 @@ func (e Engine) AddBehaviors(params *tamber.ActorParams) (*tamber.Actor, error) 
 	} else {
 		err = errors.New("Invalid actor params: either id or behaviors need to be set")
 	}
-	return actor, err
+	if !actor.Succ {
+		err = errors.New(actor.Error)
+	}
+	return &actor.Result, err
 }
 
 func RemoveBehaviors(params *tamber.ActorParams) (*tamber.Actor, error) {
@@ -56,7 +62,7 @@ func RemoveBehaviors(params *tamber.ActorParams) (*tamber.Actor, error) {
 func (e Engine) RemoveBehaviors(params *tamber.ActorParams) (*tamber.Actor, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	actor := &tamber.Actor{}
+	actor := &tamber.ActorResponse{}
 	var err error
 
 	if len(params.Id) > 0 && len(*params.Behaviors) > 0 {
@@ -64,7 +70,10 @@ func (e Engine) RemoveBehaviors(params *tamber.ActorParams) (*tamber.Actor, erro
 	} else {
 		err = errors.New("Invalid actor params: either id or behaviors need to be set")
 	}
-	return actor, err
+	if !actor.Succ {
+		err = errors.New(actor.Error)
+	}
+	return &actor.Result, err
 }
 
 func Retrieve(params *tamber.ActorParams) (*tamber.Actor, error) {
@@ -74,7 +83,7 @@ func Retrieve(params *tamber.ActorParams) (*tamber.Actor, error) {
 func (e Engine) Retrieve(params *tamber.ActorParams) (*tamber.Actor, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	actor := &tamber.Actor{}
+	actor := &tamber.ActorResponse{}
 	var err error
 
 	if len(params.Id) > 0 {
@@ -83,7 +92,10 @@ func (e Engine) Retrieve(params *tamber.ActorParams) (*tamber.Actor, error) {
 		err = errors.New("Invalid actor params: id needs to be set")
 	}
 
-	return actor, err
+	if !actor.Succ {
+		err = errors.New(actor.Error)
+	}
+	return &actor.Result, err
 }
 
 func Remove(params *tamber.ActorParams) (*tamber.Actor, error) {
@@ -93,7 +105,7 @@ func Remove(params *tamber.ActorParams) (*tamber.Actor, error) {
 func (e Engine) Remove(params *tamber.ActorParams) (*tamber.Actor, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	actor := &tamber.Actor{}
+	actor := &tamber.ActorResponse{}
 	var err error
 
 	if len(params.Id) > 0 {
@@ -102,7 +114,10 @@ func (e Engine) Remove(params *tamber.ActorParams) (*tamber.Actor, error) {
 		err = errors.New("Invalid actor params: id needs to be set")
 	}
 
-	return actor, err
+	if !actor.Succ {
+		err = errors.New(actor.Error)
+	}
+	return &actor.Result, err
 }
 
 func getEngine() Engine {

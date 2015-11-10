@@ -20,7 +20,7 @@ func Create(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
 func (e Engine) Create(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	behavior := &tamber.Behavior{}
+	behavior := &tamber.BehaviorResponse{}
 	var err error
 
 	if len(params.Name) > 0 && len(params.Type) > 0 && params.Desirability > 0 {
@@ -29,7 +29,10 @@ func (e Engine) Create(params *tamber.BehaviorParams) (*tamber.Behavior, error) 
 		err = errors.New("Invalid behavior params: name, type, and desirability need to be set")
 	}
 
-	return behavior, err
+	if !behavior.Succ {
+		err = errors.New(behavior.Error)
+	}
+	return &behavior.Result, err
 }
 
 func Retrieve(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
@@ -39,7 +42,7 @@ func Retrieve(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
 func (e Engine) Retrieve(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	behavior := &tamber.Behavior{}
+	behavior := &tamber.BehaviorResponse{}
 	var err error
 
 	if len(params.Name) > 0 {
@@ -48,7 +51,10 @@ func (e Engine) Retrieve(params *tamber.BehaviorParams) (*tamber.Behavior, error
 		err = errors.New("Invalid behavior params: name needs to be set")
 	}
 
-	return behavior, err
+	if !behavior.Succ {
+		err = errors.New(behavior.Error)
+	}
+	return &behavior.Result, err
 }
 
 func Remove(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
@@ -58,7 +64,7 @@ func Remove(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
 func (e Engine) Remove(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	behavior := &tamber.Behavior{}
+	behavior := &tamber.BehaviorResponse{}
 	var err error
 
 	if len(params.Name) > 0 {
@@ -67,7 +73,10 @@ func (e Engine) Remove(params *tamber.BehaviorParams) (*tamber.Behavior, error) 
 		err = errors.New("Invalid behavior params: name needs to be set")
 	}
 
-	return behavior, err
+	if !behavior.Succ {
+		err = errors.New(behavior.Error)
+	}
+	return &behavior.Result, err
 }
 
 func getEngine() Engine {

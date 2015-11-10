@@ -2,6 +2,7 @@ package tamber
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/url"
 	"strconv"
 )
@@ -9,14 +10,15 @@ import (
 type ActorParams struct {
 	Id        string
 	Behaviors *[]ActorBehavior
-	GetRecs   DiscoverParams //DiscoverParams.Actor field is not needed and wll be ignored if set.
-	Created   int64          //cannot be set to 0
+	GetRecs   *DiscoverParams //DiscoverParams.Actor field is not needed and wll be ignored if set.
+	Created   int64           //cannot be set to 0
 }
 
 type ActorBehavior struct {
-	Behavior, Item string
-	Value          float64
-	Created        int64
+	Behavior string  `json:"behavior"`
+	Item     string  `json:"item"`
+	Value    float64 `json:"value"`
+	Created  int64   `json:"created"`
 }
 
 type Actor struct {
@@ -26,11 +28,11 @@ type Actor struct {
 	Created   int64            `json:"created"`
 }
 
-type ActorReturn struct {
-	Succ   bool
-	Result Actor
-	Error  string
-	Time   float64
+type ActorResponse struct {
+	Succ   bool    `json:"success"`
+	Result Actor   `json:"result"`
+	Error  string  `json:"error"`
+	Time   float64 `json:"time"`
 }
 
 func (params *ActorParams) AppendToBody(v *url.Values) {
@@ -42,23 +44,9 @@ func (params *ActorParams) AppendToBody(v *url.Values) {
 
 	getRecs, _ := json.Marshal(params.GetRecs)
 	v.Add("getRecs", string(getRecs))
+	fmt.Printf("%v", v)
 
 	if params.Created > 0 {
 		v.Add("created", strconv.FormatInt(params.Created, 10))
 	}
-}
-
-// Custom unmarshaling is needed because the result
-// may be an id or the full struct.
-func (a *Actor) UnmarshalJSON(data []byte) error {
-	var actor Actor
-	err := json.Unmarshal(data, &actor)
-	if err == nil {
-		*a = actor
-	} else {
-		// the id is surrounded by "\" characters, so strip them
-		a.Id = string(data[1 : len(data)-1])
-	}
-
-	return nil
 }
