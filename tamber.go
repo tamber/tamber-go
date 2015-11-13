@@ -65,7 +65,6 @@ func GetDefaultSessionConfig() *SessionConfig {
 func (s *SessionConfig) Call(method, path, key, object, command string, form *url.Values, resp interface{}) error {
 	var body io.Reader
 	if form != nil && len(*form) > 0 {
-		form.Add("object", object)
 		form.Add("command", command)
 		data := form.Encode()
 		if strings.ToUpper(method) == "GET" {
@@ -74,7 +73,7 @@ func (s *SessionConfig) Call(method, path, key, object, command string, form *ur
 			body = bytes.NewBufferString(data)
 		}
 	}
-
+	path += object
 	req, err := s.NewRequest(method, path, key, "application/x-www-form-urlencoded", body)
 	if err != nil {
 		return err
@@ -90,9 +89,9 @@ func (s *SessionConfig) Call(method, path, key, object, command string, form *ur
 // NewRequest is used by Call to generate an http.Request. It handles encoding
 // parameters and attaching the appropriate headers.
 func (s *SessionConfig) NewRequest(method, path, key, contentType string, body io.Reader) (*http.Request, error) {
-	// if !strings.HasPrefix(path, "/") {
-	// 	path = "/" + path
-	// }
+	if !strings.HasPrefix(path, "/") {
+		path = "/" + path
+	}
 
 	path = s.URL + path
 

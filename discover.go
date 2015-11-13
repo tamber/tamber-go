@@ -22,14 +22,14 @@ type Discovery struct {
 	Created    int64   `json:"created"`
 }
 
+type Discoveries []Discovery
+
 type DiscoverResponse struct {
 	Succ   bool        `json:"success"`
 	Result Discoveries `json:"result"`
 	Error  string      `json:"error"`
 	Time   float64     `json:"time"`
 }
-
-type Discoveries []Discovery
 
 func (params *DiscoverParams) AppendToBody(v *url.Values) {
 	if len(params.Actor) > 0 {

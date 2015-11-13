@@ -3,7 +3,7 @@ package test
 import (
 	"fmt"
 	tamber "github.com/tamber/tamber-go"
-	// "github.com/tamber/tamber-go/actor"
+	"github.com/tamber/tamber-go/actor"
 	// "github.com/tamber/tamber-go/behavior"
 	"github.com/tamber/tamber-go/engine"
 	"github.com/tamber/tamber-go/item"
@@ -12,22 +12,14 @@ import (
 
 func Test() {
 	tamber.DefaultKey = "UhurbcIiFDIt6yuzDOAO"
-	// a, err := actor.AddBehaviors(&tamber.ActorParams{
-	// 	Id: "2197054086",
-	// 	Behaviors: &[]tamber.ActorBehavior{
-	// 		tamber.ActorBehavior{
-	// 			Behavior: "like",
-	// 			Item:     "HZNP",
-	// 			Value:    1.0,
-	// 			Created:  1446417346,
-	// 		},
-	// 	},
-	// })
-	// if err != nil {
-	// 	fmt.Println(err)
-	// } else {
-	// 	fmt.Printf("%v", a)
-	// }
+	a, err := actor.Remove(&tamber.ActorParams{
+		Id: "2197054086",
+	})
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Printf("%v", a)
+	}
 
 	// a, err = actor.Retrieve(&tamber.ActorParams{
 	// 	Id: "2197054086",

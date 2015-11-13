@@ -24,7 +24,7 @@ type ActorBehavior struct {
 type Actor struct {
 	Id        string           `json:"id"`
 	Behaviors *[]ActorBehavior `json:"behaviors"`
-	Recs      []Discovery      `json:"recs"`
+	Recs      Discoveries      `json:"recs"`
 	Created   int64            `json:"created"`
 }
 
