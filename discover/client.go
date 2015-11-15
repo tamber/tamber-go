@@ -24,7 +24,7 @@ func (e Engine) Recommended(params *tamber.DiscoverParams) (*tamber.Discoveries,
 	var err error
 
 	if len(params.Actor) > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "getRecs", body, discoveries)
+		err = e.S.Call("POST", "", e.Key, object, "getRecommended", body, discoveries)
 	} else {
 		err = errors.New("Invalid discover params: actor needs to be set")
 	}

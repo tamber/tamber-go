@@ -8,10 +8,10 @@ import (
 )
 
 type ActorParams struct {
-	Id        string
-	Behaviors *[]ActorBehavior
-	GetRecs   *DiscoverParams //DiscoverParams.Actor field is not needed and wll be ignored if set.
-	Created   int64           //cannot be set to 0
+	Id        string           `json:"id"`
+	Behaviors *[]ActorBehavior `json:"behaviors,omitempty"`
+	GetRecs   *DiscoverParams  `json:"getRecs,omitempty"` //DiscoverParams.Actor field is not needed and wll be ignored if set.
+	Created   int64            `json:"created,omitempty"` //cannot be set to 0
 }
 
 type ActorBehavior struct {

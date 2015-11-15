@@ -7,11 +7,12 @@ import (
 )
 
 type DiscoverParams struct {
-	Actor  string             `json:"actor"` //When setting ActorParams.GetRecs, Actor is not needed and wll be ignored if set.
-	Item   string             `json:"item"`
-	Number int                `json:"number"`
-	Page   int                `json:"page"`
-	Filter *map[string]string `json:"filter"`
+	//When setting ActorParams.GetRecs, Actor is not needed and wll be ignored if set.
+	Actor  string                  `json:"actor"`
+	Item   string                  `json:"item"`
+	Number int                     `json:"number"`
+	Page   int                     `json:"page"`
+	Filter *map[string]interface{} `json:"filter,omitempty"`
 }
 
 type Discovery struct {
@@ -45,5 +46,5 @@ func (params *DiscoverParams) AppendToBody(v *url.Values) {
 		v.Add("page", strconv.Itoa(params.Number))
 	}
 	filter, _ := json.Marshal(params.Filter)
-	v.Add("tags", string(filter))
+	v.Add("filter", string(filter))
 }

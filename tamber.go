@@ -96,6 +96,7 @@ func (s *SessionConfig) NewRequest(method, path, key, contentType string, body i
 	path = s.URL + path
 
 	req, err := http.NewRequest(method, path, body)
+
 	if err != nil {
 		s.errFunc("Cannot create Tamber request", err)
 		return nil, err
@@ -133,7 +134,6 @@ func (s *SessionConfig) Do(req *http.Request, v interface{}) error {
 	if err != nil {
 		s.errFunc("Json error", err)
 	}
-	s.errFunc("", v)
 
 	return nil
 }

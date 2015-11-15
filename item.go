@@ -7,10 +7,10 @@ import (
 )
 
 type ItemParams struct {
-	Id         string
-	Properties *map[string]interface{}
-	Tags       *[]string
-	Created    int64
+	Id         string                  `json:"id"`
+	Properties *map[string]interface{} `json:"properties,omitempty"`
+	Tags       *[]string               `json:"tags,omitempty"`
+	Created    int64                   `json:"created,omitempty"`
 	// GetSimilar DiscoverParams //Coming soon, not yet supported
 }
 
