@@ -3,7 +3,6 @@ package tamber
 import (
 	"bytes"
 	"encoding/json"
-	// "errors"
 	"io"
 	"io/ioutil"
 	"log"
@@ -65,7 +64,6 @@ func GetDefaultSessionConfig() *SessionConfig {
 func (s *SessionConfig) Call(method, path, key, object, command string, form *url.Values, resp interface{}) error {
 	var body io.Reader
 	if form != nil && len(*form) > 0 {
-		form.Add("command", command)
 		data := form.Encode()
 		if strings.ToUpper(method) == "GET" {
 			path += "?" + data
@@ -73,7 +71,7 @@ func (s *SessionConfig) Call(method, path, key, object, command string, form *ur
 			body = bytes.NewBufferString(data)
 		}
 	}
-	path += object
+	path += object + "/" + command
 	req, err := s.NewRequest(method, path, key, "application/x-www-form-urlencoded", body)
 	if err != nil {
 		return err
