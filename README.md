@@ -27,6 +27,7 @@ import (
 )
 
 tamber.DefaultKey = "sBW1WHQ4bP4Ryfz3AQOo"
+
 a, err := actor.AddBehaviors(&tamber.ActorParams{
     Id: "2197054086",
     Behaviors: &[]tamber.ActorBehavior{
@@ -39,9 +40,7 @@ a, err := actor.AddBehaviors(&tamber.ActorParams{
     },
 })
 if err != nil {
-    fmt.Println(err)
-} else {
-    fmt.Printf("%v", a)
+   //Handle
 }
 ```
 
@@ -70,9 +69,7 @@ a, err := e.Actors.AddBehaviors(&tamber.ActorParams{
     },
 })
 if err != nil {
-    fmt.Println(err)
-} else {
-    fmt.Printf("%v", a)
+   //Handle
 }
 ```
 
