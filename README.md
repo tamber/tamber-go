@@ -33,7 +33,7 @@ a, err := actor.AddBehaviors(&tamber.ActorParams{
     Behaviors: &[]tamber.ActorBehavior{
         tamber.ActorBehavior{
             Behavior: "like",
-            Item:     "HZNP",
+            Item:     "i5gq90scc1",
             Value:    1.0,
             Created:  1446417346,
         },
@@ -62,7 +62,7 @@ a, err := e.Actors.AddBehaviors(&tamber.ActorParams{
     Behaviors: &[]tamber.ActorBehavior{
         tamber.ActorBehavior{
             Behavior: "like",
-            Item:     "HZNP",
+            Item:     "i5gq90scc1",
             Value:    1.0,
             Created:  1446417346,
         },
