@@ -23,10 +23,10 @@ func (e Engine) Recommended(params *tamber.DiscoverParams) (*tamber.Discoveries,
 	discoveries := &tamber.DiscoverResponse{}
 	var err error
 
-	if len(params.Actor) > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "getRecs", body, discoveries)
+	if len(params.User) > 0 {
+		err = e.S.Call("POST", "", e.Key, object, "recommended", body, discoveries)
 	} else {
-		err = errors.New("Invalid discover params: actor needs to be set")
+		err = errors.New("Invalid discover params: user needs to be set")
 	}
 
 	if !discoveries.Succ {
@@ -46,7 +46,7 @@ func (e Engine) Similar(params *tamber.DiscoverParams) (*tamber.Discoveries, err
 	var err error
 
 	if len(params.Item) > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "getSimilar", body, discoveries)
+		err = e.S.Call("POST", "", e.Key, object, "similar", body, discoveries)
 	} else {
 		err = errors.New("Invalid discover params: item needs to be set")
 	}
@@ -67,10 +67,10 @@ func (e Engine) RecommendedSimilar(params *tamber.DiscoverParams) (*tamber.Disco
 	discoveries := &tamber.DiscoverResponse{}
 	var err error
 
-	if len(params.Actor) > 0 && len(params.Item) > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "getRecommendedSimilar", body, discoveries)
+	if len(params.User) > 0 && len(params.Item) > 0 {
+		err = e.S.Call("POST", "", e.Key, object, "recommendedSimilar", body, discoveries)
 	} else {
-		err = errors.New("Invalid discover params: actor and item need to be set")
+		err = errors.New("Invalid discover params: user and item need to be set")
 	}
 
 	if !discoveries.Succ {
@@ -88,7 +88,7 @@ func (e Engine) Popular(params *tamber.DiscoverParams) (*tamber.Discoveries, err
 	params.AppendToBody(body)
 
 	discoveries := &tamber.DiscoverResponse{}
-	err := e.S.Call("POST", "", e.Key, object, "getPopular", body, discoveries)
+	err := e.S.Call("POST", "", e.Key, object, "popular", body, discoveries)
 
 	if !discoveries.Succ {
 		err = errors.New(discoveries.Error)
@@ -105,7 +105,7 @@ func (e Engine) Hot(params *tamber.DiscoverParams) (*tamber.Discoveries, error) 
 	params.AppendToBody(body)
 
 	discoveries := &tamber.DiscoverResponse{}
-	err := e.S.Call("POST", "", e.Key, object, "getHot", body, discoveries)
+	err := e.S.Call("POST", "", e.Key, object, "hot", body, discoveries)
 
 	if !discoveries.Succ {
 		err = errors.New(discoveries.Error)

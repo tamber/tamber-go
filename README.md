@@ -23,24 +23,32 @@ If you only have one Tamber engine, and therefore one API Key, simply import the
 ```go
 import (
     tamber "github.com/tamber/tamber-go"
-    "github.com/tamber/tamber-go/actor"
+    "github.com/tamber/tamber-go/event"
+    "fmt"
 )
 
-tamber.DefaultKey = "sBW1WHQ4bP4Ryfz3AQOo"
+tamber.DefaultKey = "key_sBW1WHQ4bP4Ryfz3AQOo"
 
-a, err := actor.AddBehaviors(&tamber.ActorParams{
-    Id: "2197054086",
-    Behaviors: &[]tamber.ActorBehavior{
-        tamber.ActorBehavior{
-            Behavior: "like",
-            Item:     "i5gq90scc1",
-            Value:    1.0,
-            Created:  1446417346,
-        },
-    },
+e, err := event.Track(&tamber.EventParams{
+    User: "user_rlox8k927z7p",
+    Behavior: "click",
+    Item: "item_wmt4fn6o4zlk",
 })
+
 if err != nil {
    //Handle
+}
+
+recommendations, err := discover.Recommended(&tamber.DiscoverParams{
+    User: "user_rlox8k927z7p",
+})
+
+if err != nil {
+   //Handle
+}
+
+for _, rec := range recommendations{
+    fmt.Printf("Item Id:%s :: Score:%f", rec.Item, rec.Score)
 }
 ```
 
@@ -52,22 +60,18 @@ If you have multiple Tamber engines, use the engine package.
 import (
     "github.com/tamber/tamber-go"
     "github.com/tamber/tamber-go/engine"
-    "github.com/tamber/tamber-go/actor"
+    "github.com/tamber/tamber-go/event"
 )
 
 e := &engine.API{}
 e.Init("80r2oX10Uw4XfZSxfh4O", nil)
-a, err := e.Actors.AddBehaviors(&tamber.ActorParams{
-    Id: "2197054086",
-    Behaviors: &[]tamber.ActorBehavior{
-        tamber.ActorBehavior{
-            Behavior: "like",
-            Item:     "i5gq90scc1",
-            Value:    1.0,
-            Created:  1446417346,
-        },
-    },
+
+e, err := e.Event.Track(&tamber.EventParams{
+    User: "user_rlox8k927z7p",
+    Behavior: "click",
+    Item: "item_wmt4fn6o4zlk",
 })
+
 if err != nil {
    //Handle
 }

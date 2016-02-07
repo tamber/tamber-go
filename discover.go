@@ -7,20 +7,21 @@ import (
 )
 
 type DiscoverParams struct {
-	//When setting ActorParams.GetRecs, Actor is not needed and wll be ignored if set.
-	Actor  string                  `json:"actor"`
-	Item   string                  `json:"item"`
-	Number int                     `json:"number"`
-	Page   int                     `json:"page"`
-	Filter *map[string]interface{} `json:"filter,omitempty"`
+	User       string                  `json:"user"`
+	Item       string                  `json:"item"`
+	Number     int                     `json:"number"`
+	Page       int                     `json:"page"`
+	Filter     *map[string]interface{} `json:"filter,omitempty"`
+	TestEvents *[]Event                `json:"test_events,omitempty"`
 }
 
 type Discovery struct {
-	Id         string  `json:"id"`
-	Score      float64 `json:"score"`
-	Popularity float64 `json:"popularity"`
-	Hotness    float64 `json:"hotness"`
-	Created    int64   `json:"created"`
+	Item        string  `json:"item"`
+	Object      string  `json:"object"`
+	Score       float64 `json:"score"`
+	Popularity  float64 `json:"popularity"`
+	Hotness     float64 `json:"hotness"`
+	ItemCreated int64   `json:"item_created"`
 }
 
 type Discoveries []Discovery
@@ -33,8 +34,8 @@ type DiscoverResponse struct {
 }
 
 func (params *DiscoverParams) AppendToBody(v *url.Values) {
-	if len(params.Actor) > 0 {
-		v.Add("actor", params.Actor)
+	if len(params.User) > 0 {
+		v.Add("user", params.User)
 	}
 	if len(params.Item) > 0 {
 		v.Add("item", params.Item)
@@ -47,4 +48,7 @@ func (params *DiscoverParams) AppendToBody(v *url.Values) {
 	}
 	filter, _ := json.Marshal(params.Filter)
 	v.Add("filter", string(filter))
+
+	test_events, _ := json.Marshal(params.TestEvents)
+	v.Add("test_events", string(test_events))
 }

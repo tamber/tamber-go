@@ -6,12 +6,22 @@ import (
 	"strconv"
 )
 
+type ItemFeatures struct {
+	Properties map[string]interface{} `json:"properties"`
+	Tags       []string               `json:"tags"`
+}
+
+type ItemUpdates struct {
+	Add    ItemFeatures `json:"add"`
+	Remove ItemFeatures `json:"remove"`
+}
+
 type ItemParams struct {
 	Id         string                  `json:"id"`
+	Updates    *ItemUpdates            `json:"updates"`
 	Properties *map[string]interface{} `json:"properties,omitempty"`
 	Tags       *[]string               `json:"tags,omitempty"`
 	Created    int64                   `json:"created,omitempty"`
-	// GetSimilar DiscoverParams //Coming soon, not yet supported
 }
 
 type Item struct {
@@ -32,11 +42,18 @@ func (params *ItemParams) AppendToBody(v *url.Values) {
 
 	v.Add("id", params.Id)
 
+	updates, _ := json.Marshal(params.Updates)
+	if updates != nil {
+		v.Add("updates", string(updates))
+	}
 	props, _ := json.Marshal(params.Properties)
-	v.Add("properties", string(props))
-
+	if props != nil {
+		v.Add("properties", string(props))
+	}
 	tags, _ := json.Marshal(params.Tags)
-	v.Add("tags", string(tags))
+	if tags != nil {
+		v.Add("tags", string(tags))
+	}
 
 	if params.Created > 0 {
 		v.Add("created", strconv.FormatInt(params.Created, 10))

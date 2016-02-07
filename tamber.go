@@ -3,6 +3,7 @@ package tamber
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -17,7 +18,7 @@ const (
 )
 
 // apiversion is the currently supported API version
-const apiversion = "2015-11-7"
+const apiversion = "2015-1-31"
 
 // clientversion is the binding version
 const clientversion = "0.0.1"
@@ -80,6 +81,7 @@ func (s *SessionConfig) Call(method, path, key, object, command string, form *ur
 	if err := s.Do(req, resp); err != nil {
 		return err
 	}
+	fmt.Printf("\n%+v\n", resp)
 
 	return nil
 }
@@ -128,6 +130,7 @@ func (s *SessionConfig) Do(req *http.Request, v interface{}) error {
 		s.errFunc("Cannot parse Tamber response", err)
 		return err
 	}
+
 	err = json.Unmarshal(resBody, v)
 	if err != nil {
 		s.errFunc("Json error", err)

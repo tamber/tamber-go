@@ -33,7 +33,7 @@ func (params *BehaviorParams) AppendToBody(v *url.Values) {
 		v.Add("type", params.Type)
 	}
 	if params.Desirability > 0 {
-		v.Add("desirability", strconv.FormatFloat(params.Desirability, 'E', -1, 64))
+		v.Add("desirability", strconv.FormatFloat(params.Desirability, 'f', -1, 64))
 	}
 	bParams, _ := json.Marshal(params.Params)
 	v.Add("params", string(bParams))

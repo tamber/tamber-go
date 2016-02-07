@@ -36,7 +36,7 @@ func (e Engine) Create(params *tamber.PropertyParams) (*tamber.Property, error) 
 }
 
 func Retrieve(params *tamber.PropertyParams) (*tamber.Property, error) {
-	return getEngine().Create(params)
+	return getEngine().Retrieve(params)
 }
 
 func (e Engine) Retrieve(params *tamber.PropertyParams) (*tamber.Property, error) {
@@ -58,7 +58,7 @@ func (e Engine) Retrieve(params *tamber.PropertyParams) (*tamber.Property, error
 }
 
 func Remove(params *tamber.PropertyParams) (*tamber.Property, error) {
-	return getEngine().Create(params)
+	return getEngine().Remove(params)
 }
 
 func (e Engine) Remove(params *tamber.PropertyParams) (*tamber.Property, error) {
