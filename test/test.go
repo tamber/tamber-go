@@ -8,7 +8,6 @@ import (
 	"github.com/tamber/tamber-go/engine"
 	"github.com/tamber/tamber-go/event"
 	"github.com/tamber/tamber-go/item"
-	"github.com/tamber/tamber-go/property"
 	"github.com/tamber/tamber-go/user"
 )
 
@@ -190,37 +189,6 @@ func Test() {
 		fmt.Println(err)
 	} else {
 		fmt.Printf("User: %+v\n", *u)
-	}
-
-	//Property
-	fmt.Println("Property - Create (2)")
-	p, err := property.Create(&tamber.PropertyParams{
-		Name: "clothing_type",
-		Type: "string",
-	})
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Printf("Property: %+v", *p)
-	}
-	p, err = property.Create(&tamber.PropertyParams{
-		Name: "stock",
-		Type: "float",
-	})
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Printf("Property: %+v", *p)
-	}
-
-	fmt.Println("Property - Retrieve")
-	p, err = property.Retrieve(&tamber.PropertyParams{
-		Name: "clothing_type",
-	})
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Printf("Property: %+v", *p)
 	}
 
 	//Item
