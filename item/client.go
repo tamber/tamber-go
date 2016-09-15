@@ -24,7 +24,7 @@ func (e Engine) Create(params *tamber.ItemParams) (*tamber.Item, error) {
 	var err error
 
 	if len(params.Id) > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "create", body, item)
+		err = e.S.Call("POST", "", e.Key, "", object, "create", body, item)
 	} else {
 		err = errors.New("Invalid item params: id needs to be set")
 	}
@@ -45,7 +45,7 @@ func (e Engine) Update(params *tamber.ItemParams) (*tamber.Item, error) {
 	var err error
 
 	if len(params.Id) > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "update", body, item)
+		err = e.S.Call("POST", "", e.Key, "", object, "update", body, item)
 	} else {
 		err = errors.New("Invalid item params: id needs to be set")
 	}
@@ -67,7 +67,7 @@ func (e Engine) Retrieve(params *tamber.ItemParams) (*tamber.Item, error) {
 	var err error
 
 	if len(params.Id) > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "retrieve", body, item)
+		err = e.S.Call("POST", "", e.Key, "", object, "retrieve", body, item)
 	} else {
 		err = errors.New("Invalid item params: id needs to be set")
 	}
@@ -89,7 +89,7 @@ func (e Engine) Remove(params *tamber.ItemParams) (*tamber.Item, error) {
 	var err error
 
 	if len(params.Id) > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "remove", body, item)
+		err = e.S.Call("POST", "", e.Key, "", object, "remove", body, item)
 	} else {
 		err = errors.New("Invalid item params: id needs to be set")
 	}

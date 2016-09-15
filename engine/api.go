@@ -6,7 +6,6 @@ import (
 	"github.com/tamber/tamber-go/discover"
 	"github.com/tamber/tamber-go/event"
 	"github.com/tamber/tamber-go/item"
-	"github.com/tamber/tamber-go/property"
 	"github.com/tamber/tamber-go/user"
 )
 
@@ -16,7 +15,7 @@ type API struct {
 	User     *user.Engine
 	Item     *item.Engine
 	Behavior *behavior.Engine
-	Property *property.Engine
+	Key      string
 }
 
 func (a *API) Init(key string, config *SessionConfig) {
@@ -28,7 +27,7 @@ func (a *API) Init(key string, config *SessionConfig) {
 	a.User = &user.Engine{S: config, Key: key}
 	a.Item = &item.Engine{S: config, Key: key}
 	a.Behavior = &behavior.Engine{S: config, Key: key}
-	a.Property = &property.Engine{S: config, Key: key}
+	a.Key = key
 }
 
 // New creates a new Tamber Engine object the appropriate key

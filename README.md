@@ -24,6 +24,7 @@ If you only have one Tamber engine, and therefore one API Key, simply import the
 import (
     tamber "github.com/tamber/tamber-go"
     "github.com/tamber/tamber-go/event"
+    "github.com/tamber/tamber-go/discover"
     "fmt"
 )
 

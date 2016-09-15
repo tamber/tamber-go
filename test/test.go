@@ -1,6 +1,7 @@
 package test
 
 import (
+	"encoding/csv"
 	"fmt"
 	tamber "github.com/tamber/tamber-go"
 	"github.com/tamber/tamber-go/behavior"
@@ -8,9 +9,76 @@ import (
 	"github.com/tamber/tamber-go/engine"
 	"github.com/tamber/tamber-go/event"
 	"github.com/tamber/tamber-go/item"
-	"github.com/tamber/tamber-go/property"
 	"github.com/tamber/tamber-go/user"
+	"net/http"
+	"os"
+	"strings"
+	"time"
 )
+
+func errFunc(exp string, err interface{}) {
+	fmt.Printf("\n%s: %v\n", exp, err)
+}
+
+func streamProperties(e *engine.API) {
+	csvfile, err := os.Open("/Users/alexirobbins/Sites/gocode/src/EngieTest/data/vango-full/vango_full.csv")
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	defer csvfile.Close()
+
+	reader := csv.NewReader(csvfile)
+
+	reader.FieldsPerRecord = -1 // see the Reader struct information below
+
+	rawCSVdata, err := reader.ReadAll()
+
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	items := make(map[string]struct{})
+	// sanity check, display to standard output
+	for _, row := range rawCSVdata {
+		id_params := strings.Split(row[1], "-")
+		t := id_params[0]
+		id := id_params[1]
+		if t == "artwork" {
+			continue
+		}
+
+		if _, ok := items[id]; !ok {
+			items[id] = struct{}{}
+
+			i, err := e.Item.Update(&tamber.ItemParams{
+				Id: row[1],
+				Updates: &tamber.ItemUpdates{
+					Add: tamber.ItemFeatures{
+						Properties: map[string]interface{}{
+							"type": t,
+						},
+					},
+				},
+			})
+			if err != nil {
+				fmt.Println(err)
+			} else {
+				fmt.Printf("%+v", i)
+			}
+		}
+	}
+}
+func TempTest() {
+	e := &engine.API{}
+	// var ef tamber.SessionErrFunction = errFunc
+	sc := &tamber.SessionConfig{URL: "https://api.tamber.com/v1", HTTPClient: &http.Client{Timeout: 80 * time.Second}}
+	sc.SetErrFunc(errFunc)
+	e.Init("Y2tpJMriyLnNImYKmdPd", sc)
+	streamProperties(e)
+}
 
 func BasicTest() {
 	fmt.Println("\nRecs w/ Test Events")
@@ -133,7 +201,9 @@ func PartialTest() {
 }
 
 func Test() {
-	tamber.DefaultKey = "IVRiX25dr5rsJ0TDdVOD"
+	// TempTest()
+	// return
+	tamber.DefaultKey = "NcDJAfY4zjauTmfDlZQM"
 
 	fmt.Printf("\n\nBasic Test\n---------\n\n")
 	BasicTest()
@@ -190,37 +260,6 @@ func Test() {
 		fmt.Println(err)
 	} else {
 		fmt.Printf("User: %+v\n", *u)
-	}
-
-	//Property
-	fmt.Println("Property - Create (2)")
-	p, err := property.Create(&tamber.PropertyParams{
-		Name: "clothing_type",
-		Type: "string",
-	})
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Printf("Property: %+v", *p)
-	}
-	p, err = property.Create(&tamber.PropertyParams{
-		Name: "stock",
-		Type: "float",
-	})
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Printf("Property: %+v", *p)
-	}
-
-	fmt.Println("Property - Retrieve")
-	p, err = property.Retrieve(&tamber.PropertyParams{
-		Name: "clothing_type",
-	})
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Printf("Property: %+v", *p)
 	}
 
 	//Item

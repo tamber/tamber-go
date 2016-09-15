@@ -24,7 +24,7 @@ func (e Engine) Recommended(params *tamber.DiscoverParams) (*tamber.Discoveries,
 	var err error
 
 	if len(params.User) > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "recommended", body, discoveries)
+		err = e.S.Call("POST", "", e.Key, "", object, "recommended", body, discoveries)
 	} else {
 		err = errors.New("Invalid discover params: user needs to be set")
 	}
@@ -46,7 +46,7 @@ func (e Engine) Similar(params *tamber.DiscoverParams) (*tamber.Discoveries, err
 	var err error
 
 	if len(params.Item) > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "similar", body, discoveries)
+		err = e.S.Call("POST", "", e.Key, "", object, "similar", body, discoveries)
 	} else {
 		err = errors.New("Invalid discover params: item needs to be set")
 	}
@@ -68,7 +68,7 @@ func (e Engine) RecommendedSimilar(params *tamber.DiscoverParams) (*tamber.Disco
 	var err error
 
 	if len(params.User) > 0 && len(params.Item) > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "recommendedSimilar", body, discoveries)
+		err = e.S.Call("POST", "", e.Key, "", object, "recommendedSimilar", body, discoveries)
 	} else {
 		err = errors.New("Invalid discover params: user and item need to be set")
 	}
@@ -88,7 +88,7 @@ func (e Engine) Popular(params *tamber.DiscoverParams) (*tamber.Discoveries, err
 	params.AppendToBody(body)
 
 	discoveries := &tamber.DiscoverResponse{}
-	err := e.S.Call("POST", "", e.Key, object, "popular", body, discoveries)
+	err := e.S.Call("POST", "", e.Key, "", object, "popular", body, discoveries)
 
 	if !discoveries.Succ {
 		err = errors.New(discoveries.Error)
@@ -105,7 +105,7 @@ func (e Engine) Hot(params *tamber.DiscoverParams) (*tamber.Discoveries, error) 
 	params.AppendToBody(body)
 
 	discoveries := &tamber.DiscoverResponse{}
-	err := e.S.Call("POST", "", e.Key, object, "hot", body, discoveries)
+	err := e.S.Call("POST", "", e.Key, "", object, "hot", body, discoveries)
 
 	if !discoveries.Succ {
 		err = errors.New(discoveries.Error)

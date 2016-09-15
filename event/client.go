@@ -24,7 +24,7 @@ func (e Engine) Track(params *tamber.EventParams) (*tamber.EventResult, error) {
 	var err error
 
 	if len(params.User) > 0 && len(params.Item) > 0 && len(params.Behavior) > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "track", body, event)
+		err = e.S.Call("POST", "", e.Key, "", object, "track", body, event)
 	} else {
 		err = errors.New("Invalid event params: user, item, and behavior need to be set")
 	}
@@ -45,7 +45,7 @@ func (e Engine) Retrieve(params *tamber.EventParams) (*tamber.EventResult, error
 	event := &tamber.EventResponse{}
 	var err error
 
-	err = e.S.Call("POST", "", e.Key, object, "retrieve", body, event)
+	err = e.S.Call("POST", "", e.Key, "", object, "retrieve", body, event)
 
 	if !event.Succ {
 		err = errors.New(event.Error)
@@ -64,7 +64,7 @@ func (e Engine) Batch(params *tamber.EventBatchParams) (*tamber.BatchResult, err
 	var err error
 
 	if len(params.Events) > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "batch", body, event)
+		err = e.S.Call("POST", "", e.Key, "", object, "batch", body, event)
 	} else {
 		err = errors.New("Invalid batch params: events need to be set")
 	}

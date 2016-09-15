@@ -24,7 +24,7 @@ func (e Engine) Create(params *tamber.UserParams) (*tamber.User, error) {
 	var err error
 
 	if len(params.Id) > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "create", body, user)
+		err = e.S.Call("POST", "", e.Key, "", object, "create", body, user)
 	} else {
 		err = errors.New("Invalid user params: id needs to be set")
 	}
@@ -46,7 +46,7 @@ func (e Engine) Update(params *tamber.UserParams) (*tamber.User, error) {
 	var err error
 
 	if len(params.Id) > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "update", body, user)
+		err = e.S.Call("POST", "", e.Key, "", object, "update", body, user)
 	} else {
 		err = errors.New("Invalid user params: id needs to be set")
 	}
@@ -68,7 +68,7 @@ func (e Engine) Retrieve(params *tamber.UserParams) (*tamber.User, error) {
 	var err error
 
 	if len(params.Id) > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "retrieve", body, user)
+		err = e.S.Call("POST", "", e.Key, "", object, "retrieve", body, user)
 	} else {
 		err = errors.New("Invalid user params: id needs to be set")
 	}

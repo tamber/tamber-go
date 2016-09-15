@@ -24,7 +24,7 @@ func (e Engine) Create(params *tamber.BehaviorParams) (*tamber.Behavior, error) 
 	var err error
 
 	if len(params.Name) > 0 && params.Desirability > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "create", body, behavior)
+		err = e.S.Call("POST", "", e.Key, "", object, "create", body, behavior)
 	} else {
 		err = errors.New("Invalid behavior params: name, type, and desirability need to be set")
 	}
@@ -46,7 +46,7 @@ func (e Engine) Retrieve(params *tamber.BehaviorParams) (*tamber.Behavior, error
 	var err error
 
 	if len(params.Name) > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "retrieve", body, behavior)
+		err = e.S.Call("POST", "", e.Key, "", object, "retrieve", body, behavior)
 	} else {
 		err = errors.New("Invalid behavior params: name needs to be set")
 	}
