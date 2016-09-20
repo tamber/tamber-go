@@ -52,9 +52,9 @@ type Engine struct {
 	EventsDatasetId string
 	ItemsDatasetId  string
 	Dashboard       struct {
-		BehaviorCount string
-		ItemCount     string
-		UserCount     string
+		BehaviorCount int64
+		ItemCount     int64
+		UserCount     int64
 	}
 }
 
