@@ -45,6 +45,7 @@ type Engine struct {
 	S   *SessionConfig
 
 	// Metadata Fields: used only by account module
+	EngineId        uint32 `bson:"engine_id"`
 	Id              string
 	Name            string
 	Status          int
