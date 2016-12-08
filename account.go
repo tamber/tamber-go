@@ -3,6 +3,7 @@ package tamber
 import (
 	"encoding/json"
 	"net/url"
+	"strconv"
 )
 
 var (
@@ -12,18 +13,82 @@ var (
 
 // Inputs
 type UploadParams struct {
-	Filepath string
-	Type     string
+	Filepath string `json:"filepath"`
+	Type     string `json:"type"`
+}
+
+type CreateProjectParentParams struct {
+	AccountId    string   `json:"accountid"`
+	Name         string   `json:"name"`
+	Environments []string `json:"environments"`
+}
+
+type CreateProjectParams struct {
+	AccountId       string `json:"accountid"`
+	Environment     string `json:"environment"`
+	ProjectParentId string `json:"parentid"`
 }
 
 type CreateEngineParams struct {
-	Name            string
-	EventsDatasetId string
-	ItemsDatasetId  string
-	Behaviors       map[string]Behavior
+	Name      string              `json:"name"`
+	AccountId string              `json:"accountid"`
+	ProjectId uint32              `json:"projectid"`
+	Behaviors map[string]Behavior `json:"behaviors"`
+	Filters   EngineFilters       `json:"filters"`
+}
+
+type EngineFilters struct {
+	Behaviors []string               `json:"behaviors"`
+	Items     map[string]interface{} `json:"items"`
 }
 
 // Types
+type DashboardData struct {
+	BehaviorCount int64 `json:"behavior_count"`
+	ItemCount     int64 `json:"item_count"`
+	UserCount     int64 `json:"user_count"`
+}
+
+type Project struct {
+	Id              uint32                 `json:"id"`
+	Key             string                 `json:"key"`
+	Name            string                 `json:"name"`
+	Environment     string                 `json:"environment"`
+	AccountId       string                 `json:"accountid"`
+	ProjectParentId string                 `json:"parentid"`
+	ApiVersion      string                 `json:"apiversion"`
+	Engines         []string               `json:"engines"`
+	Metadata        map[string]interface{} `json:"metadata"`
+	State           int                    `json:"state"`
+	Behaviors       []string               `json:"behaviors"`
+	Dashboard       DashboardData          `json:"dashboard"`
+}
+
+type ProjectParent struct {
+	Id         string       `json:"id"`
+	Name       string       `json:"name"`
+	ApiVersion string       `json:"apiversion"`
+	Projects   []ProjectKey `json:"projects"`
+}
+
+type ProjectKey struct {
+	Id          uint32 `json:"id"`
+	Environment string `json:"environment"`
+}
+
+type Engine struct {
+	Key        string
+	EngineId   uint32 `bson:"engine_id"`
+	Id         string
+	ProjectId  uint32
+	Name       string
+	Status     int
+	ApiVersion string
+	Dashboard  DashboardData
+	Behaviors  map[string]Behavior `json:"behaviors"`
+	Filters    EngineFilters       `json:"filters"`
+}
+
 type Dataset struct {
 	Id        string                 `json:"id"`
 	Name      string                 `json:"name"`
@@ -37,10 +102,12 @@ type Dataset struct {
 }
 
 type AccountInfo struct {
-	Id       string             `json:"id"`
-	Username string             `json:"username"`
-	Engines  map[string]Engine  `json:"clusters"` // key = engine.Id
-	Datasets map[string]Dataset `json:"datasets"` // key = dataset.Id
+	Id             string                   `json:"id"`
+	Username       string                   `json:"username"`
+	ProjectParents map[string]ProjectParent `json:"project_parents"` // key = projectParent.Id
+	Projects       map[uint32]Project       `json:"projects"`        // key = project.Id
+	Engines        map[string]Engine        `json:"engines"`         // key = engine.Id
+	Datasets       map[string]Dataset       `json:"datasets"`        // key = dataset.Id
 }
 
 // Responses
@@ -58,6 +125,20 @@ type UploadResponse struct {
 	Time   float64 `json:"time"`
 }
 
+type CreateProjectParentResponse struct {
+	Succ   bool          `json:"success"`
+	Result ProjectParent `json:"result"`
+	Error  string        `json:"error"`
+	Time   float64       `json:"time"`
+}
+
+type CreateProjectResponse struct {
+	Succ   bool    `json:"success"`
+	Result Project `json:"result"`
+	Error  string  `json:"error"`
+	Time   float64 `json:"time"`
+}
+
 type CreateEngineResponse struct {
 	Succ   bool    `json:"success"`
 	Result Engine  `json:"result"`
@@ -65,16 +146,39 @@ type CreateEngineResponse struct {
 	Time   float64 `json:"time"`
 }
 
+func (params *CreateProjectParentParams) AppendToBody(v *url.Values) {
+	if len(params.AccountId) > 0 {
+		v.Add("accountid", params.AccountId)
+	}
+	if len(params.Name) > 0 {
+		v.Add("name", params.Name)
+	}
+	environments, _ := json.Marshal(params.Environments)
+	v.Add("environments", string(environments))
+}
+
+func (params *CreateProjectParams) AppendToBody(v *url.Values) {
+	if len(params.AccountId) > 0 {
+		v.Add("accountid", params.AccountId)
+	}
+	if len(params.Environment) > 0 {
+		v.Add("environment", params.Environment)
+	}
+	if len(params.ProjectParentId) > 0 {
+		v.Add("parentid", params.ProjectParentId)
+	}
+}
+
 func (params *CreateEngineParams) AppendToBody(v *url.Values) {
 	if len(params.Name) > 0 {
 		v.Add("name", params.Name)
 	}
-	if len(params.EventsDatasetId) > 0 {
-		v.Add("events_dataset_id", params.EventsDatasetId)
+	if len(params.AccountId) > 0 {
+		v.Add("accountid", params.AccountId)
 	}
-	if len(params.ItemsDatasetId) > 0 {
-		v.Add("items_dataset_id", params.ItemsDatasetId)
-	}
+	v.Add("projectid", strconv.FormatUint(uint64(params.ProjectId), 10))
 	behaviors, _ := json.Marshal(params.Behaviors)
 	v.Add("behaviors", string(behaviors))
+	filters, _ := json.Marshal(params.Filters)
+	v.Add("filters", string(filters))
 }

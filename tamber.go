@@ -40,40 +40,28 @@ type SessionConfig struct {
 	errFunc    SessionErrFunction
 }
 
-type Engine struct {
-	Key string
-	S   *SessionConfig
-
-	// Metadata Fields: used only by account module
-	EngineId        uint32 `bson:"engine_id"`
-	Id              string
-	Name            string
-	Status          int
-	ApiVersion      string
-	EventsDatasetId string
-	ItemsDatasetId  string
-	Dashboard       struct {
-		BehaviorCount int64
-		ItemCount     int64
-		UserCount     int64
-	}
-}
-
 // Default global keys
 var (
-	DefaultKey             string
+	DefaultProjectKey      string
+	DefaultEngineKey       string
 	DefaultAccountEmail    string
 	DefaultAccountPassword string
 )
 
 var httpClient = &http.Client{Timeout: defaultHTTPTimeout}
 
-func NewEngine(key string, config *SessionConfig) Engine {
-	if config == nil {
-		config = GetDefaultSessionConfig()
-	}
-	return Engine{Key: key, S: config}
-}
+// type Client struct {
+// 	ProjectKey string
+// 	EngineKey  string
+// 	S          *SessionConfig
+// }
+
+// func New(projectKey string, engineKey string, config *SessionConfig) Client {
+// 	if config == nil {
+// 		config = GetDefaultSessionConfig()
+// 	}
+// 	return Client{ProjectKey: projectKey, EngineKey: engineKey, S: config}
+// }
 
 func GetDefaultSessionConfig() *SessionConfig {
 	return &SessionConfig{ApiUrl, httpClient, defaultErrFunc}

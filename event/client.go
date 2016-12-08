@@ -6,25 +6,26 @@ import (
 	"net/url"
 )
 
-type Engine struct {
-	S   *tamber.SessionConfig
-	Key string
+type Client struct {
+	S          *tamber.SessionConfig
+	ProjectKey string
+	EngineKey  string
 }
 
 var object = "event"
 
 func Track(params *tamber.EventParams) (*tamber.EventResult, error) {
-	return getEngine().Track(params)
+	return getClient().Track(params)
 }
 
-func (e Engine) Track(params *tamber.EventParams) (*tamber.EventResult, error) {
+func (c Client) Track(params *tamber.EventParams) (*tamber.EventResult, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	event := &tamber.EventResponse{}
 	var err error
 
 	if len(params.User) > 0 && len(params.Item) > 0 && len(params.Behavior) > 0 {
-		err = e.S.Call("POST", "", e.Key, "", object, "track", body, event)
+		err = c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "track", body, event)
 	} else {
 		err = errors.New("Invalid event params: user, item, and behavior need to be set")
 	}
@@ -36,16 +37,16 @@ func (e Engine) Track(params *tamber.EventParams) (*tamber.EventResult, error) {
 }
 
 func Retrieve(params *tamber.EventParams) (*tamber.EventResult, error) {
-	return getEngine().Retrieve(params)
+	return getClient().Retrieve(params)
 }
 
-func (e Engine) Retrieve(params *tamber.EventParams) (*tamber.EventResult, error) {
+func (c Client) Retrieve(params *tamber.EventParams) (*tamber.EventResult, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	event := &tamber.EventResponse{}
 	var err error
 
-	err = e.S.Call("POST", "", e.Key, "", object, "retrieve", body, event)
+	err = c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "retrieve", body, event)
 
 	if !event.Succ {
 		err = errors.New(event.Error)
@@ -54,17 +55,17 @@ func (e Engine) Retrieve(params *tamber.EventParams) (*tamber.EventResult, error
 }
 
 func Batch(params *tamber.EventBatchParams) (*tamber.BatchResult, error) {
-	return getEngine().Batch(params)
+	return getClient().Batch(params)
 }
 
-func (e Engine) Batch(params *tamber.EventBatchParams) (*tamber.BatchResult, error) {
+func (c Client) Batch(params *tamber.EventBatchParams) (*tamber.BatchResult, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	event := &tamber.BatchResponse{}
 	var err error
 
 	if len(params.Events) > 0 {
-		err = e.S.Call("POST", "", e.Key, "", object, "batch", body, event)
+		err = c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "batch", body, event)
 	} else {
 		err = errors.New("Invalid batch params: events need to be set")
 	}
@@ -75,6 +76,6 @@ func (e Engine) Batch(params *tamber.EventBatchParams) (*tamber.BatchResult, err
 	return &event.Result, err
 }
 
-func getEngine() Engine {
-	return Engine{tamber.GetDefaultSessionConfig(), tamber.DefaultKey}
+func getClient() Client {
+	return Client{tamber.GetDefaultSessionConfig(), tamber.DefaultProjectKey, tamber.DefaultEngineKey}
 }

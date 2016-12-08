@@ -203,7 +203,8 @@ func PartialTest() {
 func Test() {
 	// TempTest()
 	// return
-	tamber.DefaultKey = "NcDJAfY4zjauTmfDlZQM"
+	tamber.DefaultProjectKey = "NcDJAfY4zjauTmfDlZQM"
+	tamber.DefaultEngineKey = "NcDJAfY4zjauTmfDlZQM"
 
 	fmt.Printf("\n\nBasic Test\n---------\n\n")
 	BasicTest()
@@ -448,6 +449,6 @@ func Test() {
 }
 
 func EngieVarTest() {
-	e := &engine.API{}
-	e.Init("80r2oX10Uw4XfZSxfh4O", nil)
+	e := &client.API{}
+	e.Init("80r2oX10Uw4XfZSxfh4O", "", nil)
 }

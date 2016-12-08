@@ -44,6 +44,50 @@ func (a Account) UploadDataset(params *tamber.UploadParams) (*tamber.Dataset, er
 	return &dataset.Result, err
 }
 
+func CreateProjectParent(params *tamber.CreateProjectParentParams) (*tamber.ProjectParent, error) {
+	return getAccount().CreateProjectParent(params)
+}
+
+func (a Account) CreateProjectParent(params *tamber.CreateProjectParentParams) (*tamber.ProjectParent, error) {
+	body := &url.Values{}
+	params.AppendToBody(body)
+	parent := &tamber.CreateProjectParentResponse{}
+	var err error
+
+	if len(params.Name) > 0 {
+		err = a.S.Call("POST", "", a.Email, a.Password, object, "createProjectParent", body, parent)
+	} else {
+		err = errors.New("Invalid create parent params: name needs to be set")
+	}
+
+	if !parent.Succ {
+		err = errors.New(parent.Error)
+	}
+	return &parent.Result, err
+}
+
+func CreateProject(params *tamber.CreateProjectParams) (*tamber.Project, error) {
+	return getAccount().CreateProject(params)
+}
+
+func (a Account) CreateProject(params *tamber.CreateProjectParams) (*tamber.Project, error) {
+	body := &url.Values{}
+	params.AppendToBody(body)
+	project := &tamber.CreateProjectResponse{}
+	var err error
+
+	if len(params.ProjectParentId) > 0 {
+		err = a.S.Call("POST", "", a.Email, a.Password, object, "createProject", body, project)
+	} else {
+		err = errors.New("Invalid create project params: ProjectParentId needs to be set")
+	}
+
+	if !project.Succ {
+		err = errors.New(project.Error)
+	}
+	return &project.Result, err
+}
+
 func CreateEngine(params *tamber.CreateEngineParams) (*tamber.Engine, error) {
 	return getAccount().CreateEngine(params)
 }

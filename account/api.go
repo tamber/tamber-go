@@ -1,7 +1,7 @@
 package account
 
 import (
-	. "github.com/tamber/tamber-go"
+	"github.com/tamber/tamber-go"
 )
 
 var (
@@ -9,19 +9,19 @@ var (
 )
 
 type Account struct {
-	S        *SessionConfig
+	S        *tamber.SessionConfig
 	Email    string
 	Password string
 }
 
-func GetDefaultAccountSessionConfig() *SessionConfig {
-	config := GetDefaultSessionConfig()
+func GetDefaultAccountSessionConfig() *tamber.SessionConfig {
+	config := tamber.GetDefaultSessionConfig()
 	config.URL = AccountUrl
 	config.HTTPClient.Timeout = 0
 	return config
 }
 
-func (a *Account) Init(email, pw string, config *SessionConfig) {
+func (a *Account) Init(email, pw string, config *tamber.SessionConfig) {
 	if config == nil {
 		config = GetDefaultAccountSessionConfig()
 	}
@@ -30,7 +30,7 @@ func (a *Account) Init(email, pw string, config *SessionConfig) {
 }
 
 // New creates a new Account object
-func New(email, pw string, config *SessionConfig) *Account {
+func New(email, pw string, config *tamber.SessionConfig) *Account {
 	account := Account{}
 	account.Init(email, pw, config)
 	return &account
