@@ -30,16 +30,11 @@ type CreateProjectParams struct {
 }
 
 type CreateEngineParams struct {
-	Name      string              `json:"name"`
-	AccountId string              `json:"accountid"`
-	ProjectId uint32              `json:"projectid"`
-	Behaviors map[string]Behavior `json:"behaviors"`
-	Filters   EngineFilters       `json:"filters"`
-}
-
-type EngineFilters struct {
-	Behaviors []string               `json:"behaviors"`
-	Items     map[string]interface{} `json:"items"`
+	Name        string                 `json:"name"`
+	AccountId   string                 `json:"accountid"`
+	ProjectId   uint32                 `json:"projectid"`
+	Behaviors   map[string]Behavior    `json:"behaviors"`
+	ItemsFilter map[string]interface{} `json:"filter"`
 }
 
 // Types
@@ -77,16 +72,16 @@ type ProjectKey struct {
 }
 
 type Engine struct {
-	Key        string
-	EngineId   uint32 `bson:"engine_id"`
-	Id         string
-	ProjectId  uint32
-	Name       string
-	Status     int
-	ApiVersion string
-	Dashboard  DashboardData
-	Behaviors  map[string]Behavior `json:"behaviors"`
-	Filters    EngineFilters       `json:"filters"`
+	Key         string
+	EngineId    uint32 `bson:"engine_id"`
+	Id          string
+	ProjectId   uint32
+	Name        string
+	Status      int
+	ApiVersion  string
+	Dashboard   DashboardData
+	Behaviors   map[string]Behavior    `json:"behaviors"`
+	ItemsFilter map[string]interface{} `json:"filter"`
 }
 
 type Dataset struct {
@@ -179,6 +174,6 @@ func (params *CreateEngineParams) AppendToBody(v *url.Values) {
 	v.Add("projectid", strconv.FormatUint(uint64(params.ProjectId), 10))
 	behaviors, _ := json.Marshal(params.Behaviors)
 	v.Add("behaviors", string(behaviors))
-	filters, _ := json.Marshal(params.Filters)
-	v.Add("filters", string(filters))
+	filter, _ := json.Marshal(params.ItemsFilter)
+	v.Add("filter", string(filter))
 }
