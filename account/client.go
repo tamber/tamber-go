@@ -4,6 +4,7 @@ import (
 	"errors"
 	tamber "github.com/tamber/tamber-go"
 	"net/url"
+	"time"
 )
 
 var (
@@ -32,8 +33,13 @@ func (a Account) UploadDataset(params *tamber.UploadParams) (*tamber.Dataset, er
 	dataset := &tamber.UploadResponse{}
 	var err error
 
+	err = a.updateToken()
+	if err != nil {
+		return nil, err
+	}
+
 	if len(params.Filepath) > 0 {
-		err = a.S.CallUpload("POST", "", a.Email, a.Password, object, "uploadDataset", params.Filepath, params.Type, dataset)
+		err = a.S.CallUpload("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, object, "uploadDataset", params.Filepath, params.Type, dataset)
 	} else {
 		err = errors.New("Invalid upload dataset params: filepath needs to be set")
 	}
@@ -54,8 +60,13 @@ func (a Account) CreateProjectParent(params *tamber.CreateProjectParentParams) (
 	parent := &tamber.CreateProjectParentResponse{}
 	var err error
 
+	err = a.updateToken()
+	if err != nil {
+		return nil, err
+	}
+
 	if len(params.Name) > 0 {
-		err = a.S.Call("POST", "", a.Email, a.Password, object, "createProjectParent", body, parent)
+		err = a.S.Call("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, object, "createProjectParent", body, parent)
 	} else {
 		err = errors.New("Invalid create parent params: name needs to be set")
 	}
@@ -76,8 +87,13 @@ func (a Account) CreateProject(params *tamber.CreateProjectParams) (*tamber.Proj
 	project := &tamber.CreateProjectResponse{}
 	var err error
 
+	err = a.updateToken()
+	if err != nil {
+		return nil, err
+	}
+
 	if len(params.ProjectParentId) > 0 {
-		err = a.S.Call("POST", "", a.Email, a.Password, object, "createProject", body, project)
+		err = a.S.Call("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, object, "createProject", body, project)
 	} else {
 		err = errors.New("Invalid create project params: ProjectParentId needs to be set")
 	}
@@ -98,8 +114,13 @@ func (a Account) CreateEngine(params *tamber.CreateEngineParams) (*tamber.Engine
 	engine := &tamber.CreateEngineResponse{}
 	var err error
 
+	err = a.updateToken()
+	if err != nil {
+		return nil, err
+	}
+
 	if len(params.Name) > 0 {
-		err = a.S.Call("POST", "", a.Email, a.Password, object, "createEngine", body, engine)
+		err = a.S.Call("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, object, "createEngine", body, engine)
 	} else {
 		err = errors.New("Invalid create engine params: name needs to be set")
 	}
@@ -119,7 +140,39 @@ func (a Account) Retrieve() (*tamber.AccountInfo, error) {
 	resp := &tamber.AccountResponse{}
 	var err error
 
-	err = a.S.Call("POST", "", a.Email, a.Password, object, "retrieve", body, resp)
+	err = a.updateToken()
+	if err != nil {
+		return nil, err
+	}
+
+	err = a.S.Call("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, object, "retrieve", body, resp)
+
+	if !resp.Succ {
+		err = errors.New(resp.Error)
+	}
+	return &resp.Result, err
+}
+
+func (a Account) updateToken() error {
+	if a.AuthToken.ExpireTime < time.Now().UnixNano()/int64(time.Millisecond) {
+		authToken, err := a.Login()
+		if err != nil {
+			return err
+		}
+		if a.AuthToken == tamber.DefaultAuthToken {
+			tamber.DefaultAuthToken = authToken
+		}
+		a.AuthToken = authToken
+	}
+	return nil
+}
+
+func (a Account) Login() (*tamber.AuthToken, error) {
+	body := &url.Values{}
+	resp := &tamber.LoginResponse{}
+	var err error
+
+	err = a.S.Call("POST", "", a.Email, a.Password, object, "login", body, resp)
 
 	if !resp.Succ {
 		err = errors.New(resp.Error)
@@ -128,5 +181,5 @@ func (a Account) Retrieve() (*tamber.AccountInfo, error) {
 }
 
 func getAccount() Account {
-	return Account{GetDefaultAccountSessionConfig(), tamber.DefaultAccountEmail, tamber.DefaultAccountPassword}
+	return Account{GetDefaultAccountSessionConfig(), tamber.DefaultAccountEmail, tamber.DefaultAccountPassword, tamber.DefaultAuthToken}
 }

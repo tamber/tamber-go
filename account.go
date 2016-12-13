@@ -105,6 +105,12 @@ type AccountInfo struct {
 	Datasets       map[string]Dataset       `json:"datasets"`        // key = dataset.Id
 }
 
+type AuthToken struct {
+	Token      string `json:"token"`
+	AccountId  string `json:"accountid`
+	ExpireTime int64  `json:"expiration_timestamp"`
+}
+
 // Responses
 type AccountResponse struct {
 	Succ   bool        `json:"success"`
@@ -139,6 +145,13 @@ type CreateEngineResponse struct {
 	Result Engine  `json:"result"`
 	Error  string  `json:"error"`
 	Time   float64 `json:"time"`
+}
+
+type LoginResponse struct {
+	Succ   bool      `json:"success"`
+	Result AuthToken `json:"result"`
+	Error  string    `json:"error"`
+	Time   float64   `json:"time"`
 }
 
 func (params *CreateProjectParentParams) AppendToBody(v *url.Values) {

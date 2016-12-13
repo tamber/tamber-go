@@ -42,10 +42,13 @@ type SessionConfig struct {
 
 // Default global keys
 var (
-	DefaultProjectKey      string
-	DefaultEngineKey       string
+	DefaultProjectKey string
+	DefaultEngineKey  string
+
 	DefaultAccountEmail    string
 	DefaultAccountPassword string
+
+	DefaultAuthToken *AuthToken
 )
 
 var httpClient = &http.Client{Timeout: defaultHTTPTimeout}
