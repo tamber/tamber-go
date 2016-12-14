@@ -154,7 +154,7 @@ func (a Account) Retrieve() (*tamber.AccountInfo, error) {
 }
 
 func (a Account) updateToken() error {
-	if a.AuthToken.ExpireTime < time.Now().UnixNano()/int64(time.Millisecond) {
+	if a.AuthToken == nil || a.AuthToken.ExpireTime < time.Now().UnixNano()/int64(time.Millisecond) {
 		authToken, err := a.Login()
 		if err != nil {
 			return err

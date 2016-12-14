@@ -59,16 +59,16 @@ type Project struct {
 	Dashboard       DashboardData          `json:"dashboard"`
 }
 
+type ProjectKey struct {
+	Id          uint32 `json:"id"`
+	Environment string `json:"environment"`
+}
+
 type ProjectParent struct {
 	Id         string       `json:"id"`
 	Name       string       `json:"name"`
 	ApiVersion string       `json:"apiversion"`
 	Projects   []ProjectKey `json:"projects"`
-}
-
-type ProjectKey struct {
-	Id          uint32 `json:"id"`
-	Environment string `json:"environment"`
 }
 
 type Engine struct {
