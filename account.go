@@ -51,12 +51,13 @@ type Project struct {
 	Environment     string                 `json:"environment"`
 	AccountId       string                 `json:"accountid"`
 	ProjectParentId string                 `json:"parentid"`
-	ApiVersion      string                 `json:"apiversion"`
+	ApiVersion      string                 `json:"api_version"`
 	Engines         []string               `json:"engines"`
 	Metadata        map[string]interface{} `json:"metadata"`
 	State           int                    `json:"state"`
 	Behaviors       []string               `json:"behaviors"`
 	Dashboard       DashboardData          `json:"dashboard"`
+	Created         int64                  `json:"created"`
 }
 
 type ProjectKey struct {
@@ -67,21 +68,22 @@ type ProjectKey struct {
 type ProjectParent struct {
 	Id         string       `json:"id"`
 	Name       string       `json:"name"`
-	ApiVersion string       `json:"apiversion"`
+	ApiVersion string       `json:"api_version"`
 	Projects   []ProjectKey `json:"projects"`
 }
 
 type Engine struct {
-	Key         string
-	EngineId    uint32 `bson:"engine_id"`
-	Id          string
-	ProjectId   uint32
-	Name        string
-	Status      int
-	ApiVersion  string
-	Dashboard   DashboardData
+	Key         string                 `json:"key"`
+	EngineId    uint32                 `bson:"engine_id"`
+	Id          string                 `json:"id"`
+	ProjectId   uint32                 `json:"projectid"`
+	Name        string                 `json:"name"`
+	Status      int                    `json:"status"`
+	ApiVersion  string                 `json:"api_version"`
+	Dashboard   DashboardData          `json:"dashboard"`
 	Behaviors   map[string]Behavior    `json:"behaviors"`
 	ItemsFilter map[string]interface{} `json:"filter"`
+	Created     int64                  `json:"created"`
 }
 
 type Dataset struct {
@@ -94,6 +96,7 @@ type Dataset struct {
 	Info      map[string]interface{} `json:"info"`
 	Settings  map[string]interface{} `json:"settings"`
 	Object    string                 `json:"object"`
+	Created   int64                  `json:"created"`
 }
 
 type AccountInfo struct {
