@@ -15,7 +15,7 @@ func UploadEventsDataset(filepath string) (*tamber.Dataset, error) {
 	return getAccount().UploadEventsDataset(filepath)
 }
 
-func (a Account) UploadEventsDataset(filepath string) (*tamber.Dataset, error) {
+func (a *Account) UploadEventsDataset(filepath string) (*tamber.Dataset, error) {
 	params := &tamber.UploadParams{Filepath: filepath, Type: tamber.EventsDatasetName}
 	return a.UploadDataset(params)
 }
@@ -24,12 +24,12 @@ func UploadItemsDataset(filepath string) (*tamber.Dataset, error) {
 	return getAccount().UploadItemsDataset(filepath)
 }
 
-func (a Account) UploadItemsDataset(filepath string) (*tamber.Dataset, error) {
+func (a *Account) UploadItemsDataset(filepath string) (*tamber.Dataset, error) {
 	params := &tamber.UploadParams{Filepath: filepath, Type: tamber.ItemsDatasetName}
 	return a.UploadDataset(params)
 }
 
-func (a Account) UploadDataset(params *tamber.UploadParams) (*tamber.Dataset, error) {
+func (a *Account) UploadDataset(params *tamber.UploadParams) (*tamber.Dataset, error) {
 	dataset := &tamber.UploadResponse{}
 	var err error
 
@@ -54,7 +54,7 @@ func CreateProjectParent(params *tamber.CreateProjectParentParams) (*tamber.Proj
 	return getAccount().CreateProjectParent(params)
 }
 
-func (a Account) CreateProjectParent(params *tamber.CreateProjectParentParams) (*tamber.ProjectParent, error) {
+func (a *Account) CreateProjectParent(params *tamber.CreateProjectParentParams) (*tamber.ProjectParent, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	parent := &tamber.CreateProjectParentResponse{}
@@ -81,7 +81,7 @@ func CreateProject(params *tamber.CreateProjectParams) (*tamber.Project, error) 
 	return getAccount().CreateProject(params)
 }
 
-func (a Account) CreateProject(params *tamber.CreateProjectParams) (*tamber.Project, error) {
+func (a *Account) CreateProject(params *tamber.CreateProjectParams) (*tamber.Project, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	project := &tamber.CreateProjectResponse{}
@@ -108,7 +108,7 @@ func CreateEngine(params *tamber.CreateEngineParams) (*tamber.Engine, error) {
 	return getAccount().CreateEngine(params)
 }
 
-func (a Account) CreateEngine(params *tamber.CreateEngineParams) (*tamber.Engine, error) {
+func (a *Account) CreateEngine(params *tamber.CreateEngineParams) (*tamber.Engine, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	engine := &tamber.CreateEngineResponse{}
@@ -135,7 +135,7 @@ func Retrieve() (*tamber.AccountInfo, error) {
 	return getAccount().Retrieve()
 }
 
-func (a Account) Retrieve() (*tamber.AccountInfo, error) {
+func (a *Account) Retrieve() (*tamber.AccountInfo, error) {
 	body := &url.Values{}
 	resp := &tamber.AccountResponse{}
 	var err error
@@ -153,7 +153,7 @@ func (a Account) Retrieve() (*tamber.AccountInfo, error) {
 	return &resp.Result, err
 }
 
-func (a Account) updateToken() error {
+func (a *Account) updateToken() error {
 	if a.AuthToken == nil || a.AuthToken.ExpireTime < time.Now().UnixNano()/int64(time.Millisecond) {
 		authToken, err := a.Login()
 		if err != nil {
@@ -167,7 +167,7 @@ func (a Account) updateToken() error {
 	return nil
 }
 
-func (a Account) Login() (*tamber.AuthToken, error) {
+func (a *Account) Login() (*tamber.AuthToken, error) {
 	body := &url.Values{}
 	resp := &tamber.LoginResponse{}
 	var err error
@@ -180,6 +180,6 @@ func (a Account) Login() (*tamber.AuthToken, error) {
 	return &resp.Result, err
 }
 
-func getAccount() Account {
-	return Account{GetDefaultAccountSessionConfig(), tamber.DefaultAccountEmail, tamber.DefaultAccountPassword, tamber.DefaultAuthToken}
+func getAccount() *Account {
+	return &Account{GetDefaultAccountSessionConfig(), tamber.DefaultAccountEmail, tamber.DefaultAccountPassword, tamber.DefaultAuthToken}
 }
