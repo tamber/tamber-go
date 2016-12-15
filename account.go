@@ -57,6 +57,7 @@ type Project struct {
 	State           int                    `json:"state"`
 	Behaviors       []string               `json:"behaviors"`
 	Dashboard       DashboardData          `json:"dashboard"`
+	Object          string                 `json:"object"`
 	Created         int64                  `json:"created"`
 }
 
@@ -74,15 +75,17 @@ type ProjectParent struct {
 
 type Engine struct {
 	Key         string                 `json:"key"`
-	EngineId    uint32                 `bson:"engine_id"`
+	EngineId    uint32                 `json:"engine_id"`
 	Id          string                 `json:"id"`
 	ProjectId   uint32                 `json:"projectid"`
+	ProjectKey  string                 `json:"project_key"`
 	Name        string                 `json:"name"`
 	Status      int                    `json:"status"`
 	ApiVersion  string                 `json:"api_version"`
 	Dashboard   DashboardData          `json:"dashboard"`
 	Behaviors   map[string]Behavior    `json:"behaviors"`
 	ItemsFilter map[string]interface{} `json:"filter"`
+	Object      string                 `json:"object"`
 	Created     int64                  `json:"created"`
 }
 
