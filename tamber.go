@@ -49,6 +49,9 @@ var (
 	DefaultAccountPassword string
 
 	DefaultAuthToken *AuthToken
+	DefaultErrFunc   SessionErrFunction = func(exp string, err interface{}) {
+		log.Printf("\n%s: %v\n", exp, err)
+	}
 )
 
 var httpClient = &http.Client{Timeout: defaultHTTPTimeout}
@@ -67,7 +70,7 @@ var httpClient = &http.Client{Timeout: defaultHTTPTimeout}
 // }
 
 func GetDefaultSessionConfig() *SessionConfig {
-	return &SessionConfig{ApiUrl, httpClient, defaultErrFunc}
+	return &SessionConfig{ApiUrl, httpClient, DefaultErrFunc}
 }
 
 func (s *SessionConfig) Call(method, path, key, ext, object, command string, form *url.Values, resp interface{}) error {
@@ -150,8 +153,4 @@ func (s *SessionConfig) Do(req *http.Request, v interface{}) error {
 // When executing API requests. By default this is a log.Printf
 func (s *SessionConfig) SetErrFunc(errFunc SessionErrFunction) {
 	s.errFunc = errFunc
-}
-
-func defaultErrFunc(exp string, err interface{}) {
-	log.Printf("\n%s: %v\n", exp, err)
 }
