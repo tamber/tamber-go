@@ -56,19 +56,6 @@ var (
 
 var httpClient = &http.Client{Timeout: defaultHTTPTimeout}
 
-// type Client struct {
-// 	ProjectKey string
-// 	EngineKey  string
-// 	S          *SessionConfig
-// }
-
-// func New(projectKey string, engineKey string, config *SessionConfig) Client {
-// 	if config == nil {
-// 		config = GetDefaultSessionConfig()
-// 	}
-// 	return Client{ProjectKey: projectKey, EngineKey: engineKey, S: config}
-// }
-
 func GetDefaultSessionConfig() *SessionConfig {
 	return &SessionConfig{ApiUrl, httpClient, DefaultErrFunc}
 }
@@ -92,7 +79,6 @@ func (s *SessionConfig) Call(method, path, key, ext, object, command string, for
 	if err := s.Do(req, resp); err != nil {
 		return err
 	}
-	// fmt.Printf("\n%+v\n", resp)
 	return nil
 }
 

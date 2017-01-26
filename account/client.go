@@ -11,21 +11,21 @@ var (
 	object = "account"
 )
 
-func UploadEventsDataset(filepath string) (*tamber.Dataset, error) {
-	return getAccount().UploadEventsDataset(filepath)
+func UploadEventsDataset(projectId uint32, filepath string) (*tamber.Dataset, error) {
+	return getAccount().UploadEventsDataset(projectId, filepath)
 }
 
-func (a *Account) UploadEventsDataset(filepath string) (*tamber.Dataset, error) {
-	params := &tamber.UploadParams{Filepath: filepath, Type: tamber.EventsDatasetName}
+func (a *Account) UploadEventsDataset(projectId uint32, filepath string) (*tamber.Dataset, error) {
+	params := &tamber.UploadParams{ProjectId: projectId, Filepath: filepath, Type: tamber.EventsDatasetName}
 	return a.UploadDataset(params)
 }
 
-func UploadItemsDataset(filepath string) (*tamber.Dataset, error) {
-	return getAccount().UploadItemsDataset(filepath)
+func UploadItemsDataset(projectId uint32, filepath string) (*tamber.Dataset, error) {
+	return getAccount().UploadItemsDataset(projectId, filepath)
 }
 
-func (a *Account) UploadItemsDataset(filepath string) (*tamber.Dataset, error) {
-	params := &tamber.UploadParams{Filepath: filepath, Type: tamber.ItemsDatasetName}
+func (a *Account) UploadItemsDataset(projectId uint32, filepath string) (*tamber.Dataset, error) {
+	params := &tamber.UploadParams{ProjectId: projectId, Filepath: filepath, Type: tamber.ItemsDatasetName}
 	return a.UploadDataset(params)
 }
 

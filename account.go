@@ -7,14 +7,15 @@ import (
 )
 
 var (
-	EventsDatasetName = "behaviors_dataset"
+	EventsDatasetName = "events_dataset"
 	ItemsDatasetName  = "items_dataset"
 )
 
 // Inputs
 type UploadParams struct {
-	Filepath string `json:"filepath"`
-	Type     string `json:"type"`
+	ProjectId uint32 `json:"projectid"`
+	Filepath  string `json:"filepath"`
+	Type      string `json:"type"`
 }
 
 type CreateProjectParentParams struct {
@@ -59,6 +60,7 @@ type Project struct {
 	Dashboard       DashboardData          `json:"dashboard"`
 	Object          string                 `json:"object"`
 	Created         int64                  `json:"created"`
+	Datasets        map[string]Dataset     `json:"datasets"`
 }
 
 type ProjectKey struct {
@@ -90,16 +92,15 @@ type Engine struct {
 }
 
 type Dataset struct {
-	Id        string                 `json:"id"`
-	Name      string                 `json:"name"`
-	Type      string                 `json:"type"`     // behaviors_dataset, items_dataset
-	FileType  string                 `json:"filetype"` // json or csv
-	FileSize  int64                  `json:"filesize"`
-	Behaviors []string               `json:"behaviors"`
-	Info      map[string]interface{} `json:"info"`
-	Settings  map[string]interface{} `json:"settings"`
-	Object    string                 `json:"object"`
-	Created   int64                  `json:"created"`
+	Id        string `json:"id"`
+	ProjectId uint32 `json:"projectid"`
+	AccountId string `json:"accountid"`
+	Name      string `json:"name"`
+	Type      string `json:"type"`     // behaviors_dataset, items_dataset
+	FileType  string `json:"filetype"` // json or csv
+	FileSize  int64  `json:"filesize"`
+	Object    string `json:"object"`
+	Created   int64  `json:"created"`
 }
 
 type AccountInfo struct {
@@ -108,7 +109,6 @@ type AccountInfo struct {
 	ProjectParents map[string]ProjectParent `json:"project_parents"` // key = projectParent.Id
 	Projects       map[uint32]Project       `json:"projects"`        // key = project.Id
 	Engines        map[string]Engine        `json:"engines"`         // key = engine.Id
-	Datasets       map[string]Dataset       `json:"datasets"`        // key = dataset.Id
 }
 
 type AuthToken struct {
