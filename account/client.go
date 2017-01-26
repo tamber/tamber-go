@@ -11,21 +11,21 @@ var (
 	object = "account"
 )
 
-func UploadEventsDataset(projectId uint32, filepath string) (*tamber.Dataset, error) {
-	return getAccount().UploadEventsDataset(projectId, filepath)
+func UploadEventsDataset(filepath string) (*tamber.Dataset, error) {
+	return getAccount().UploadEventsDataset(filepath)
 }
 
-func (a *Account) UploadEventsDataset(projectId uint32, filepath string) (*tamber.Dataset, error) {
-	params := &tamber.UploadParams{ProjectId: projectId, Filepath: filepath, Type: tamber.EventsDatasetName}
+func (a *Account) UploadEventsDataset(filepath string) (*tamber.Dataset, error) {
+	params := &tamber.UploadParams{Filepath: filepath, Type: tamber.EventsDatasetName}
 	return a.UploadDataset(params)
 }
 
-func UploadItemsDataset(projectId uint32, filepath string) (*tamber.Dataset, error) {
-	return getAccount().UploadItemsDataset(projectId, filepath)
+func UploadItemsDataset(filepath string) (*tamber.Dataset, error) {
+	return getAccount().UploadItemsDataset(filepath)
 }
 
-func (a *Account) UploadItemsDataset(projectId uint32, filepath string) (*tamber.Dataset, error) {
-	params := &tamber.UploadParams{ProjectId: projectId, Filepath: filepath, Type: tamber.ItemsDatasetName}
+func (a *Account) UploadItemsDataset(filepath string) (*tamber.Dataset, error) {
+	params := &tamber.UploadParams{Filepath: filepath, Type: tamber.ItemsDatasetName}
 	return a.UploadDataset(params)
 }
 
@@ -178,6 +178,18 @@ func (a *Account) Login() (*tamber.AuthToken, error) {
 		err = errors.New(resp.Error)
 	}
 	return &resp.Result, err
+}
+
+func (a *Account) RetrainEngine(engineId uint32) (*tamber.Engine, error) {
+	body := &url.Values{}
+	body.Add("id", strconv.FormatUint(uint64(engineId), 10))
+	engine := &tamber.CreateEngineResponse{}
+	a.S.Call("GET", "", a.Email, a.Password, object, "retrainEngine", body, engine)
+
+	if !engine.Succ {
+		err = errors.New(engine.Error)
+	}
+	return &engine.Result, err
 }
 
 func getAccount() *Account {
