@@ -131,6 +131,22 @@ func (a *Account) CreateEngine(params *tamber.CreateEngineParams) (*tamber.Engin
 	return &engine.Result, err
 }
 
+func RetrainEngine(engineId uint32) (*tamber.Engine, error) {
+	return getAccount().RetrainEngine(engineId)
+}
+
+func (a *Account) RetrainEngine(engineId uint32) (*tamber.Engine, error) {
+	body := &url.Values{}
+	body.Add("id", strconv.FormatUint(uint64(engineId), 10))
+	engine := &tamber.CreateEngineResponse{}
+	a.S.Call("GET", "", a.Email, a.Password, object, "retrainEngine", body, engine)
+
+	if !engine.Succ {
+		err = errors.New(engine.Error)
+	}
+	return &engine.Result, err
+}
+
 func Retrieve() (*tamber.AccountInfo, error) {
 	return getAccount().Retrieve()
 }
@@ -178,18 +194,6 @@ func (a *Account) Login() (*tamber.AuthToken, error) {
 		err = errors.New(resp.Error)
 	}
 	return &resp.Result, err
-}
-
-func (a *Account) RetrainEngine(engineId uint32) (*tamber.Engine, error) {
-	body := &url.Values{}
-	body.Add("id", strconv.FormatUint(uint64(engineId), 10))
-	engine := &tamber.CreateEngineResponse{}
-	a.S.Call("GET", "", a.Email, a.Password, object, "retrainEngine", body, engine)
-
-	if !engine.Succ {
-		err = errors.New(engine.Error)
-	}
-	return &engine.Result, err
 }
 
 func getAccount() *Account {
