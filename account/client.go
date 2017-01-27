@@ -4,6 +4,7 @@ import (
 	"errors"
 	tamber "github.com/tamber/tamber-go"
 	"net/url"
+	"strconv"
 	"time"
 )
 
@@ -11,21 +12,21 @@ var (
 	object = "account"
 )
 
-func UploadEventsDataset(filepath string) (*tamber.Dataset, error) {
-	return getAccount().UploadEventsDataset(filepath)
+func UploadEventsDataset(projectId uint32, filepath string) (*tamber.Dataset, error) {
+	return getAccount().UploadEventsDataset(projectId, filepath)
 }
 
-func (a *Account) UploadEventsDataset(filepath string) (*tamber.Dataset, error) {
-	params := &tamber.UploadParams{Filepath: filepath, Type: tamber.EventsDatasetName}
+func (a *Account) UploadEventsDataset(projectId uint32, filepath string) (*tamber.Dataset, error) {
+	params := &tamber.UploadParams{ProjectId: projectId, Filepath: filepath, Type: tamber.EventsDatasetName}
 	return a.UploadDataset(params)
 }
 
-func UploadItemsDataset(filepath string) (*tamber.Dataset, error) {
-	return getAccount().UploadItemsDataset(filepath)
+func UploadItemsDataset(projectId uint32, filepath string) (*tamber.Dataset, error) {
+	return getAccount().UploadItemsDataset(projectId, filepath)
 }
 
-func (a *Account) UploadItemsDataset(filepath string) (*tamber.Dataset, error) {
-	params := &tamber.UploadParams{Filepath: filepath, Type: tamber.ItemsDatasetName}
+func (a *Account) UploadItemsDataset(projectId uint32, filepath string) (*tamber.Dataset, error) {
+	params := &tamber.UploadParams{ProjectId: projectId, Filepath: filepath, Type: tamber.ItemsDatasetName}
 	return a.UploadDataset(params)
 }
 
@@ -39,7 +40,7 @@ func (a *Account) UploadDataset(params *tamber.UploadParams) (*tamber.Dataset, e
 	}
 
 	if len(params.Filepath) > 0 {
-		err = a.S.CallUpload("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, object, "uploadDataset", params.Filepath, params.Type, dataset)
+		err = a.S.CallUpload("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, object, "uploadDataset", params, dataset)
 	} else {
 		err = errors.New("Invalid upload dataset params: filepath needs to be set")
 	}
@@ -139,6 +140,14 @@ func (a *Account) RetrainEngine(engineId uint32) (*tamber.Engine, error) {
 	body := &url.Values{}
 	body.Add("id", strconv.FormatUint(uint64(engineId), 10))
 	engine := &tamber.CreateEngineResponse{}
+
+	var err error
+
+	err = a.updateToken()
+	if err != nil {
+		return nil, err
+	}
+
 	a.S.Call("GET", "", a.Email, a.Password, object, "retrainEngine", body, engine)
 
 	if !engine.Succ {

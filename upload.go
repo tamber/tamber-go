@@ -14,10 +14,11 @@ import (
 	"mime/multipart"
 	"os"
 	go_path "path"
+	"strconv"
 )
 
-func (s *SessionConfig) CallUpload(method, path, key, ext, object, command, dpath, dtype string, resp interface{}) error {
-	file, err := os.Open(dpath)
+func (s *SessionConfig) CallUpload(method, path, key, ext, object, command string, params *UploadParams, resp interface{}) error {
+	file, err := os.Open(params.Filepath)
 	if err != nil {
 		return err
 	}
@@ -28,12 +29,12 @@ func (s *SessionConfig) CallUpload(method, path, key, ext, object, command, dpat
 	}
 
 	fname := fi.Name()
-	if dtype == EventsDatasetName {
+	if params.Type == EventsDatasetName {
 		ext := go_path.Ext(fname)
 		fname = fname[0:len(fname)-len(ext)] + ".csv"
 	}
 
-	fmt.Println("dpath:", dpath)
+	fmt.Println("filepath:", params.Filepath)
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	part, err := writer.CreateFormFile("file", fname)
@@ -45,7 +46,8 @@ func (s *SessionConfig) CallUpload(method, path, key, ext, object, command, dpat
 	if err != nil {
 		panic(err)
 	}
-	_ = writer.WriteField("type", dtype)
+	_ = writer.WriteField("projectid", strconv.FormatUint(uint64(params.ProjectId), 10))
+	_ = writer.WriteField("type", params.Type)
 	// for key, val := range params {
 	// 	_ = writer.WriteField(key, val)
 	// }
