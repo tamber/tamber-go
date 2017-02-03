@@ -77,8 +77,8 @@ type ProjectParent struct {
 
 type Engine struct {
 	Key         string                 `json:"key"`
-	EngineId    uint32                 `json:"engine_id"`
-	Id          string                 `json:"id"`
+	Id          uint32                 `json:"id"`
+	IdStr       string                 `json:"id_str"`
 	ProjectId   uint32                 `json:"projectid"`
 	ProjectKey  string                 `json:"project_key"`
 	Name        string                 `json:"name"`
@@ -106,9 +106,9 @@ type Dataset struct {
 type AccountInfo struct {
 	Id             string                   `json:"id"`
 	Username       string                   `json:"username"`
-	ProjectParents map[string]ProjectParent `json:"project_parents"` // key = projectParent.Id
-	Projects       map[uint32]Project       `json:"projects"`        // key = project.Id
-	Engines        map[string]Engine        `json:"engines"`         // key = engine.Id
+	ProjectParents map[string]ProjectParent `json:"project_parents"` // mapkey is projectParent.Id
+	Projects       map[uint32]Project       `json:"projects"`        // mapkey is project.Id
+	Engines        map[uint32]Engine        `json:"engines"`         // mapkey is engine.Id
 }
 
 type AuthToken struct {

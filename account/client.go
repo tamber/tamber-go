@@ -9,7 +9,10 @@ import (
 )
 
 var (
-	object = "account"
+	accountObject       = "account"
+	projectObject       = "project"
+	projectParentObject = "projectParent"
+	engineObject        = "engine"
 )
 
 func UploadEventsDataset(projectId uint32, filepath string) (*tamber.Dataset, error) {
@@ -21,14 +24,14 @@ func (a *Account) UploadEventsDataset(projectId uint32, filepath string) (*tambe
 	return a.UploadDataset(params)
 }
 
-func UploadItemsDataset(projectId uint32, filepath string) (*tamber.Dataset, error) {
-	return getAccount().UploadItemsDataset(projectId, filepath)
-}
+// func UploadItemsDataset(projectId uint32, filepath string) (*tamber.Dataset, error) {
+// 	return getAccount().UploadItemsDataset(projectId, filepath)
+// }
 
-func (a *Account) UploadItemsDataset(projectId uint32, filepath string) (*tamber.Dataset, error) {
-	params := &tamber.UploadParams{ProjectId: projectId, Filepath: filepath, Type: tamber.ItemsDatasetName}
-	return a.UploadDataset(params)
-}
+// func (a *Account) UploadItemsDataset(projectId uint32, filepath string) (*tamber.Dataset, error) {
+// 	params := &tamber.UploadParams{ProjectId: projectId, Filepath: filepath, Type: tamber.ItemsDatasetName}
+// 	return a.UploadDataset(params)
+// }
 
 func (a *Account) UploadDataset(params *tamber.UploadParams) (*tamber.Dataset, error) {
 	dataset := &tamber.UploadResponse{}
@@ -40,7 +43,7 @@ func (a *Account) UploadDataset(params *tamber.UploadParams) (*tamber.Dataset, e
 	}
 
 	if len(params.Filepath) > 0 {
-		err = a.S.CallUpload("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, object, "uploadDataset", params, dataset)
+		err = a.S.CallUpload("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, projectObject, "uploadDataset", params, dataset)
 	} else {
 		err = errors.New("Invalid upload dataset params: filepath needs to be set")
 	}
@@ -67,7 +70,7 @@ func (a *Account) CreateProjectParent(params *tamber.CreateProjectParentParams) 
 	}
 
 	if len(params.Name) > 0 {
-		err = a.S.Call("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, object, "createProjectParent", body, parent)
+		err = a.S.Call("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, projectParentObject, "create", body, parent)
 	} else {
 		err = errors.New("Invalid create parent params: name needs to be set")
 	}
@@ -94,7 +97,7 @@ func (a *Account) CreateProject(params *tamber.CreateProjectParams) (*tamber.Pro
 	}
 
 	if len(params.ProjectParentId) > 0 {
-		err = a.S.Call("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, object, "createProject", body, project)
+		err = a.S.Call("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, projectObject, "create", body, project)
 	} else {
 		err = errors.New("Invalid create project params: ProjectParentId needs to be set")
 	}
@@ -121,7 +124,7 @@ func (a *Account) CreateEngine(params *tamber.CreateEngineParams) (*tamber.Engin
 	}
 
 	if len(params.Name) > 0 {
-		err = a.S.Call("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, object, "createEngine", body, engine)
+		err = a.S.Call("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, engineObject, "create", body, engine)
 	} else {
 		err = errors.New("Invalid create engine params: name needs to be set")
 	}
@@ -148,7 +151,7 @@ func (a *Account) RetrainEngine(engineId uint32) (*tamber.Engine, error) {
 		return nil, err
 	}
 
-	a.S.Call("GET", "", a.Email, a.Password, object, "retrainEngine", body, engine)
+	a.S.Call("GET", "", a.AuthToken.AccountId, a.AuthToken.Token, engineObject, "retrain", body, engine)
 
 	if !engine.Succ {
 		err = errors.New(engine.Error)
@@ -170,7 +173,7 @@ func (a *Account) Retrieve() (*tamber.AccountInfo, error) {
 		return nil, err
 	}
 
-	err = a.S.Call("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, object, "retrieve", body, resp)
+	err = a.S.Call("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, accountObject, "retrieve", body, resp)
 
 	if !resp.Succ {
 		err = errors.New(resp.Error)
@@ -197,7 +200,7 @@ func (a *Account) Login() (*tamber.AuthToken, error) {
 	resp := &tamber.LoginResponse{}
 	var err error
 
-	err = a.S.Call("POST", "", a.Email, a.Password, object, "login", body, resp)
+	err = a.S.Call("POST", "", a.Email, a.Password, accountObject, "login", body, resp)
 
 	if !resp.Succ {
 		err = errors.New(resp.Error)
