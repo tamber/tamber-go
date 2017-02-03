@@ -11,7 +11,7 @@ import (
 var (
 	accountObject       = "account"
 	projectObject       = "project"
-	projectParentObject = "projectParent"
+	projectParentObject = "project_parent"
 	engineObject        = "engine"
 )
 
@@ -43,7 +43,7 @@ func (a *Account) UploadDataset(params *tamber.UploadParams) (*tamber.Dataset, e
 	}
 
 	if len(params.Filepath) > 0 {
-		err = a.S.CallUpload("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, projectObject, "uploadDataset", params, dataset)
+		err = a.S.CallUpload("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, projectObject, "upload_dataset", params, dataset)
 	} else {
 		err = errors.New("Invalid upload dataset params: filepath needs to be set")
 	}
