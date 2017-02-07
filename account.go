@@ -18,21 +18,12 @@ type UploadParams struct {
 	Type      string `json:"type"`
 }
 
-type CreateProjectParentParams struct {
-	AccountId    string   `json:"accountid"`
-	Name         string   `json:"name"`
-	Environments []string `json:"environments"`
-}
-
 type CreateProjectParams struct {
-	AccountId       string `json:"accountid"`
-	Environment     string `json:"environment"`
-	ProjectParentId string `json:"parentid"`
+	Name string `json:"name"`
 }
 
 type CreateEngineParams struct {
 	Name        string                 `json:"name"`
-	AccountId   string                 `json:"accountid"`
 	ProjectId   uint32                 `json:"projectid"`
 	Behaviors   map[string]Behavior    `json:"behaviors"`
 	ItemsFilter map[string]interface{} `json:"filter"`
@@ -49,7 +40,6 @@ type Project struct {
 	Id              uint32                 `json:"id"`
 	Key             string                 `json:"key"`
 	Name            string                 `json:"name"`
-	Environment     string                 `json:"environment"`
 	AccountId       string                 `json:"accountid"`
 	ProjectParentId string                 `json:"parentid"`
 	ApiVersion      string                 `json:"api_version"`
@@ -61,18 +51,6 @@ type Project struct {
 	Object          string                 `json:"object"`
 	Created         int64                  `json:"created"`
 	Datasets        map[string]Dataset     `json:"datasets"`
-}
-
-type ProjectKey struct {
-	Id          uint32 `json:"id"`
-	Environment string `json:"environment"`
-}
-
-type ProjectParent struct {
-	Id         string       `json:"id"`
-	Name       string       `json:"name"`
-	ApiVersion string       `json:"api_version"`
-	Projects   []ProjectKey `json:"projects"`
 }
 
 type Engine struct {
@@ -104,11 +82,10 @@ type Dataset struct {
 }
 
 type AccountInfo struct {
-	Id             string                   `json:"id"`
-	Username       string                   `json:"username"`
-	ProjectParents map[string]ProjectParent `json:"project_parents"` // mapkey is projectParent.Id
-	Projects       map[uint32]Project       `json:"projects"`        // mapkey is project.Id
-	Engines        map[uint32]Engine        `json:"engines"`         // mapkey is engine.Id
+	Id       string             `json:"id"`
+	Username string             `json:"username"`
+	Projects map[uint32]Project `json:"projects"` // mapkey is project.Id
+	Engines  map[uint32]Engine  `json:"engines"`  // mapkey is engine.Id
 }
 
 type AuthToken struct {
@@ -132,13 +109,6 @@ type UploadResponse struct {
 	Time   float64 `json:"time"`
 }
 
-type CreateProjectParentResponse struct {
-	Succ   bool          `json:"success"`
-	Result ProjectParent `json:"result"`
-	Error  string        `json:"error"`
-	Time   float64       `json:"time"`
-}
-
 type CreateProjectResponse struct {
 	Succ   bool    `json:"success"`
 	Result Project `json:"result"`
@@ -160,35 +130,15 @@ type LoginResponse struct {
 	Time   float64   `json:"time"`
 }
 
-func (params *CreateProjectParentParams) AppendToBody(v *url.Values) {
-	if len(params.AccountId) > 0 {
-		v.Add("accountid", params.AccountId)
-	}
+func (params *CreateProjectParams) AppendToBody(v *url.Values) {
 	if len(params.Name) > 0 {
 		v.Add("name", params.Name)
-	}
-	environments, _ := json.Marshal(params.Environments)
-	v.Add("environments", string(environments))
-}
-
-func (params *CreateProjectParams) AppendToBody(v *url.Values) {
-	if len(params.AccountId) > 0 {
-		v.Add("accountid", params.AccountId)
-	}
-	if len(params.Environment) > 0 {
-		v.Add("environment", params.Environment)
-	}
-	if len(params.ProjectParentId) > 0 {
-		v.Add("parentid", params.ProjectParentId)
 	}
 }
 
 func (params *CreateEngineParams) AppendToBody(v *url.Values) {
 	if len(params.Name) > 0 {
 		v.Add("name", params.Name)
-	}
-	if len(params.AccountId) > 0 {
-		v.Add("accountid", params.AccountId)
 	}
 	v.Add("projectid", strconv.FormatUint(uint64(params.ProjectId), 10))
 	behaviors, _ := json.Marshal(params.Behaviors)

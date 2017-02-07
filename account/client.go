@@ -54,33 +54,6 @@ func (a *Account) UploadDataset(params *tamber.UploadParams) (*tamber.Dataset, e
 	return &dataset.Result, err
 }
 
-func CreateProjectParent(params *tamber.CreateProjectParentParams) (*tamber.ProjectParent, error) {
-	return getAccount().CreateProjectParent(params)
-}
-
-func (a *Account) CreateProjectParent(params *tamber.CreateProjectParentParams) (*tamber.ProjectParent, error) {
-	body := &url.Values{}
-	params.AppendToBody(body)
-	parent := &tamber.CreateProjectParentResponse{}
-	var err error
-
-	err = a.updateToken()
-	if err != nil {
-		return nil, err
-	}
-
-	if len(params.Name) > 0 {
-		err = a.S.Call("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, projectParentObject, "create", body, parent)
-	} else {
-		err = errors.New("Invalid create parent params: name needs to be set")
-	}
-
-	if !parent.Succ {
-		err = errors.New(parent.Error)
-	}
-	return &parent.Result, err
-}
-
 func CreateProject(params *tamber.CreateProjectParams) (*tamber.Project, error) {
 	return getAccount().CreateProject(params)
 }
@@ -96,10 +69,10 @@ func (a *Account) CreateProject(params *tamber.CreateProjectParams) (*tamber.Pro
 		return nil, err
 	}
 
-	if len(params.ProjectParentId) > 0 {
+	if len(params.Name) > 0 {
 		err = a.S.Call("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, projectObject, "create", body, project)
 	} else {
-		err = errors.New("Invalid create project params: ProjectParentId needs to be set")
+		err = errors.New("Invalid create project params: Name needs to be set")
 	}
 
 	if !project.Succ {
