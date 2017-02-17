@@ -69,7 +69,7 @@ func (c Client) RecommendedSimilar(params *tamber.DiscoverParams) (*tamber.Disco
 	var err error
 
 	if len(params.User) > 0 && len(params.Item) > 0 {
-		err = c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "recommendedSimilar", body, discoveries)
+		err = c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "recommended_similar", body, discoveries)
 	} else {
 		err = errors.New("Invalid discover params: user and item need to be set")
 	}

@@ -54,7 +54,7 @@ func (params *EventParams) AppendToBody(v *url.Values) {
 		v.Add("created", strconv.FormatInt(params.Created, 10))
 	}
 	getRecs, _ := json.Marshal(params.GetRecs)
-	v.Add("getRecs", string(getRecs))
+	v.Add("get_recs", string(getRecs))
 
 	//For Retrieve Method Only
 	if params.CreatedSince != 0 {

@@ -31,7 +31,7 @@ type CreateEngineParams struct {
 
 // Types
 type DashboardData struct {
-	BehaviorCount int64 `json:"behavior_count"`
+	BehaviorCount int64 `json:"event_count"`
 	ItemCount     int64 `json:"item_count"`
 	UserCount     int64 `json:"user_count"`
 }
