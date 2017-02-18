@@ -116,6 +116,13 @@ type CreateProjectResponse struct {
 	Time   float64 `json:"time"`
 }
 
+type DeleteProjectResponse struct {
+	Succ   bool    `json:"success"`
+	Result uint32  `json:"result"`
+	Error  string  `json:"error"`
+	Time   float64 `json:"time"`
+}
+
 type CreateEngineResponse struct {
 	Succ   bool    `json:"success"`
 	Result Engine  `json:"result"`
