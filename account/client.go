@@ -88,19 +88,15 @@ func DeleteProject(projectId uint32) error {
 func (a *Account) DeleteProject(projectId uint32) error {
 	body := &url.Values{}
 	body.Add("id", strconv.FormatUint(uint64(projectId), 10))
-	resp := &DeleteProjectResponse{}
+	resp := &tamber.DeleteProjectResponse{}
 	var err error
 
 	err = a.updateToken()
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	if len(params.Name) > 0 {
-		err = a.S.Call("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, projectObject, "delete", body, resp)
-	} else {
-		err = errors.New("Invalid create project params: Name needs to be set")
-	}
+	err = a.S.Call("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, projectObject, "delete", body, resp)
 
 	if !resp.Succ {
 		err = errors.New(resp.Error)
