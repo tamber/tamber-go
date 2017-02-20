@@ -28,6 +28,7 @@ func (a *Account) Init(email, pw string, config *tamber.SessionConfig) error {
 	}
 	a.Email = email
 	a.Password = pw
+	a.S = config
 	authToken, err := a.Login()
 	if err != nil {
 		return err
