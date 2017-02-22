@@ -10,7 +10,6 @@ import (
 )
 
 type API struct {
-	S          *tamber.SessionConfig
 	Event      *event.Client
 	Discover   *discover.Client
 	User       *user.Client
@@ -24,7 +23,6 @@ func (a *API) Init(projectKey string, engineKey string, config *tamber.SessionCo
 	if config == nil {
 		config = tamber.GetDefaultSessionConfig()
 	}
-	a.S = config
 	a.Event = &event.Client{S: config, ProjectKey: projectKey, EngineKey: engineKey}
 	a.Discover = &discover.Client{S: config, ProjectKey: projectKey, EngineKey: engineKey}
 	a.User = &user.Client{S: config, ProjectKey: projectKey, EngineKey: engineKey}
