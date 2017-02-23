@@ -6,25 +6,26 @@ import (
 	"net/url"
 )
 
-type Engine struct {
-	S   *tamber.SessionConfig
-	Key string
+type Client struct {
+	S          *tamber.SessionConfig
+	ProjectKey string
+	EngineKey  string
 }
 
 var object = "behavior"
 
 func Create(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
-	return getEngine().Create(params)
+	return getClient().Create(params)
 }
 
-func (e Engine) Create(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
+func (c Client) Create(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	behavior := &tamber.BehaviorResponse{}
 	var err error
 
 	if len(params.Name) > 0 && params.Desirability > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "create", body, behavior)
+		err = c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "create", body, behavior)
 	} else {
 		err = errors.New("Invalid behavior params: name, type, and desirability need to be set")
 	}
@@ -36,17 +37,17 @@ func (e Engine) Create(params *tamber.BehaviorParams) (*tamber.Behavior, error) 
 }
 
 func Retrieve(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
-	return getEngine().Retrieve(params)
+	return getClient().Retrieve(params)
 }
 
-func (e Engine) Retrieve(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
+func (c Client) Retrieve(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	behavior := &tamber.BehaviorResponse{}
 	var err error
 
 	if len(params.Name) > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "retrieve", body, behavior)
+		err = c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "retrieve", body, behavior)
 	} else {
 		err = errors.New("Invalid behavior params: name needs to be set")
 	}
@@ -57,6 +58,6 @@ func (e Engine) Retrieve(params *tamber.BehaviorParams) (*tamber.Behavior, error
 	return &behavior.Result, err
 }
 
-func getEngine() Engine {
-	return Engine{tamber.GetDefaultSessionConfig(), tamber.DefaultKey}
+func getClient() Client {
+	return Client{tamber.GetDefaultSessionConfig(), tamber.DefaultProjectKey, tamber.DefaultEngineKey}
 }

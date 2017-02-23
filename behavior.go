@@ -6,6 +6,11 @@ import (
 	"strconv"
 )
 
+const (
+	ExponentialBehaviorType = "exponential"
+	RatingBehaviorType      = "rating"
+)
+
 type BehaviorParams struct {
 	Name, Type   string
 	Desirability float64

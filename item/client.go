@@ -6,25 +6,26 @@ import (
 	"net/url"
 )
 
-type Engine struct {
-	S   *tamber.SessionConfig
-	Key string
+type Client struct {
+	S          *tamber.SessionConfig
+	ProjectKey string
+	EngineKey  string
 }
 
 var object = "item"
 
 func Create(params *tamber.ItemParams) (*tamber.Item, error) {
-	return getEngine().Create(params)
+	return getClient().Create(params)
 }
 
-func (e Engine) Create(params *tamber.ItemParams) (*tamber.Item, error) {
+func (c Client) Create(params *tamber.ItemParams) (*tamber.Item, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	item := &tamber.ItemResponse{}
 	var err error
 
 	if len(params.Id) > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "create", body, item)
+		err = c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "create", body, item)
 	} else {
 		err = errors.New("Invalid item params: id needs to be set")
 	}
@@ -35,17 +36,17 @@ func (e Engine) Create(params *tamber.ItemParams) (*tamber.Item, error) {
 }
 
 func Update(params *tamber.ItemParams) (*tamber.Item, error) {
-	return getEngine().Update(params)
+	return getClient().Update(params)
 }
 
-func (e Engine) Update(params *tamber.ItemParams) (*tamber.Item, error) {
+func (c Client) Update(params *tamber.ItemParams) (*tamber.Item, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	item := &tamber.ItemResponse{}
 	var err error
 
 	if len(params.Id) > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "update", body, item)
+		err = c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "update", body, item)
 	} else {
 		err = errors.New("Invalid item params: id needs to be set")
 	}
@@ -57,17 +58,17 @@ func (e Engine) Update(params *tamber.ItemParams) (*tamber.Item, error) {
 }
 
 func Retrieve(params *tamber.ItemParams) (*tamber.Item, error) {
-	return getEngine().Retrieve(params)
+	return getClient().Retrieve(params)
 }
 
-func (e Engine) Retrieve(params *tamber.ItemParams) (*tamber.Item, error) {
+func (c Client) Retrieve(params *tamber.ItemParams) (*tamber.Item, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	item := &tamber.ItemResponse{}
 	var err error
 
 	if len(params.Id) > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "retrieve", body, item)
+		err = c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "retrieve", body, item)
 	} else {
 		err = errors.New("Invalid item params: id needs to be set")
 	}
@@ -79,17 +80,17 @@ func (e Engine) Retrieve(params *tamber.ItemParams) (*tamber.Item, error) {
 }
 
 func Remove(params *tamber.ItemParams) (*tamber.Item, error) {
-	return getEngine().Remove(params)
+	return getClient().Remove(params)
 }
 
-func (e Engine) Remove(params *tamber.ItemParams) (*tamber.Item, error) {
+func (c Client) Remove(params *tamber.ItemParams) (*tamber.Item, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	item := &tamber.ItemResponse{}
 	var err error
 
 	if len(params.Id) > 0 {
-		err = e.S.Call("POST", "", e.Key, object, "remove", body, item)
+		err = c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "remove", body, item)
 	} else {
 		err = errors.New("Invalid item params: id needs to be set")
 	}
@@ -99,6 +100,6 @@ func (e Engine) Remove(params *tamber.ItemParams) (*tamber.Item, error) {
 	return &item.Result, err
 }
 
-func getEngine() Engine {
-	return Engine{tamber.GetDefaultSessionConfig(), tamber.DefaultKey}
+func getClient() Client {
+	return Client{tamber.GetDefaultSessionConfig(), tamber.DefaultProjectKey, tamber.DefaultEngineKey}
 }

@@ -3,7 +3,6 @@ package tamber
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -13,27 +12,20 @@ import (
 	"time"
 )
 
-const (
-	apiUrl = "https://api.tamber.com/v1"
+var (
+	ApiUrl = "https://api.tamber.com/v1"
 )
 
 // apiversion is the currently supported API version
-const apiversion = "2015-1-31"
+const apiversion = "2017-2-8"
 
 // clientversion is the binding version
-const clientversion = "0.0.1"
+const clientversion = "0.0.2"
 
 // defaultHTTPTimeout is the default timeout on the http.Client used by the library.
 const defaultHTTPTimeout = 80 * time.Second
 
 type SessionErrFunction func(exp string, err interface{})
-
-// Session is an interface for making calls against Tamber services.
-// This interface exists to enable mocking for during testing if needed.
-type Session interface {
-	Call(method, key string, body *url.Values, resp interface{}) error
-	// CallMultipart(method, path, key, boundary string, body io.Reader, v interface{}) error
-}
 
 type SessionConfig struct {
 	URL        string
@@ -46,8 +38,15 @@ type Engine struct {
 	S   *SessionConfig
 }
 
-//Default global engine key
-var DefaultKey string
+// Default global keys
+var (
+	DefaultProjectKey string
+	DefaultEngineKey  string
+
+	DefaultErrFunc SessionErrFunction = func(exp string, err interface{}) {
+		log.Printf("\n%s: %v\n", exp, err)
+	}
+)
 
 var httpClient = &http.Client{Timeout: defaultHTTPTimeout}
 
@@ -59,10 +58,10 @@ func NewEngine(key string, config *SessionConfig) Engine {
 }
 
 func GetDefaultSessionConfig() *SessionConfig {
-	return &SessionConfig{apiUrl, httpClient, defaultErrFunc}
+	return &SessionConfig{ApiUrl, httpClient, DefaultErrFunc}
 }
 
-func (s *SessionConfig) Call(method, path, key, object, command string, form *url.Values, resp interface{}) error {
+func (s *SessionConfig) Call(method, path, key, ext, object, command string, form *url.Values, resp interface{}) error {
 	var body io.Reader
 	if form != nil && len(*form) > 0 {
 		data := form.Encode()
@@ -73,7 +72,7 @@ func (s *SessionConfig) Call(method, path, key, object, command string, form *ur
 		}
 	}
 	path += object + "/" + command
-	req, err := s.NewRequest(method, path, key, "application/x-www-form-urlencoded", body)
+	req, err := s.NewRequest(method, path, key, ext, "application/x-www-form-urlencoded", body)
 	if err != nil {
 		return err
 	}
@@ -81,14 +80,12 @@ func (s *SessionConfig) Call(method, path, key, object, command string, form *ur
 	if err := s.Do(req, resp); err != nil {
 		return err
 	}
-	fmt.Printf("\n%+v\n", resp)
-
 	return nil
 }
 
 // NewRequest is used by Call to generate an http.Request. It handles encoding
 // parameters and attaching the appropriate headers.
-func (s *SessionConfig) NewRequest(method, path, key, contentType string, body io.Reader) (*http.Request, error) {
+func (s *SessionConfig) NewRequest(method, path, key, ext, contentType string, body io.Reader) (*http.Request, error) {
 	if !strings.HasPrefix(path, "/") {
 		path = "/" + path
 	}
@@ -102,7 +99,7 @@ func (s *SessionConfig) NewRequest(method, path, key, contentType string, body i
 		return nil, err
 	}
 
-	req.SetBasicAuth(key, "")
+	req.SetBasicAuth(key, ext)
 
 	req.Header.Add("Tamber-Version", apiversion)
 	req.Header.Add("User-Agent", "Tamber/v1 GoBindings/"+clientversion)
@@ -143,8 +140,4 @@ func (s *SessionConfig) Do(req *http.Request, v interface{}) error {
 // When executing API requests. By default this is a log.Printf
 func (s *SessionConfig) SetErrFunc(errFunc SessionErrFunction) {
 	s.errFunc = errFunc
-}
-
-func defaultErrFunc(exp string, err interface{}) {
-	log.Printf("\n%s: %v\n", exp, err)
 }

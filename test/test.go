@@ -132,7 +132,8 @@ func PartialTest() {
 }
 
 func Test() {
-	tamber.DefaultKey = "IVRiX25dr5rsJ0TDdVOD"
+	tamber.DefaultProjectKey = "Mu6DUPXdDYe98cv5JIfX"
+	tamber.DefaultEngineKey = "SbWYPBNdARfIDa0IIO9L"
 
 	fmt.Printf("\n\nBasic Test\n---------\n\n")
 	BasicTest()
@@ -377,6 +378,14 @@ func Test() {
 }
 
 func EngieVarTest() {
-	e := &engine.API{}
-	e.Init("80r2oX10Uw4XfZSxfh4O", nil)
+	c := client.New("Mu6DUPXdDYe98cv5JIfX", "SbWYPBNdARfIDa0IIO9L", nil)
+	_, err := c.Event.Track(&tamber.EventParams{
+		User:     "user_rlox8k927z7p",
+		Behavior: "click",
+		Item:     "item_wmt4fn6o4zlk",
+	})
+
+	if err != nil {
+		panic(err)
+	}
 }

@@ -9,7 +9,7 @@ import (
 type UserParams struct {
 	Id       string                  `json:"id"`
 	Events   *[]Event                `json:"events,omitempty"`
-	GetRecs  *DiscoverParams         `json:"getRecs,omitempty"` //DiscoverParams.User field is not needed and wll be ignored if set.
+	GetRecs  *DiscoverParams         `json:"get_recs,omitempty"` //DiscoverParams.User field is not needed and wll be ignored if set.
 	Metadata *map[string]interface{} `json:"metadata"`
 	Created  int64                   `json:"created,omitempty"` //0 values ignored
 }
@@ -34,11 +34,15 @@ func (params *UserParams) AppendToBody(v *url.Values) {
 
 	v.Add("id", params.Id)
 
-	events, _ := json.Marshal(params.Events)
-	v.Add("events", string(events))
+	if params.Events != nil {
+		events, _ := json.Marshal(params.Events)
+		v.Add("events", string(events))
+	}
 
-	getRecs, _ := json.Marshal(params.GetRecs)
-	v.Add("getRecs", string(getRecs))
+	if params.GetRecs != nil {
+		getRecs, _ := json.Marshal(params.GetRecs)
+		v.Add("get_recs", string(getRecs))
+	}
 
 	metadata, _ := json.Marshal(params.Metadata)
 	v.Add("metadata", string(metadata))

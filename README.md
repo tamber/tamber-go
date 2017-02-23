@@ -27,7 +27,7 @@ import (
     "fmt"
 )
 
-tamber.DefaultKey = "key_sBW1WHQ4bP4Ryfz3AQOo"
+tamber.DefaultProjectKey = "Mu6DUPXdDYe98cv5JIfX"
 
 e, err := event.Track(&tamber.EventParams{
     User: "user_rlox8k927z7p",
@@ -38,6 +38,8 @@ e, err := event.Track(&tamber.EventParams{
 if err != nil {
    //Handle
 }
+
+tamber.DefaultEngineKey = "SbWYPBNdARfIDa0IIO9L"
 
 recommendations, err := discover.Recommended(&tamber.DiscoverParams{
     User: "user_rlox8k927z7p",
@@ -59,14 +61,13 @@ If you have multiple Tamber engines, use the engine package.
 ```go
 import (
     "github.com/tamber/tamber-go"
-    "github.com/tamber/tamber-go/engine"
+    "github.com/tamber/tamber-go/client"
     "github.com/tamber/tamber-go/event"
 )
 
-e := &engine.API{}
-e.Init("80r2oX10Uw4XfZSxfh4O", nil)
+c := client.New("Mu6DUPXdDYe98cv5JIfX", "SbWYPBNdARfIDa0IIO9L", nil)
 
-e, err := e.Event.Track(&tamber.EventParams{
+e, err := c.Event.Track(&tamber.EventParams{
     User: "user_rlox8k927z7p",
     Behavior: "click",
     Item: "item_wmt4fn6o4zlk",
