@@ -30,7 +30,7 @@ func (c Client) Create(params *tamber.BehaviorParams) (*tamber.Behavior, error) 
 		err = errors.New("Invalid behavior params: name, type, and desirability need to be set")
 	}
 
-	if !behavior.Succ {
+	if err == nil && !behavior.Succ {
 		err = errors.New(behavior.Error)
 	}
 	return &behavior.Result, err
@@ -52,7 +52,7 @@ func (c Client) Retrieve(params *tamber.BehaviorParams) (*tamber.Behavior, error
 		err = errors.New("Invalid behavior params: name needs to be set")
 	}
 
-	if !behavior.Succ {
+	if err == nil && !behavior.Succ {
 		err = errors.New(behavior.Error)
 	}
 	return &behavior.Result, err

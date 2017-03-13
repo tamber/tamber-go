@@ -30,7 +30,7 @@ func (c Client) Create(params *tamber.UserParams) (*tamber.User, error) {
 		err = errors.New("Invalid user params: id needs to be set")
 	}
 
-	if !user.Succ {
+	if err == nil && !user.Succ {
 		err = errors.New(user.Error)
 	}
 	return &user.Result, err
@@ -52,7 +52,7 @@ func (c Client) Update(params *tamber.UserParams) (*tamber.User, error) {
 		err = errors.New("Invalid user params: id needs to be set")
 	}
 
-	if !user.Succ {
+	if err == nil && !user.Succ {
 		err = errors.New(user.Error)
 	}
 	return &user.Result, err
@@ -74,7 +74,7 @@ func (c Client) Retrieve(params *tamber.UserParams) (*tamber.User, error) {
 		err = errors.New("Invalid user params: id needs to be set")
 	}
 
-	if !user.Succ {
+	if err == nil && !user.Succ {
 		err = errors.New(user.Error)
 	}
 	return &user.Result, err

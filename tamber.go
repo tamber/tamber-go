@@ -17,10 +17,10 @@ var (
 )
 
 // apiversion is the currently supported API version
-const apiversion = "2017-2-8"
+const apiversion = "2017-3-8"
 
 // clientversion is the binding version
-const clientversion = "0.0.2"
+const clientversion = "0.0.3"
 
 // defaultHTTPTimeout is the default timeout on the http.Client used by the library.
 const defaultHTTPTimeout = 80 * time.Second
@@ -31,11 +31,6 @@ type SessionConfig struct {
 	URL        string
 	HTTPClient *http.Client
 	errFunc    SessionErrFunction
-}
-
-type Engine struct {
-	Key string
-	S   *SessionConfig
 }
 
 // Default global keys
@@ -49,13 +44,6 @@ var (
 )
 
 var httpClient = &http.Client{Timeout: defaultHTTPTimeout}
-
-func NewEngine(key string, config *SessionConfig) Engine {
-	if config == nil {
-		config = GetDefaultSessionConfig()
-	}
-	return Engine{key, config}
-}
 
 func GetDefaultSessionConfig() *SessionConfig {
 	return &SessionConfig{ApiUrl, httpClient, DefaultErrFunc}

@@ -7,21 +7,24 @@ import (
 )
 
 type DiscoverParams struct {
-	User       string                  `json:"user"`
-	Item       string                  `json:"item"`
-	Number     int                     `json:"number"`
-	Page       int                     `json:"page"`
-	Filter     *map[string]interface{} `json:"filter,omitempty"`
-	TestEvents *[]Event                `json:"test_events,omitempty"`
+	User          string                  `json:"user"`
+	Item          string                  `json:"item"`
+	Number        int                     `json:"number"`
+	Page          int                     `json:"page"`
+	Filter        *map[string]interface{} `json:"filter,omitempty"`
+	TestEvents    *[]Event                `json:"test_events,omitempty"`
+	GetProperties bool                    `json:"get_properties"`
 }
 
 type Discovery struct {
-	Item        string  `json:"item"`
-	Object      string  `json:"object"`
-	Score       float64 `json:"score"`
-	Popularity  float64 `json:"popularity"`
-	Hotness     float64 `json:"hotness"`
-	ItemCreated int64   `json:"item_created"`
+	Item        string                 `json:"item"`
+	Object      string                 `json:"object"`
+	Score       float64                `json:"score"`
+	Popularity  float64                `json:"popularity"`
+	Hotness     float64                `json:"hotness"`
+	Properties  map[string]interface{} `json:"properties"`
+	Tags        []string               `json:"tags"`
+	ItemCreated int64                  `json:"item_created"`
 }
 
 type Discoveries []Discovery

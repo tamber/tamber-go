@@ -16,9 +16,9 @@ Usage
 
 There are two ways to use Tamber:
 
-##Single Engine
+##Single Project / Engine
 
-If you only have one Tamber engine, and therefore one API Key, simply import the packages you would like to use, and use the following pattern:
+If you only have one Tamber project and/or engine, simply import the packages you would like to use, and use the following pattern:
 
 ```go
 import (
@@ -39,7 +39,7 @@ if err != nil {
    //Handle
 }
 
-tamber.DefaultEngineKey = "SbWYPBNdARfIDa0IIO9L"
+tamber.DefaultEngineKey = "SbWYPBNdARfIDa0IIO9L" // Discover endpoint requires engines
 
 recommendations, err := discover.Recommended(&tamber.DiscoverParams{
     User: "user_rlox8k927z7p",
@@ -54,9 +54,9 @@ for _, rec := range recommendations{
 }
 ```
 
-##Multiple Engines
+##Multiple Projects / Engines
 
-If you have multiple Tamber engines, use the engine package.
+If you have multiple Tamber projects or engines, use the client module to separate instances.
 
 ```go
 import (

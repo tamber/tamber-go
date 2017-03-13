@@ -29,7 +29,8 @@ func (c Client) Create(params *tamber.ItemParams) (*tamber.Item, error) {
 	} else {
 		err = errors.New("Invalid item params: id needs to be set")
 	}
-	if !item.Succ {
+
+	if err == nil && !item.Succ {
 		err = errors.New(item.Error)
 	}
 	return &item.Result, err
@@ -51,7 +52,7 @@ func (c Client) Update(params *tamber.ItemParams) (*tamber.Item, error) {
 		err = errors.New("Invalid item params: id needs to be set")
 	}
 
-	if !item.Succ {
+	if err == nil && !item.Succ {
 		err = errors.New(item.Error)
 	}
 	return &item.Result, err
@@ -73,7 +74,7 @@ func (c Client) Retrieve(params *tamber.ItemParams) (*tamber.Item, error) {
 		err = errors.New("Invalid item params: id needs to be set")
 	}
 
-	if !item.Succ {
+	if err == nil && !item.Succ {
 		err = errors.New(item.Error)
 	}
 	return &item.Result, err
@@ -94,7 +95,7 @@ func (c Client) Remove(params *tamber.ItemParams) (*tamber.Item, error) {
 	} else {
 		err = errors.New("Invalid item params: id needs to be set")
 	}
-	if !item.Succ {
+	if err == nil && !item.Succ {
 		err = errors.New(item.Error)
 	}
 	return &item.Result, err

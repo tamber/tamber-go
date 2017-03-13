@@ -30,7 +30,7 @@ func (c Client) Recommended(params *tamber.DiscoverParams) (*tamber.Discoveries,
 		err = errors.New("Invalid discover params: user needs to be set")
 	}
 
-	if !discoveries.Succ {
+	if err == nil && !discoveries.Succ {
 		err = errors.New(discoveries.Error)
 	}
 	return &discoveries.Result, err
@@ -52,7 +52,7 @@ func (c Client) Similar(params *tamber.DiscoverParams) (*tamber.Discoveries, err
 		err = errors.New("Invalid discover params: item needs to be set")
 	}
 
-	if !discoveries.Succ {
+	if err == nil && !discoveries.Succ {
 		err = errors.New(discoveries.Error)
 	}
 	return &discoveries.Result, err
@@ -74,7 +74,7 @@ func (c Client) RecommendedSimilar(params *tamber.DiscoverParams) (*tamber.Disco
 		err = errors.New("Invalid discover params: user and item need to be set")
 	}
 
-	if !discoveries.Succ {
+	if err == nil && !discoveries.Succ {
 		err = errors.New(discoveries.Error)
 	}
 	return &discoveries.Result, err
@@ -91,7 +91,7 @@ func (c Client) Popular(params *tamber.DiscoverParams) (*tamber.Discoveries, err
 	discoveries := &tamber.DiscoverResponse{}
 	err := c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "popular", body, discoveries)
 
-	if !discoveries.Succ {
+	if err == nil && !discoveries.Succ {
 		err = errors.New(discoveries.Error)
 	}
 	return &discoveries.Result, err
@@ -108,7 +108,7 @@ func (c Client) Hot(params *tamber.DiscoverParams) (*tamber.Discoveries, error) 
 	discoveries := &tamber.DiscoverResponse{}
 	err := c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "hot", body, discoveries)
 
-	if !discoveries.Succ {
+	if err == nil && !discoveries.Succ {
 		err = errors.New(discoveries.Error)
 	}
 	return &discoveries.Result, err

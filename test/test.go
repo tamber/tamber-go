@@ -5,7 +5,6 @@ import (
 	tamber "github.com/tamber/tamber-go"
 	"github.com/tamber/tamber-go/behavior"
 	"github.com/tamber/tamber-go/discover"
-	"github.com/tamber/tamber-go/engine"
 	"github.com/tamber/tamber-go/event"
 	"github.com/tamber/tamber-go/item"
 	"github.com/tamber/tamber-go/user"
