@@ -54,7 +54,7 @@ for _, rec := range recommendations{
 }
 ```
 
-##Stream Items
+## Stream Items
 
 If you want to add properties or tags to your items, the Stream method allows you to efficiently stream item updates.
 
@@ -94,7 +94,7 @@ if err != nil {
 }
 ```
 
-##Multiple Projects / Engines
+## Multiple Projects / Engines
 
 If you have multiple Tamber projects or engines, use the client module to separate instances.
 
@@ -118,7 +118,7 @@ if err != nil {
 }
 ```
 
-###API Response Info
+### API Response Info
 
 The Tamber API includes useful HTTP status codes and headers in its responses. The ResponseInfo type provides access to these values, and is returned by all methods (see the `info` value in the examples).
 
