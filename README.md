@@ -85,7 +85,7 @@ The Tamber client library provides additional features that make it easy to buil
 
 ## Stream Items
 
-If you want to add properties or tags to your items, the Stream method allows you to efficiently stream item updates.
+If you want to add properties or tags to your items, the Stream method allows you to efficiently stream item updates. By default, item updates will automatically create novel items (you may deactivate this behavior by setting the `NoCreate` field to false).
 
 ```go
 import (
