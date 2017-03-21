@@ -3,6 +3,7 @@ package tamber
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -20,7 +21,7 @@ var (
 const apiversion = "2017-3-8"
 
 // clientversion is the binding version
-const clientversion = "0.0.3"
+const clientversion = "0.0.4"
 
 // defaultHTTPTimeout is the default timeout on the http.Client used by the library.
 const defaultHTTPTimeout = 80 * time.Second
@@ -49,7 +50,7 @@ func GetDefaultSessionConfig() *SessionConfig {
 	return &SessionConfig{ApiUrl, httpClient, DefaultErrFunc}
 }
 
-func (s *SessionConfig) Call(method, path, key, ext, object, command string, form *url.Values, resp interface{}) error {
+func (s *SessionConfig) Call(method, path, key, ext, object, command string, form *url.Values, resp Response) error {
 	var body io.Reader
 	if form != nil && len(*form) > 0 {
 		data := form.Encode()
@@ -99,7 +100,7 @@ func (s *SessionConfig) NewRequest(method, path, key, ext, contentType string, b
 // Do is used by Call to execute an API request and parse the response. It uses
 // the backend's HTTP client to execute the request and unmarshals the response
 // into v. It also handles unmarshaling errors returned by the API.
-func (s *SessionConfig) Do(req *http.Request, v interface{}) error {
+func (s *SessionConfig) Do(req *http.Request, v Response) error {
 
 	res, err := s.HTTPClient.Do(req)
 
@@ -120,6 +121,10 @@ func (s *SessionConfig) Do(req *http.Request, v interface{}) error {
 	if err != nil {
 		s.errFunc("Json error", err)
 	}
+
+	info := s.NewResponse(res.StatusCode, res.Header)
+	fmt.Println("info:", info)
+	v.SetInfo(info)
 
 	return nil
 }

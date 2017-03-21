@@ -14,11 +14,11 @@ type Client struct {
 
 var object = "discover"
 
-func Recommended(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
+func Recommended(params *tamber.DiscoverParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
 	return getClient().Recommended(params)
 }
 
-func (c Client) Recommended(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
+func (c Client) Recommended(params *tamber.DiscoverParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	discoveries := &tamber.DiscoverResponse{}
@@ -33,14 +33,14 @@ func (c Client) Recommended(params *tamber.DiscoverParams) (*tamber.Discoveries,
 	if err == nil && !discoveries.Succ {
 		err = errors.New(discoveries.Error)
 	}
-	return &discoveries.Result, err
+	return &discoveries.Result, &discoveries.ResponseInfo, err
 }
 
-func Similar(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
+func Similar(params *tamber.DiscoverParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
 	return getClient().Similar(params)
 }
 
-func (c Client) Similar(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
+func (c Client) Similar(params *tamber.DiscoverParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	discoveries := &tamber.DiscoverResponse{}
@@ -55,14 +55,14 @@ func (c Client) Similar(params *tamber.DiscoverParams) (*tamber.Discoveries, err
 	if err == nil && !discoveries.Succ {
 		err = errors.New(discoveries.Error)
 	}
-	return &discoveries.Result, err
+	return &discoveries.Result, &discoveries.ResponseInfo, err
 }
 
-func RecommendedSimilar(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
+func RecommendedSimilar(params *tamber.DiscoverParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
 	return getClient().RecommendedSimilar(params)
 }
 
-func (c Client) RecommendedSimilar(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
+func (c Client) RecommendedSimilar(params *tamber.DiscoverParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	discoveries := &tamber.DiscoverResponse{}
@@ -77,14 +77,14 @@ func (c Client) RecommendedSimilar(params *tamber.DiscoverParams) (*tamber.Disco
 	if err == nil && !discoveries.Succ {
 		err = errors.New(discoveries.Error)
 	}
-	return &discoveries.Result, err
+	return &discoveries.Result, &discoveries.ResponseInfo, err
 }
 
-func Popular(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
+func Popular(params *tamber.DiscoverParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
 	return getClient().Popular(params)
 }
 
-func (c Client) Popular(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
+func (c Client) Popular(params *tamber.DiscoverParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 
@@ -94,14 +94,14 @@ func (c Client) Popular(params *tamber.DiscoverParams) (*tamber.Discoveries, err
 	if err == nil && !discoveries.Succ {
 		err = errors.New(discoveries.Error)
 	}
-	return &discoveries.Result, err
+	return &discoveries.Result, &discoveries.ResponseInfo, err
 }
 
-func Hot(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
+func Hot(params *tamber.DiscoverParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
 	return getClient().Hot(params)
 }
 
-func (c Client) Hot(params *tamber.DiscoverParams) (*tamber.Discoveries, error) {
+func (c Client) Hot(params *tamber.DiscoverParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 
@@ -111,7 +111,7 @@ func (c Client) Hot(params *tamber.DiscoverParams) (*tamber.Discoveries, error) 
 	if err == nil && !discoveries.Succ {
 		err = errors.New(discoveries.Error)
 	}
-	return &discoveries.Result, err
+	return &discoveries.Result, &discoveries.ResponseInfo, err
 }
 
 func getClient() Client {

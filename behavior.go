@@ -30,6 +30,11 @@ type BehaviorResponse struct {
 	Result Behavior `json:"result"`
 	Error  string   `json:"error"`
 	Time   float64  `json:"time"`
+	ResponseInfo
+}
+
+func (r *BehaviorResponse) SetInfo(info ResponseInfo) {
+	r.ResponseInfo = info
 }
 
 func (params *BehaviorParams) AppendToBody(v *url.Values) {

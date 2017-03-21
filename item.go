@@ -36,6 +36,11 @@ type ItemResponse struct {
 	Result Item    `json:"result"`
 	Error  string  `json:"error"`
 	Time   float64 `json:"time"`
+	ResponseInfo
+}
+
+func (r *ItemResponse) SetInfo(info ResponseInfo) {
+	r.ResponseInfo = info
 }
 
 func (params *ItemParams) AppendToBody(v *url.Values) {

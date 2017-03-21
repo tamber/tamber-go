@@ -29,7 +29,7 @@ import (
 
 tamber.DefaultProjectKey = "Mu6DUPXdDYe98cv5JIfX"
 
-e, err := event.Track(&tamber.EventParams{
+e, info, err := event.Track(&tamber.EventParams{
     User: "user_rlox8k927z7p",
     Behavior: "click",
     Item: "item_wmt4fn6o4zlk",
@@ -41,7 +41,7 @@ if err != nil {
 
 tamber.DefaultEngineKey = "SbWYPBNdARfIDa0IIO9L" // Discover endpoint requires engines
 
-recommendations, err := discover.Recommended(&tamber.DiscoverParams{
+recommendations, info, err := discover.Recommended(&tamber.DiscoverParams{
     User: "user_rlox8k927z7p",
 })
 
@@ -51,6 +51,46 @@ if err != nil {
 
 for _, rec := range recommendations{
     fmt.Printf("Item Id:%s :: Score:%f", rec.Item, rec.Score)
+}
+```
+
+##Stream Items
+
+If you want to add properties or tags to your items, the Stream method allows you to efficiently stream item updates.
+
+```go
+import (
+    tamber "github.com/tamber/tamber-go"
+    "github.com/tamber/tamber-go/event"
+    "fmt"
+)
+
+const (
+    NUM_THREADS = 10
+    BUF_SIZE    = 64 * 1024
+)
+
+tamber.DefaultProjectKey = "Mu6DUPXdDYe98cv5JIfX"
+
+items := Database.LoadItems()
+itemUpdates := make([]*tamber.ItemParams, len(items))
+for i, item := range items {
+    itemUpdates[i] = &tamber.ItemParams{Id: item.Id, Updates: &tamber.ItemUpdates{Add: tamber.ItemFeatures{Properties: item.Properties}}}
+}
+
+// You may optionally supply a channel to read updated items.
+out := make(chan *tamber.Item, BUF_SIZE)
+go func() {
+    for {
+        select {
+        case item := <-out:
+            fmt.Println("updated item:", *item)
+        }
+    }
+}()
+info, err := tamber_item.Stream(itemUpdates, &out, N_THREADS, BUF_SIZE)
+if err != nil {
+    //Handle
 }
 ```
 
@@ -67,7 +107,7 @@ import (
 
 c := client.New("Mu6DUPXdDYe98cv5JIfX", "SbWYPBNdARfIDa0IIO9L", nil)
 
-e, err := c.Event.Track(&tamber.EventParams{
+e, info, err := c.Event.Track(&tamber.EventParams{
     User: "user_rlox8k927z7p",
     Behavior: "click",
     Item: "item_wmt4fn6o4zlk",
@@ -75,6 +115,19 @@ e, err := c.Event.Track(&tamber.EventParams{
 
 if err != nil {
    //Handle
+}
+```
+
+###API Response Info
+
+The Tamber API includes useful HTTP status codes and headers in its responses. The ResponseInfo type provides access to these values, and is returned by all methods (see the `info` value in the examples).
+
+```
+type ResponseInfo struct {
+    HTTPCode           int // HTTP status code
+    RateLimit          int // Limit-per-period for request method
+    RateLimitRemaining int // Requests remaining in current window for request method
+    RateLimitReset     int // Time in seconds until rate limits are reset
 }
 ```
 

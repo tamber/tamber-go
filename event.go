@@ -27,6 +27,7 @@ type EventParams struct {
 type EventResult struct {
 	Events []Event      `json:"events"`
 	Recs   *[]Discovery `json:"recommended,omitempty"`
+	ResponseInfo
 }
 
 type EventResponse struct {
@@ -34,6 +35,10 @@ type EventResponse struct {
 	Result EventResult `json:"result"`
 	Error  string      `json:"error"`
 	Time   float64     `json:"time"`
+}
+
+func (r *EventResponse) SetInfo(info ResponseInfo) {
+	r.Result.ResponseInfo = info
 }
 
 func (params *EventParams) AppendToBody(v *url.Values) {
@@ -87,6 +92,11 @@ type BatchResponse struct {
 	Result BatchResult `json:"result"`
 	Error  string      `json:"error"`
 	Time   float64     `json:"time"`
+	ResponseInfo
+}
+
+func (r *BatchResponse) SetInfo(info ResponseInfo) {
+	r.ResponseInfo = info
 }
 
 func (params *EventBatchParams) AppendToBody(v *url.Values) {

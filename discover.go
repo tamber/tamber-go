@@ -34,6 +34,11 @@ type DiscoverResponse struct {
 	Result Discoveries `json:"result"`
 	Error  string      `json:"error"`
 	Time   float64     `json:"time"`
+	ResponseInfo
+}
+
+func (r *DiscoverResponse) SetInfo(info ResponseInfo) {
+	r.ResponseInfo = info
 }
 
 func (params *DiscoverParams) AppendToBody(v *url.Values) {

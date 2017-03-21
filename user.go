@@ -28,6 +28,11 @@ type UserResponse struct {
 	Result User    `json:"result"`
 	Error  string  `json:"error"`
 	Time   float64 `json:"time"`
+	ResponseInfo
+}
+
+func (r *UserResponse) SetInfo(info ResponseInfo) {
+	r.ResponseInfo = info
 }
 
 func (params *UserParams) AppendToBody(v *url.Values) {
