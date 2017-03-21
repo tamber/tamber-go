@@ -54,6 +54,35 @@ for _, rec := range recommendations{
 }
 ```
 
+## Multiple Projects / Engines
+
+If you have multiple Tamber projects or engines, use the client module to separate instances.
+
+```go
+import (
+    "github.com/tamber/tamber-go"
+    "github.com/tamber/tamber-go/client"
+    "github.com/tamber/tamber-go/event"
+)
+
+c := client.New("Mu6DUPXdDYe98cv5JIfX", "SbWYPBNdARfIDa0IIO9L", nil)
+
+e, info, err := c.Event.Track(&tamber.EventParams{
+    User: "user_rlox8k927z7p",
+    Behavior: "click",
+    Item: "item_wmt4fn6o4zlk",
+})
+
+if err != nil {
+   //Handle
+}
+```
+
+Features
+========
+
+The Tamber client library provides additional features that make it easy to build and run your engines.
+
 ## Stream Items
 
 If you want to add properties or tags to your items, the Stream method allows you to efficiently stream item updates.
@@ -91,30 +120,6 @@ go func() {
 info, err := tamber_item.Stream(itemUpdates, &out, N_THREADS, BUF_SIZE)
 if err != nil {
     //Handle
-}
-```
-
-## Multiple Projects / Engines
-
-If you have multiple Tamber projects or engines, use the client module to separate instances.
-
-```go
-import (
-    "github.com/tamber/tamber-go"
-    "github.com/tamber/tamber-go/client"
-    "github.com/tamber/tamber-go/event"
-)
-
-c := client.New("Mu6DUPXdDYe98cv5JIfX", "SbWYPBNdARfIDa0IIO9L", nil)
-
-e, info, err := c.Event.Track(&tamber.EventParams{
-    User: "user_rlox8k927z7p",
-    Behavior: "click",
-    Item: "item_wmt4fn6o4zlk",
-})
-
-if err != nil {
-   //Handle
 }
 ```
 
