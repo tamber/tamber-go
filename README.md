@@ -24,6 +24,7 @@ If you only have one Tamber project and/or engine, simply import the packages yo
 import (
     tamber "github.com/tamber/tamber-go"
     "github.com/tamber/tamber-go/event"
+    "github.com/tamber/tamber-go/discover"
     "fmt"
 )
 
@@ -62,7 +63,6 @@ If you have multiple Tamber projects or engines, use the client module to separa
 import (
     "github.com/tamber/tamber-go"
     "github.com/tamber/tamber-go/client"
-    "github.com/tamber/tamber-go/event"
 )
 
 c := client.New("Mu6DUPXdDYe98cv5JIfX", "SbWYPBNdARfIDa0IIO9L", nil)
@@ -90,7 +90,7 @@ If you want to add properties or tags to your items, the Stream method allows yo
 ```go
 import (
     tamber "github.com/tamber/tamber-go"
-    "github.com/tamber/tamber-go/event"
+    tamber_item "github.com/tamber/tamber-go/item"
     "fmt"
 )
 
