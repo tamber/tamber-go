@@ -1,13 +1,10 @@
 package event
 
 import (
-	"bytes"
-	"compress/gzip"
 	"encoding/csv"
 	"errors"
 	"fmt"
 	tamber "github.com/tamber/tamber-go"
-	"io/ioutil"
 	"os"
 	"strconv"
 )
