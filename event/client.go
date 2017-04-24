@@ -30,7 +30,7 @@ func (c Client) Track(params *tamber.EventParams) (*tamber.EventResult, error) {
 		err = errors.New("Invalid event params: user, item, and behavior need to be set")
 	}
 
-	if !event.Succ {
+	if err == nil && !event.Succ {
 		err = errors.New(event.Error)
 	}
 	return &event.Result, err
@@ -48,7 +48,7 @@ func (c Client) Retrieve(params *tamber.EventParams) (*tamber.EventResult, error
 
 	err = c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "retrieve", body, event)
 
-	if !event.Succ {
+	if err == nil && !event.Succ {
 		err = errors.New(event.Error)
 	}
 	return &event.Result, err
@@ -70,7 +70,7 @@ func (c Client) Batch(params *tamber.EventBatchParams) (*tamber.BatchResult, err
 		err = errors.New("Invalid batch params: events need to be set")
 	}
 
-	if !event.Succ {
+	if err == nil && !event.Succ {
 		err = errors.New(event.Error)
 	}
 	return &event.Result, err

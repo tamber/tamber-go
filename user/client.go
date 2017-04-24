@@ -14,11 +14,11 @@ type Client struct {
 
 var object = "user"
 
-func Create(params *tamber.UserParams) (*tamber.User, error) {
+func Create(params *tamber.UserParams) (*tamber.User, *tamber.ResponseInfo, error) {
 	return getClient().Create(params)
 }
 
-func (c Client) Create(params *tamber.UserParams) (*tamber.User, error) {
+func (c Client) Create(params *tamber.UserParams) (*tamber.User, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	user := &tamber.UserResponse{}
@@ -30,17 +30,17 @@ func (c Client) Create(params *tamber.UserParams) (*tamber.User, error) {
 		err = errors.New("Invalid user params: id needs to be set")
 	}
 
-	if !user.Succ {
+	if err == nil && !user.Succ {
 		err = errors.New(user.Error)
 	}
-	return &user.Result, err
+	return &user.Result, &user.ResponseInfo, err
 }
 
-func Update(params *tamber.UserParams) (*tamber.User, error) {
+func Update(params *tamber.UserParams) (*tamber.User, *tamber.ResponseInfo, error) {
 	return getClient().Update(params)
 }
 
-func (c Client) Update(params *tamber.UserParams) (*tamber.User, error) {
+func (c Client) Update(params *tamber.UserParams) (*tamber.User, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	user := &tamber.UserResponse{}
@@ -52,17 +52,17 @@ func (c Client) Update(params *tamber.UserParams) (*tamber.User, error) {
 		err = errors.New("Invalid user params: id needs to be set")
 	}
 
-	if !user.Succ {
+	if err == nil && !user.Succ {
 		err = errors.New(user.Error)
 	}
-	return &user.Result, err
+	return &user.Result, &user.ResponseInfo, err
 }
 
-func Retrieve(params *tamber.UserParams) (*tamber.User, error) {
+func Retrieve(params *tamber.UserParams) (*tamber.User, *tamber.ResponseInfo, error) {
 	return getClient().Retrieve(params)
 }
 
-func (c Client) Retrieve(params *tamber.UserParams) (*tamber.User, error) {
+func (c Client) Retrieve(params *tamber.UserParams) (*tamber.User, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	user := &tamber.UserResponse{}
@@ -74,10 +74,10 @@ func (c Client) Retrieve(params *tamber.UserParams) (*tamber.User, error) {
 		err = errors.New("Invalid user params: id needs to be set")
 	}
 
-	if !user.Succ {
+	if err == nil && !user.Succ {
 		err = errors.New(user.Error)
 	}
-	return &user.Result, err
+	return &user.Result, &user.ResponseInfo, err
 }
 
 func getClient() Client {

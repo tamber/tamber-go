@@ -16,17 +16,18 @@ type Event struct {
 }
 
 type EventParams struct {
-	User, Item, Behavior        string
-	Value                       float64
-	Created                     int64
+	User, Item, Behavior        string // required
+	Value                       *float64
+	Created                     *int64
 	GetRecs                     *DiscoverParams
-	CreatedSince, CreatedBefore int64 //Only used by Retrieve method
-	Number                      int   //Only used by Retrieve method | default:200 | max:500
+	CreatedSince, CreatedBefore *int64 //Only used by Retrieve method
+	Number                      int    //Only used by Retrieve method | default:200 | max:500
 }
 
 type EventResult struct {
 	Events []Event      `json:"events"`
-	Recs   *[]Discovery `json:"recommended, omitempty"`
+	Recs   *[]Discovery `json:"recommended,omitempty"`
+	ResponseInfo
 }
 
 type EventResponse struct {
@@ -34,6 +35,10 @@ type EventResponse struct {
 	Result EventResult `json:"result"`
 	Error  string      `json:"error"`
 	Time   float64     `json:"time"`
+}
+
+func (r *EventResponse) SetInfo(info ResponseInfo) {
+	r.Result.ResponseInfo = info
 }
 
 func (params *EventParams) AppendToBody(v *url.Values) {
@@ -47,21 +52,21 @@ func (params *EventParams) AppendToBody(v *url.Values) {
 		v.Add("behavior", params.Behavior)
 	}
 
-	if params.Value != 0 {
-		v.Add("value", strconv.FormatFloat(params.Value, 'f', -1, 64))
+	if params.Value != nil {
+		v.Add("value", strconv.FormatFloat(*(params.Value), 'f', -1, 64))
 	}
-	if params.Created != 0 {
-		v.Add("created", strconv.FormatInt(params.Created, 10))
+	if params.Created != nil {
+		v.Add("created", strconv.FormatInt(*(params.Created), 10))
 	}
 	getRecs, _ := json.Marshal(params.GetRecs)
 	v.Add("get_recs", string(getRecs))
 
 	//For Retrieve Method Only
-	if params.CreatedSince != 0 {
-		v.Add("created_since", strconv.FormatInt(params.CreatedSince, 10))
+	if params.CreatedSince != nil {
+		v.Add("created_since", strconv.FormatInt(*(params.CreatedSince), 10))
 	}
-	if params.CreatedBefore != 0 {
-		v.Add("created_before", strconv.FormatInt(params.CreatedBefore, 10))
+	if params.CreatedBefore != nil {
+		v.Add("created_before", strconv.FormatInt(*(params.CreatedBefore), 10))
 	}
 	if params.Number != 0 {
 		v.Add("number", strconv.Itoa(params.Number))
@@ -87,6 +92,11 @@ type BatchResponse struct {
 	Result BatchResult `json:"result"`
 	Error  string      `json:"error"`
 	Time   float64     `json:"time"`
+	ResponseInfo
+}
+
+func (r *BatchResponse) SetInfo(info ResponseInfo) {
+	r.ResponseInfo = info
 }
 
 func (params *EventBatchParams) AppendToBody(v *url.Values) {

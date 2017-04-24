@@ -6,7 +6,6 @@ import (
 	tamber "github.com/tamber/tamber-go"
 	"github.com/tamber/tamber-go/behavior"
 	"github.com/tamber/tamber-go/discover"
-	"github.com/tamber/tamber-go/engine"
 	"github.com/tamber/tamber-go/event"
 	"github.com/tamber/tamber-go/item"
 	"github.com/tamber/tamber-go/user"
@@ -82,22 +81,22 @@ func TempTest() {
 
 func BasicTest() {
 	fmt.Println("\nRecs w/ Test Events")
-	e, err := event.Track(&tamber.EventParams{
+	e, info, err := event.Track(&tamber.EventParams{
 		User:     "user_jctzgisbru",
 		Item:     "item_i5gq90scc1",
 		Behavior: "mention",
 	})
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("err:", err, "info:", info)
 	} else {
 		fmt.Printf("Event: %+v\n", *e)
 	}
-	d, err := discover.Recommended(&tamber.DiscoverParams{
+	d, info, err := discover.Recommended(&tamber.DiscoverParams{
 		User:   "user_jctzgisbru",
 		Number: 100,
 	})
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("err:", err, "info:", info)
 	} else {
 		for _, rec := range *d {
 			fmt.Printf("Item: %s :: Score: %s", rec.Item, rec.Score)
@@ -107,7 +106,7 @@ func BasicTest() {
 
 func PartialTest() {
 	//Create a behavior
-	b, err := behavior.Create(&tamber.BehaviorParams{
+	b, info, err := behavior.Create(&tamber.BehaviorParams{
 		Name:         "like",
 		Type:         "chi-squared",
 		Desirability: 0.5,
@@ -116,12 +115,12 @@ func PartialTest() {
 		},
 	})
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("err:", err, "info:", info)
 	} else {
 		fmt.Printf("Behavior: %+v\n", *b)
 	}
 	//need to create properties before applying them
-	i, err := item.Create(&tamber.ItemParams{
+	i, info, err := item.Create(&tamber.ItemParams{
 		Id: "item_i5gq90scc1",
 		Properties: &map[string]interface{}{
 			"duration": 64.5,
@@ -131,45 +130,45 @@ func PartialTest() {
 	})
 
 	//Track an event - user performs the behavior on an item
-	e, err := event.Track(&tamber.EventParams{
+	e, info, err := event.Track(&tamber.EventParams{
 		User:     "user_jctzgisbru",
 		Item:     "item_i5gq90scc1",
 		Behavior: "like",
 	})
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("err:", err, "info:", info)
 	} else {
 		fmt.Printf("Event: %+v\n", *e)
 	}
-	e, err = event.Track(&tamber.EventParams{
+	e, info, err = event.Track(&tamber.EventParams{
 		User:     "user_jctzgisbru",
 		Item:     "item_u9nlytt3w5",
 		Behavior: "like",
 	})
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("err:", err, "info:", info)
 	} else {
 		fmt.Printf("Event: %+v\n", *e)
 	}
 
 	//Check User - w/ get recs
-	u, err := user.Retrieve(&tamber.UserParams{
+	u, info, err := user.Retrieve(&tamber.UserParams{
 		Id:      "user_jctzgisbru",
 		GetRecs: &tamber.DiscoverParams{},
 	})
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("err:", err, "info:", info)
 	} else {
 		fmt.Printf("User: %+v\n", *u)
 	}
 
 	//Get User's Recommended Items
-	d, err := discover.Recommended(&tamber.DiscoverParams{
+	d, info, err := discover.Recommended(&tamber.DiscoverParams{
 		User:   "user_jctzgisbru",
 		Number: 100,
 	})
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("err:", err, "info:", info)
 	} else {
 		for _, rec := range *d {
 			fmt.Printf("Item: %s :: Score: %s", rec.Item, rec.Score)
@@ -177,22 +176,22 @@ func PartialTest() {
 	}
 
 	//Check Item - w/ get recs
-	i, err = item.Retrieve(&tamber.ItemParams{
+	i, info, err = item.Retrieve(&tamber.ItemParams{
 		Id: "item_i5gq90scc1",
 	})
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("err:", err, "info:", info)
 	} else {
 		fmt.Printf("\nItem: %+v\n", *i)
 	}
 
 	//Get Item's Similar Items
-	d, err = discover.Similar(&tamber.DiscoverParams{
+	d, info, err = discover.Similar(&tamber.DiscoverParams{
 		Item:   "item_i5gq90scc1",
 		Number: 100,
 	})
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("err:", err, "info:", info)
 	} else {
 		for _, rec := range *d {
 			fmt.Printf("Item: %s :: Score: %s", rec.Item, rec.Score)
@@ -201,10 +200,8 @@ func PartialTest() {
 }
 
 func Test() {
-	// TempTest()
-	// return
-	tamber.DefaultProjectKey = "NcDJAfY4zjauTmfDlZQM"
-	tamber.DefaultEngineKey = "NcDJAfY4zjauTmfDlZQM"
+	tamber.DefaultProjectKey = "Mu6DUPXdDYe98cv5JIfX"
+	tamber.DefaultEngineKey = "SbWYPBNdARfIDa0IIO9L"
 
 	fmt.Printf("\n\nBasic Test\n---------\n\n")
 	BasicTest()
@@ -216,7 +213,7 @@ func Test() {
 
 	//User
 	fmt.Println("User - Create")
-	u, err := user.Create(&tamber.UserParams{
+	u, info, err := user.Create(&tamber.UserParams{
 		Id: "user_fwu592pwmo",
 		Metadata: &map[string]interface{}{
 			"city": "San Francisco, CA",
@@ -233,13 +230,13 @@ func Test() {
 		},
 	})
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("err:", err, "info:", info)
 	} else {
 		fmt.Printf("User: %+v\n", *u)
 	}
 
 	fmt.Println("User -- Update")
-	u, err = user.Update(&tamber.UserParams{
+	u, info, err = user.Update(&tamber.UserParams{
 		Id: "user_fwu592pwmo",
 		Metadata: &map[string]interface{}{
 			"city": "Mountain View, CA",
@@ -248,24 +245,24 @@ func Test() {
 		},
 	})
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("err:", err, "info:", info)
 	} else {
 		fmt.Printf("User: %+v\n", *u)
 	}
 
 	fmt.Println("User -- Retrieve")
-	u, err = user.Retrieve(&tamber.UserParams{
+	u, info, err = user.Retrieve(&tamber.UserParams{
 		Id: "user_fwu592pwmo",
 	})
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("err:", err, "info:", info)
 	} else {
 		fmt.Printf("User: %+v\n", *u)
 	}
 
 	//Item
 	fmt.Println("Item - Create")
-	i, err := item.Create(&tamber.ItemParams{
+	i, info, err := item.Create(&tamber.ItemParams{
 		Id: "item_nqzd5w00s9",
 		Properties: &map[string]interface{}{
 			"clothing_type": "pants",
@@ -274,13 +271,13 @@ func Test() {
 		Tags: &[]string{"casual", "feminine"},
 	})
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("err:", err, "info:", info)
 	} else {
 		fmt.Printf("\nItem: %+v\n", *i)
 	}
 
 	fmt.Println("Item - Update")
-	i, err = item.Update(&tamber.ItemParams{
+	i, info, err = item.Update(&tamber.ItemParams{
 		Id: "item_nqzd5w00s9",
 		Updates: &tamber.ItemUpdates{
 			Add: tamber.ItemFeatures{
@@ -294,46 +291,46 @@ func Test() {
 		},
 	})
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("err:", err, "info:", info)
 	} else {
 		fmt.Printf("\nItem: %+v\n", *i)
 	}
 
 	fmt.Println("Item - Retrieve")
-	i, err = item.Retrieve(&tamber.ItemParams{
+	i, info, err = item.Retrieve(&tamber.ItemParams{
 		Id: "item_nqzd5w00s9",
 	})
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("err:", err, "info:", info)
 	} else {
 		fmt.Printf("\nItem: %+v\n", *i)
 	}
 
 	//event
 	//track -- note: repeat behavior
-	e, err := event.Track(&tamber.EventParams{
+	e, info, err := event.Track(&tamber.EventParams{
 		User:     "user_jctzgisbru",
 		Item:     "item_i5gq90scc1",
 		Behavior: "like",
 	})
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("err:", err, "info:", info)
 	} else {
 		fmt.Printf("Event: %+v\n", *e)
 	}
 	//retrieve
 
-	e, err = event.Retrieve(&tamber.EventParams{
+	e, info, err = event.Retrieve(&tamber.EventParams{
 		User: "user_jctzgisbru",
 	})
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("err:", err, "info:", info)
 	} else {
 		fmt.Printf("Event: %+v\n", *e)
 	}
 
 	//batch
-	batch_resp, err := event.Batch(&tamber.EventBatchParams{
+	batch_resp, info, err := event.Batch(&tamber.EventBatchParams{
 		Events: []tamber.Event{
 			tamber.Event{
 				User:     "user_y7u9sv6we0",
@@ -368,14 +365,14 @@ func Test() {
 		},
 	})
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("err:", err, "info:", info)
 	} else {
 		fmt.Printf("Batch Response: %+v\n", *batch_resp)
 	}
 
 	//discover
 	fmt.Println("Discover - Recommended (w/ TestEvents and Filter)")
-	d, err := discover.Recommended(&tamber.DiscoverParams{
+	d, info, err := discover.Recommended(&tamber.DiscoverParams{
 		User:   "user_jctzgisbru",
 		Number: 100,
 		TestEvents: &[]tamber.Event{
@@ -412,7 +409,7 @@ func Test() {
 		},
 	})
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("err:", err, "info:", info)
 	} else {
 		for _, rec := range *d {
 			fmt.Printf("Item: %s :: Score: %s", rec.Item, rec.Score)
@@ -426,22 +423,22 @@ func Test() {
 	//Behavior
 	//create - see BasicTest()
 	fmt.Println("Behavior - Retrieve")
-	b, err := behavior.Retrieve(&tamber.BehaviorParams{
+	b, info, err := behavior.Retrieve(&tamber.BehaviorParams{
 		Name: "like",
 	})
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("err:", err, "info:", info)
 	} else {
 		fmt.Printf("Behavior: %+v\n", *b)
 	}
 
 	//Remove Tests
 	fmt.Println("Item - Remove")
-	i, err = item.Remove(&tamber.ItemParams{
+	i, info, err = item.Remove(&tamber.ItemParams{
 		Id: "item_nqzd5w00s9",
 	})
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("err:", err, "info:", info)
 	} else {
 		fmt.Printf("\nItem: %+v\n", *i)
 	}
@@ -449,6 +446,14 @@ func Test() {
 }
 
 func EngieVarTest() {
-	e := &client.API{}
-	e.Init("80r2oX10Uw4XfZSxfh4O", "", nil)
+	c := client.New("Mu6DUPXdDYe98cv5JIfX", "SbWYPBNdARfIDa0IIO9L", nil)
+	_, info, err := c.Event.Track(&tamber.EventParams{
+		User:     "user_rlox8k927z7p",
+		Behavior: "click",
+		Item:     "item_wmt4fn6o4zlk",
+	})
+
+	if err != nil {
+		panic(err)
+	}
 }

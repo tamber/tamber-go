@@ -14,11 +14,11 @@ type Client struct {
 
 var object = "behavior"
 
-func Create(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
+func Create(params *tamber.BehaviorParams) (*tamber.Behavior, *tamber.ResponseInfo, error) {
 	return getClient().Create(params)
 }
 
-func (c Client) Create(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
+func (c Client) Create(params *tamber.BehaviorParams) (*tamber.Behavior, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	behavior := &tamber.BehaviorResponse{}
@@ -30,17 +30,17 @@ func (c Client) Create(params *tamber.BehaviorParams) (*tamber.Behavior, error) 
 		err = errors.New("Invalid behavior params: name, type, and desirability need to be set")
 	}
 
-	if !behavior.Succ {
+	if err == nil && !behavior.Succ {
 		err = errors.New(behavior.Error)
 	}
-	return &behavior.Result, err
+	return &behavior.Result, &behavior.ResponseInfo, err
 }
 
-func Retrieve(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
+func Retrieve(params *tamber.BehaviorParams) (*tamber.Behavior, *tamber.ResponseInfo, error) {
 	return getClient().Retrieve(params)
 }
 
-func (c Client) Retrieve(params *tamber.BehaviorParams) (*tamber.Behavior, error) {
+func (c Client) Retrieve(params *tamber.BehaviorParams) (*tamber.Behavior, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	behavior := &tamber.BehaviorResponse{}
@@ -52,10 +52,10 @@ func (c Client) Retrieve(params *tamber.BehaviorParams) (*tamber.Behavior, error
 		err = errors.New("Invalid behavior params: name needs to be set")
 	}
 
-	if !behavior.Succ {
+	if err == nil && !behavior.Succ {
 		err = errors.New(behavior.Error)
 	}
-	return &behavior.Result, err
+	return &behavior.Result, &behavior.ResponseInfo, err
 }
 
 func getClient() Client {
