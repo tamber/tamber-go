@@ -3,7 +3,6 @@ package tamber
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -123,7 +122,6 @@ func (s *SessionConfig) Do(req *http.Request, v Response) error {
 	}
 
 	info := s.NewResponse(res.StatusCode, res.Header)
-	fmt.Println("info:", info)
 	v.SetInfo(info)
 
 	return nil

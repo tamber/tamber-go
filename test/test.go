@@ -4,6 +4,7 @@ import (
 	"fmt"
 	tamber "github.com/tamber/tamber-go"
 	"github.com/tamber/tamber-go/behavior"
+	"github.com/tamber/tamber-go/client"
 	"github.com/tamber/tamber-go/discover"
 	"github.com/tamber/tamber-go/event"
 	"github.com/tamber/tamber-go/item"
@@ -378,7 +379,7 @@ func Test() {
 
 func EngieVarTest() {
 	c := client.New("Mu6DUPXdDYe98cv5JIfX", "SbWYPBNdARfIDa0IIO9L", nil)
-	_, info, err := c.Event.Track(&tamber.EventParams{
+	_, _, err := c.Event.Track(&tamber.EventParams{
 		User:     "user_rlox8k927z7p",
 		Behavior: "click",
 		Item:     "item_wmt4fn6o4zlk",
