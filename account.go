@@ -100,6 +100,7 @@ type AccountResponse struct {
 	Result AccountInfo `json:"result"`
 	Error  string      `json:"error"`
 	Time   float64     `json:"time"`
+	ResponseInfo
 }
 
 type UploadResponse struct {
@@ -107,6 +108,7 @@ type UploadResponse struct {
 	Result Dataset `json:"result"`
 	Error  string  `json:"error"`
 	Time   float64 `json:"time"`
+	ResponseInfo
 }
 
 type CreateProjectResponse struct {
@@ -114,6 +116,7 @@ type CreateProjectResponse struct {
 	Result Project `json:"result"`
 	Error  string  `json:"error"`
 	Time   float64 `json:"time"`
+	ResponseInfo
 }
 
 type DeleteProjectResponse struct {
@@ -121,6 +124,7 @@ type DeleteProjectResponse struct {
 	Result uint32  `json:"result"`
 	Error  string  `json:"error"`
 	Time   float64 `json:"time"`
+	ResponseInfo
 }
 
 type CreateEngineResponse struct {
@@ -128,6 +132,7 @@ type CreateEngineResponse struct {
 	Result Engine  `json:"result"`
 	Error  string  `json:"error"`
 	Time   float64 `json:"time"`
+	ResponseInfo
 }
 
 type LoginResponse struct {
@@ -135,6 +140,26 @@ type LoginResponse struct {
 	Result AuthToken `json:"result"`
 	Error  string    `json:"error"`
 	Time   float64   `json:"time"`
+	ResponseInfo
+}
+
+func (r *AccountResponse) SetInfo(info ResponseInfo) {
+	r.ResponseInfo = info
+}
+func (r *UploadResponse) SetInfo(info ResponseInfo) {
+	r.ResponseInfo = info
+}
+func (r *CreateProjectResponse) SetInfo(info ResponseInfo) {
+	r.ResponseInfo = info
+}
+func (r *DeleteProjectResponse) SetInfo(info ResponseInfo) {
+	r.ResponseInfo = info
+}
+func (r *CreateEngineResponse) SetInfo(info ResponseInfo) {
+	r.ResponseInfo = info
+}
+func (r *LoginResponse) SetInfo(info ResponseInfo) {
+	r.ResponseInfo = info
 }
 
 func (params *CreateProjectParams) AppendToBody(v *url.Values) {
