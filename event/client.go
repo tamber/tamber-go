@@ -14,11 +14,11 @@ type Client struct {
 
 var object = "event"
 
-func Track(params *tamber.EventParams) (*tamber.EventResult, error) {
+func Track(params *tamber.EventParams) (*tamber.EventResult, *tamber.ResponseInfo, error) {
 	return getClient().Track(params)
 }
 
-func (c Client) Track(params *tamber.EventParams) (*tamber.EventResult, error) {
+func (c Client) Track(params *tamber.EventParams) (*tamber.EventResult, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	event := &tamber.EventResponse{}
@@ -33,14 +33,14 @@ func (c Client) Track(params *tamber.EventParams) (*tamber.EventResult, error) {
 	if err == nil && !event.Succ {
 		err = errors.New(event.Error)
 	}
-	return &event.Result, err
+	return &event.Result, &event.ResponseInfo, err
 }
 
-func Retrieve(params *tamber.EventParams) (*tamber.EventResult, error) {
+func Retrieve(params *tamber.EventParams) (*tamber.EventResult, *tamber.ResponseInfo, error) {
 	return getClient().Retrieve(params)
 }
 
-func (c Client) Retrieve(params *tamber.EventParams) (*tamber.EventResult, error) {
+func (c Client) Retrieve(params *tamber.EventParams) (*tamber.EventResult, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	event := &tamber.EventResponse{}
@@ -51,14 +51,14 @@ func (c Client) Retrieve(params *tamber.EventParams) (*tamber.EventResult, error
 	if err == nil && !event.Succ {
 		err = errors.New(event.Error)
 	}
-	return &event.Result, err
+	return &event.Result, &event.ResponseInfo, err
 }
 
-func Batch(params *tamber.EventBatchParams) (*tamber.BatchResult, error) {
+func Batch(params *tamber.EventBatchParams) (*tamber.BatchResult, *tamber.ResponseInfo, error) {
 	return getClient().Batch(params)
 }
 
-func (c Client) Batch(params *tamber.EventBatchParams) (*tamber.BatchResult, error) {
+func (c Client) Batch(params *tamber.EventBatchParams) (*tamber.BatchResult, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	event := &tamber.BatchResponse{}
@@ -73,7 +73,7 @@ func (c Client) Batch(params *tamber.EventBatchParams) (*tamber.BatchResult, err
 	if err == nil && !event.Succ {
 		err = errors.New(event.Error)
 	}
-	return &event.Result, err
+	return &event.Result, &event.ResponseInfo, err
 }
 
 func getClient() Client {
