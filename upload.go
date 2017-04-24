@@ -62,7 +62,7 @@ func (s *SessionConfig) CallUpload(method, path, key, ext, object, command strin
 		return err
 	}
 
-	if err := s.Do(req, resp); err != nil {
+	if err := s.AccountDo(req, resp); err != nil {
 		return err
 	}
 	return nil
