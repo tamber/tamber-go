@@ -17,12 +17,12 @@ type ItemUpdates struct {
 }
 
 type ItemParams struct {
-	Id         string                  `json:"id"`
-	Updates    *ItemUpdates            `json:"updates"`
-	NoCreate   bool                    `json:"no_create"`
-	Properties *map[string]interface{} `json:"properties,omitempty"`
-	Tags       *[]string               `json:"tags,omitempty"`
-	Created    int64                   `json:"created,omitempty"`
+	Id         string                 `json:"id"`
+	Updates    *ItemUpdates           `json:"updates"`
+	NoCreate   bool                   `json:"no_create"`
+	Properties map[string]interface{} `json:"properties,omitempty"`
+	Tags       []string               `json:"tags,omitempty"`
+	Created    int64                  `json:"created,omitempty"`
 }
 
 type Item struct {

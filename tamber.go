@@ -58,7 +58,7 @@ func (s *SessionConfig) Call(method, path, key, ext, object, command string, for
 	if form != nil && len(*form) > 0 {
 		data := form.Encode()
 		if strings.ToUpper(method) == "GET" {
-			path += "?" + data
+			command += "?" + data
 		} else {
 			body = bytes.NewBufferString(data)
 		}
