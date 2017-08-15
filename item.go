@@ -27,6 +27,7 @@ type ItemUpdateParams struct {
 	Id       string      `json:"id"`
 	Updates  ItemUpdates `json:"updates"`
 	NoCreate bool        `json:"no_create,omitempty"`
+	Created  *int64      `json:"created,omitempty"`
 }
 
 type Item struct {
@@ -73,6 +74,10 @@ func (params *ItemUpdateParams) AppendToBody(v *url.Values) {
 	updates, _ := json.Marshal(params.Updates)
 	if updates != nil {
 		v.Add("updates", string(updates))
+	}
+
+	if params.Created != nil {
+		v.Add("created", strconv.FormatInt(*params.Created, 10))
 	}
 
 	v.Add("no_create", strconv.FormatBool(params.NoCreate))
