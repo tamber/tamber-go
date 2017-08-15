@@ -102,9 +102,9 @@ const (
 tamber.DefaultProjectKey = "Mu6DUPXdDYe98cv5JIfX"
 
 items := Database.LoadItems()
-itemUpdates := make([]*tamber.ItemParams, len(items))
+itemUpdates := make([]*tamber.ItemUpdateParams, len(items))
 for i, item := range items {
-    itemUpdates[i] = &tamber.ItemParams{Id: item.Id, Updates: &tamber.ItemUpdates{Add: tamber.ItemFeatures{Properties: item.Properties}}}
+    itemUpdates[i] = &tamber.ItemUpdateParams{Id: item.Id, Updates: tamber.ItemUpdates{Add: tamber.ItemFeatures{Properties: item.Properties}}}
 }
 
 // You may optionally supply a channel to read updated items.
