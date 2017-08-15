@@ -127,31 +127,6 @@ func (s *SessionConfig) Do(req *http.Request, v Response) error {
 	return nil
 }
 
-func (s *SessionConfig) AccountDo(req *http.Request, v interface{}) error {
-
-	res, err := s.HTTPClient.Do(req)
-
-	if err != nil {
-		s.errFunc("Request to Tamber failed", err)
-		return err
-	}
-
-	defer res.Body.Close()
-
-	resBody, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		s.errFunc("Cannot parse Tamber response", err)
-		return err
-	}
-
-	err = json.Unmarshal(resBody, v)
-	if err != nil {
-		s.errFunc("Json error", err)
-	}
-
-	return nil
-}
-
 // Set a new error handling function, which handles errors encountered
 // When executing API requests. By default this is a log.Printf
 func (s *SessionConfig) SetErrFunc(errFunc SessionErrFunction) {
