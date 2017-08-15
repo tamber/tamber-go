@@ -38,6 +38,10 @@ var (
 	DefaultProjectKey string
 	DefaultEngineKey  string
 
+	DefaultAccountEmail    string
+	DefaultAccountPassword string
+	DefaultAuthToken       *AuthToken
+
 	DefaultErrFunc SessionErrFunction = func(exp string, err interface{}) {
 		log.Printf("\n%s: %v\n", exp, err)
 	}
@@ -123,6 +127,31 @@ func (s *SessionConfig) Do(req *http.Request, v Response) error {
 
 	info := s.NewResponse(res.StatusCode, res.Header)
 	v.SetInfo(info)
+
+	return nil
+}
+
+func (s *SessionConfig) AccountDo(req *http.Request, v interface{}) error {
+
+	res, err := s.HTTPClient.Do(req)
+
+	if err != nil {
+		s.errFunc("Request to Tamber failed", err)
+		return err
+	}
+
+	defer res.Body.Close()
+
+	resBody, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		s.errFunc("Cannot parse Tamber response", err)
+		return err
+	}
+
+	err = json.Unmarshal(resBody, v)
+	if err != nil {
+		s.errFunc("Json error", err)
+	}
 
 	return nil
 }
