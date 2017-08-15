@@ -24,18 +24,22 @@ func Gzip(filepath string) error {
 	return nil
 }
 
-func StringPointer(v string) *string {
+func String(v string) *string {
 	return &v
 }
 
-func Int64Pointer(v int64) *int64 {
+func Int64(v int64) *int64 {
 	return &v
 }
 
-func IntPointer(v int) *int {
+func Bool(v bool) *bool {
 	return &v
 }
 
-func FloatPointer(v float64) *float64 {
+func Int(v int) *int {
+	return &v
+}
+
+func Float(v float64) *float64 {
 	return &v
 }

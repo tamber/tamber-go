@@ -36,11 +36,11 @@ func (c Client) Track(params *tamber.EventParams) (*tamber.EventResult, *tamber.
 	return &event.Result, &event.ResponseInfo, err
 }
 
-func Retrieve(params *tamber.EventParams) (*tamber.EventResult, *tamber.ResponseInfo, error) {
+func Retrieve(params *tamber.EventRetrieveParams) (*tamber.EventResult, *tamber.ResponseInfo, error) {
 	return getClient().Retrieve(params)
 }
 
-func (c Client) Retrieve(params *tamber.EventParams) (*tamber.EventResult, *tamber.ResponseInfo, error) {
+func (c Client) Retrieve(params *tamber.EventRetrieveParams) (*tamber.EventResult, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	event := &tamber.EventResponse{}

@@ -12,8 +12,9 @@ const (
 )
 
 type BehaviorParams struct {
-	Name, Type   string
+	Name         string
 	Desirability float64
+	Type         *string
 	Params       map[string]interface{}
 }
 
@@ -39,12 +40,14 @@ func (r *BehaviorResponse) SetInfo(info ResponseInfo) {
 
 func (params *BehaviorParams) AppendToBody(v *url.Values) {
 	v.Add("name", params.Name)
-	if len(params.Type) > 0 {
-		v.Add("type", params.Type)
+	if params.Type != nil {
+		v.Add("type", *params.Type)
 	}
-	if params.Desirability > 0 {
-		v.Add("desirability", strconv.FormatFloat(params.Desirability, 'f', -1, 64))
+
+	v.Add("desirability", strconv.FormatFloat(params.Desirability, 'f', -1, 64))
+
+	if params.Params != nil {
+		bParams, _ := json.Marshal(params.Params)
+		v.Add("params", string(bParams))
 	}
-	bParams, _ := json.Marshal(params.Params)
-	v.Add("params", string(bParams))
 }

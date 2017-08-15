@@ -20,7 +20,7 @@ var (
 const apiversion = "2017-3-8"
 
 // clientversion is the binding version
-const clientversion = "0.0.4"
+const clientversion = "0.0.5"
 
 // defaultHTTPTimeout is the default timeout on the http.Client used by the library.
 const defaultHTTPTimeout = 80 * time.Second
@@ -38,11 +38,7 @@ var (
 	DefaultProjectKey string
 	DefaultEngineKey  string
 
-	DefaultAccountEmail    string
-	DefaultAccountPassword string
-
-	DefaultAuthToken *AuthToken
-	DefaultErrFunc   SessionErrFunction = func(exp string, err interface{}) {
+	DefaultErrFunc SessionErrFunction = func(exp string, err interface{}) {
 		log.Printf("\n%s: %v\n", exp, err)
 	}
 )

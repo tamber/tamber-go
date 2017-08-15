@@ -38,11 +38,11 @@ func (c Client) Create(params *tamber.ItemParams) (*tamber.Item, *tamber.Respons
 	return &item.Result, &item.ResponseInfo, err
 }
 
-func Update(params *tamber.ItemParams) (*tamber.Item, *tamber.ResponseInfo, error) {
+func Update(params *tamber.ItemUpdateParams) (*tamber.Item, *tamber.ResponseInfo, error) {
 	return getClient().Update(params)
 }
 
-func (c Client) Update(params *tamber.ItemParams) (*tamber.Item, *tamber.ResponseInfo, error) {
+func (c Client) Update(params *tamber.ItemUpdateParams) (*tamber.Item, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	item := &tamber.ItemResponse{}
@@ -60,65 +60,12 @@ func (c Client) Update(params *tamber.ItemParams) (*tamber.Item, *tamber.Respons
 	return &item.Result, &item.ResponseInfo, err
 }
 
-func OpenChanStream(in chan *tamber.ItemParams, out *chan *tamber.Item, numThreads, bufSize int) (*tamber.ResponseInfo, error) {
-	return getClient().OpenChanStream(in, out, numThreads, bufSize)
-}
-
-func (c Client) OpenChanStream(in chan *tamber.ItemParams, out *chan *tamber.Item, numThreads, bufSize int) (*tamber.ResponseInfo, error) {
-	var wg sync.WaitGroup
-
-	stop := make(chan struct {
-		info *tamber.ResponseInfo
-		err  error
-	}, 1)
-	for i := 0; i < numThreads; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			for itemParams := range in {
-				select {
-				case resp := <-stop:
-					stop <- resp
-					return
-				default:
-				}
-				item, info, err := c.Update(itemParams)
-				if err != nil {
-					resp := struct {
-						info *tamber.ResponseInfo
-						err  error
-					}{info, err}
-					select {
-					case stop <- resp:
-						return
-					default:
-						return
-					}
-				}
-				if out != nil {
-					*out <- item
-				}
-				if info.RateLimitRemaining < numThreads {
-					time.Sleep(time.Second * time.Duration(info.RateLimitReset))
-				}
-			}
-		}()
-	}
-	wg.Wait()
-	select {
-	case resp := <-stop:
-		return resp.info, resp.err
-	default:
-		return nil, nil
-	}
-}
-
-func Stream(items []*tamber.ItemParams, out *chan *tamber.Item, numThreads, bufSize int) (*tamber.ResponseInfo, error) {
+func Stream(items []*tamber.ItemUpdateParams, out *chan *tamber.Item, numThreads, bufSize int) (*tamber.ResponseInfo, error) {
 	return getClient().Stream(items, out, numThreads, bufSize)
 }
 
-func (c Client) Stream(items []*tamber.ItemParams, out *chan *tamber.Item, numThreads, bufSize int) (*tamber.ResponseInfo, error) {
-	in := make(chan *tamber.ItemParams, bufSize)
+func (c Client) Stream(items []*tamber.ItemUpdateParams, out *chan *tamber.Item, numThreads, bufSize int) (*tamber.ResponseInfo, error) {
+	in := make(chan *tamber.ItemUpdateParams, bufSize)
 	var wg sync.WaitGroup
 
 	stop := make(chan struct {
@@ -190,6 +137,59 @@ func (c Client) Stream(items []*tamber.ItemParams, out *chan *tamber.Item, numTh
 		return nil, nil
 	}
 
+}
+
+func OpenChanStream(in chan *tamber.ItemUpdateParams, out *chan *tamber.Item, numThreads, bufSize int) (*tamber.ResponseInfo, error) {
+	return getClient().OpenChanStream(in, out, numThreads, bufSize)
+}
+
+func (c Client) OpenChanStream(in chan *tamber.ItemUpdateParams, out *chan *tamber.Item, numThreads, bufSize int) (*tamber.ResponseInfo, error) {
+	var wg sync.WaitGroup
+
+	stop := make(chan struct {
+		info *tamber.ResponseInfo
+		err  error
+	}, 1)
+	for i := 0; i < numThreads; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for itemParams := range in {
+				select {
+				case resp := <-stop:
+					stop <- resp
+					return
+				default:
+				}
+				item, info, err := c.Update(itemParams)
+				if err != nil {
+					resp := struct {
+						info *tamber.ResponseInfo
+						err  error
+					}{info, err}
+					select {
+					case stop <- resp:
+						return
+					default:
+						return
+					}
+				}
+				if out != nil {
+					*out <- item
+				}
+				if info.RateLimitRemaining < numThreads {
+					time.Sleep(time.Second * time.Duration(info.RateLimitReset))
+				}
+			}
+		}()
+	}
+	wg.Wait()
+	select {
+	case resp := <-stop:
+		return resp.info, resp.err
+	default:
+		return nil, nil
+	}
 }
 
 func Retrieve(params *tamber.ItemParams) (*tamber.Item, *tamber.ResponseInfo, error) {

@@ -18,11 +18,15 @@ type ItemUpdates struct {
 
 type ItemParams struct {
 	Id         string                 `json:"id"`
-	Updates    *ItemUpdates           `json:"updates"`
-	NoCreate   bool                   `json:"no_create"`
 	Properties map[string]interface{} `json:"properties,omitempty"`
 	Tags       []string               `json:"tags,omitempty"`
-	Created    int64                  `json:"created,omitempty"`
+	Created    *int64                 `json:"created,omitempty"`
+}
+
+type ItemUpdateParams struct {
+	Id       string      `json:"id"`
+	Updates  ItemUpdates `json:"updates"`
+	NoCreate bool        `json:"no_create,omitempty"`
 }
 
 type Item struct {
@@ -48,10 +52,6 @@ func (params *ItemParams) AppendToBody(v *url.Values) {
 
 	v.Add("id", params.Id)
 
-	updates, _ := json.Marshal(params.Updates)
-	if updates != nil {
-		v.Add("updates", string(updates))
-	}
 	props, _ := json.Marshal(params.Properties)
 	if props != nil {
 		v.Add("properties", string(props))
@@ -61,9 +61,19 @@ func (params *ItemParams) AppendToBody(v *url.Values) {
 		v.Add("tags", string(tags))
 	}
 
-	v.Add("no_create", strconv.FormatBool(params.NoCreate))
-
-	if params.Created > 0 {
-		v.Add("created", strconv.FormatInt(params.Created, 10))
+	if params.Created != nil {
+		v.Add("created", strconv.FormatInt(*params.Created, 10))
 	}
+}
+
+func (params *ItemUpdateParams) AppendToBody(v *url.Values) {
+
+	v.Add("id", params.Id)
+
+	updates, _ := json.Marshal(params.Updates)
+	if updates != nil {
+		v.Add("updates", string(updates))
+	}
+
+	v.Add("no_create", strconv.FormatBool(params.NoCreate))
 }
