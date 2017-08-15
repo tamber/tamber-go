@@ -6,6 +6,13 @@ import (
 	"strconv"
 )
 
+type ItemParams struct {
+	Id         string                 `json:"id"`
+	Properties map[string]interface{} `json:"properties,omitempty"`
+	Tags       []string               `json:"tags,omitempty"`
+	Created    *int64                 `json:"created,omitempty"`
+}
+
 type ItemFeatures struct {
 	Properties map[string]interface{} `json:"properties"`
 	Tags       []string               `json:"tags"`
@@ -14,13 +21,6 @@ type ItemFeatures struct {
 type ItemUpdates struct {
 	Add    ItemFeatures `json:"add"`
 	Remove ItemFeatures `json:"remove"`
-}
-
-type ItemParams struct {
-	Id         string                 `json:"id"`
-	Properties map[string]interface{} `json:"properties,omitempty"`
-	Tags       []string               `json:"tags,omitempty"`
-	Created    *int64                 `json:"created,omitempty"`
 }
 
 type ItemUpdateParams struct {
