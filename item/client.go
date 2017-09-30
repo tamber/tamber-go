@@ -2,7 +2,6 @@ package item
 
 import (
 	"errors"
-	"fmt"
 	tamber "github.com/tamber/tamber-go"
 	"net/url"
 	"sync"
@@ -104,7 +103,6 @@ func (c Client) Stream(items []*tamber.ItemUpdateParams, out *chan *tamber.Item,
 				if info.RateLimitRemaining <= numThreads {
 					waitv := time.Second * time.Duration(info.RateLimitReset)
 					time.Sleep(waitv)
-					hitStop = true
 				}
 			}
 		}(i)
