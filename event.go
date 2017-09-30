@@ -33,6 +33,12 @@ type Event struct {
 	Object   string  `json:"object"`
 }
 
+type Events []*Event
+
+func (E Events) Len() int           { return len(E) }
+func (E Events) Less(i, j int) bool { return E[i].Created < E[j].Created }
+func (E Events) Swap(i, j int)      { E[i], E[j] = E[j], E[i] }
+
 type EventResult struct {
 	Events []Event      `json:"events"`
 	Recs   *[]Discovery `json:"recommended,omitempty"`

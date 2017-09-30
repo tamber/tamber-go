@@ -2,6 +2,7 @@ package item
 
 import (
 	"errors"
+	"fmt"
 	tamber "github.com/tamber/tamber-go"
 	"net/url"
 	"sync"
@@ -75,7 +76,7 @@ func (c Client) Stream(items []*tamber.ItemUpdateParams, out *chan *tamber.Item,
 
 	for i := 0; i < numThreads; i++ {
 		wg.Add(1)
-		go func() {
+		go func(thread int) {
 			defer wg.Done()
 			for itemParams := range in {
 				select {
@@ -100,11 +101,13 @@ func (c Client) Stream(items []*tamber.ItemUpdateParams, out *chan *tamber.Item,
 				if out != nil {
 					*out <- item
 				}
-				if info.RateLimitRemaining < numThreads {
-					time.Sleep(time.Second * time.Duration(info.RateLimitReset))
+				if info.RateLimitRemaining <= numThreads {
+					waitv := time.Second * time.Duration(info.RateLimitReset)
+					time.Sleep(waitv)
+					hitStop = true
 				}
 			}
-		}()
+		}(i)
 	}
 	for i, itemParams := range items {
 		// ensure rate limits are acceptable to begin multi-threaded streaming
