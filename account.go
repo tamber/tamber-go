@@ -43,7 +43,7 @@ type Project struct {
 	AccountId       string                 `json:"accountid"`
 	ProjectParentId string                 `json:"parentid"`
 	ApiVersion      string                 `json:"api_version"`
-	Engines         []string               `json:"engines"`
+	Engines         []uint32               `json:"engines"`
 	Metadata        map[string]interface{} `json:"metadata"`
 	State           int                    `json:"state"`
 	Behaviors       []string               `json:"behaviors"`
