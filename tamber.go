@@ -8,7 +8,6 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -18,10 +17,10 @@ var (
 )
 
 // apiversion is the currently supported API version
-const apiversion = "2017-7-3"
+const apiversion = "2017-10-2"
 
 // clientversion is the binding version
-const clientversion = "0.0.5"
+const clientversion = "0.0.6"
 
 // defaultHTTPTimeout is the default timeout on the http.Client used by the library.
 const defaultHTTPTimeout = 80 * time.Second
