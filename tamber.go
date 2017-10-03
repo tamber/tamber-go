@@ -8,12 +8,14 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 )
 
 var (
-	ApiUrl = "https://api.tamber.com/v1"
+	ApiUrl    = "https://api.tamber.com/v1"
+	RateLimit = 40000
 )
 
 // apiversion is the currently supported API version
@@ -94,6 +96,9 @@ func (s *SessionConfig) NewRequest(method, path, key, ext, contentType string, b
 	req.SetBasicAuth(key, ext)
 
 	req.Header.Add("Tamber-Version", apiversion)
+	if RateLimit > 0 {
+		req.Header.Add("Tamber-Rate-Limit", strconv.Itoa(RateLimit))
+	}
 	req.Header.Add("User-Agent", "Tamber/v1 GoBindings/"+clientversion)
 	req.Header.Add("Content-Type", contentType)
 
