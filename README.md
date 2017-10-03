@@ -53,6 +53,19 @@ if err != nil {
 for _, rec := range recommendations{
     fmt.Printf("Item Id:%s :: Score:%f", rec.Item, rec.Score)
 }
+
+// Get items to display directly to the user
+recommendations, info, err := discover.Next(&tamber.DiscoverNextParams{
+    User: "user_rlox8k927z7p",
+    Number: 8,
+})
+
+// Or items to display directly to the user on a given item page
+recommendations, info, err := discover.Next(&tamber.DiscoverNextParams{
+    User: "user_rlox8k927z7p",
+    Item: "item_wmt4fn6o4zlk",
+    Number: 8,
+})
 ```
 
 ## Multiple Projects / Engines
