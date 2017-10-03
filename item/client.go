@@ -215,18 +215,60 @@ func (c Client) Retrieve(params *tamber.ItemParams) (*tamber.Item, *tamber.Respo
 	return &item.Result, &item.ResponseInfo, err
 }
 
-func Remove(params *tamber.ItemParams) (*tamber.Item, *tamber.ResponseInfo, error) {
-	return getClient().Remove(params)
+func Hide(id string) (*tamber.Item, *tamber.ResponseInfo, error) {
+	return getClient().Remove(id)
 }
 
-func (c Client) Remove(params *tamber.ItemParams) (*tamber.Item, *tamber.ResponseInfo, error) {
+func (c Client) Hide(id string) (*tamber.Item, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
-	params.AppendToBody(body)
+	body.Add("id", id)
 	item := &tamber.ItemResponse{}
 	var err error
 
-	if len(params.Id) > 0 {
-		err = c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "remove", body, item)
+	if len(id) > 0 {
+		err = c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "hide", body, item)
+	} else {
+		err = errors.New("Invalid item params: id needs to be set")
+	}
+	if err == nil && !item.Succ {
+		err = errors.New(item.Error)
+	}
+	return &item.Result, &item.ResponseInfo, err
+}
+
+func Unhide(id string) (*tamber.Item, *tamber.ResponseInfo, error) {
+	return getClient().Remove(id)
+}
+
+func (c Client) Unhide(id string) (*tamber.Item, *tamber.ResponseInfo, error) {
+	body := &url.Values{}
+	body.Add("id", id)
+	item := &tamber.ItemResponse{}
+	var err error
+
+	if len(id) > 0 {
+		err = c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "unhide", body, item)
+	} else {
+		err = errors.New("Invalid item params: id needs to be set")
+	}
+	if err == nil && !item.Succ {
+		err = errors.New(item.Error)
+	}
+	return &item.Result, &item.ResponseInfo, err
+}
+
+func Delete(id string) (*tamber.Item, *tamber.ResponseInfo, error) {
+	return getClient().Remove(id)
+}
+
+func (c Client) Delete(id string) (*tamber.Item, *tamber.ResponseInfo, error) {
+	body := &url.Values{}
+	body.Add("id", id)
+	item := &tamber.ItemResponse{}
+	var err error
+
+	if len(id) > 0 {
+		err = c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "delete", body, item)
 	} else {
 		err = errors.New("Invalid item params: id needs to be set")
 	}

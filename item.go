@@ -35,6 +35,10 @@ type Item struct {
 	Properties map[string]interface{} `json:"properties"`
 	Tags       []string               `json:"tags"`
 	Created    int64                  `json:"created"`
+	Hidden     bool                   `json:"hidden"`
+	// Trends data only returned if the engine key is set, or the project has a default engine
+	Popularity float64 `json:"popularity"`
+	Hotness    float64 `json:"hotness"`
 }
 
 type ItemResponse struct {
