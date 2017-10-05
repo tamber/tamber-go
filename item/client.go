@@ -216,7 +216,7 @@ func (c Client) Retrieve(params *tamber.ItemParams) (*tamber.Item, *tamber.Respo
 }
 
 func Hide(id string) (*tamber.Item, *tamber.ResponseInfo, error) {
-	return getClient().Remove(id)
+	return getClient().Hide(id)
 }
 
 func (c Client) Hide(id string) (*tamber.Item, *tamber.ResponseInfo, error) {
@@ -237,7 +237,7 @@ func (c Client) Hide(id string) (*tamber.Item, *tamber.ResponseInfo, error) {
 }
 
 func Unhide(id string) (*tamber.Item, *tamber.ResponseInfo, error) {
-	return getClient().Remove(id)
+	return getClient().Unhide(id)
 }
 
 func (c Client) Unhide(id string) (*tamber.Item, *tamber.ResponseInfo, error) {
@@ -258,7 +258,7 @@ func (c Client) Unhide(id string) (*tamber.Item, *tamber.ResponseInfo, error) {
 }
 
 func Delete(id string) (*tamber.Item, *tamber.ResponseInfo, error) {
-	return getClient().Remove(id)
+	return getClient().Delete(id)
 }
 
 func (c Client) Delete(id string) (*tamber.Item, *tamber.ResponseInfo, error) {
