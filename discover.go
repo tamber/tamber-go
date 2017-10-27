@@ -22,7 +22,7 @@ type DiscoverNextParams struct {
 	Number        *int                   `json:"number,omitempty"`
 	Filter        map[string]interface{} `json:"filter,omitempty"`
 	ExcludeItems  []string               `json:"exclude_items,omitempty"`
-	Randomness    *float64               `json:"randomness,omitempty"`
+	Variability   *float64               `json:"variability,omitempty"`
 	GetProperties bool                   `json:"get_properties"`
 }
 
@@ -88,8 +88,8 @@ func (params *DiscoverNextParams) AppendToBody(v *url.Values) {
 	if params.Number != nil {
 		v.Add("number", strconv.Itoa(*params.Number))
 	}
-	if params.Randomness != nil {
-		v.Add("randomness", strconv.FormatFloat(*params.Randomness, 'f', -1, 64))
+	if params.Variability != nil {
+		v.Add("variability", strconv.FormatFloat(*params.Variability, 'f', -1, 64))
 	}
 	filter, _ := json.Marshal(params.Filter)
 	if filter != nil {

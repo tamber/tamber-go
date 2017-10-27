@@ -15,7 +15,7 @@ type EventParams struct {
 	Context  []string `json:"context,omitempty"`
 	Created  *int64   `json:"created,omitempty"`
 	// GetRecs can only be set when making event track requests.
-	GetRecs *DiscoverParams `json:"get_recs,omitempty"`
+	GetRecs *DiscoverNextParams `json:"get_recs,omitempty"`
 }
 
 type EventRetrieveParams struct {
