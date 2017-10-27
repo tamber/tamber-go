@@ -16,7 +16,7 @@ func TrackToCSV(writer *csv.Writer, e *tamber.Event) error {
 		e.User,
 		e.Item,
 		e.Behavior,
-		strconv.FormatFloat(e.Value, 'f', -1, 64),
+		strconv.FormatFloat(e.Amount, 'f', -1, 64),
 		strconv.FormatInt(e.Created, 10),
 	})
 }
@@ -77,7 +77,7 @@ func parseLine(line []string) (e *tamber.Event, err error) {
 		case "behavior":
 			e.Behavior = x
 		case "value":
-			e.Value, err = strconv.ParseFloat(x, 64)
+			e.Amount, err = strconv.ParseFloat(x, 64)
 			if err != nil {
 				return nil, err
 			}

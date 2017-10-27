@@ -10,12 +10,12 @@ type EventParams struct {
 	User     string   `json:"user"`     // required
 	Item     string   `json:"item"`     // required
 	Behavior string   `json:"behavior"` // required
-	Value    *float64 `json:"value,omitempty"`
+	Amount   *float64 `json:"amount,omitempty"`
 	Hit      *bool    `json:"hit,omitempty"`
 	Context  []string `json:"context,omitempty"`
 	Created  *int64   `json:"created,omitempty"`
 	// GetRecs can only be set when making event track requests.
-	GetRecs *DiscoverParams `json:"get_recs,omitempty"`
+	GetRecs *DiscoverNextParams `json:"get_recs,omitempty"`
 }
 
 type EventRetrieveParams struct {
@@ -28,10 +28,16 @@ type Event struct {
 	User     string  `json:"user"`
 	Item     string  `json:"item"`
 	Behavior string  `json:"behavior"`
-	Value    float64 `json:"value"`
+	Amount   float64 `json:"amount"`
 	Created  int64   `json:"created"`
 	Object   string  `json:"object"`
 }
+
+type Events []*Event
+
+func (E Events) Len() int           { return len(E) }
+func (E Events) Less(i, j int) bool { return E[i].Created < E[j].Created }
+func (E Events) Swap(i, j int)      { E[i], E[j] = E[j], E[i] }
 
 type EventResult struct {
 	Events []Event      `json:"events"`
@@ -61,8 +67,8 @@ func (params *EventParams) AppendToBody(v *url.Values) {
 		v.Add("behavior", params.Behavior)
 	}
 
-	if params.Value != nil {
-		v.Add("value", strconv.FormatFloat(*(params.Value), 'f', -1, 64))
+	if params.Amount != nil {
+		v.Add("amount", strconv.FormatFloat(*(params.Amount), 'f', -1, 64))
 	}
 	if params.Created != nil {
 		v.Add("created", strconv.FormatInt(*(params.Created), 10))
