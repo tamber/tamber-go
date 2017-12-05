@@ -176,7 +176,7 @@ func PartialTest(t *testing.T) {
 	//Check User - w/ get recs
 	u, info, err := user.Retrieve(&tamber.UserParams{
 		Id:      "user_jctzgisbru",
-		GetRecs: &tamber.DiscoverParams{},
+		GetRecs: &tamber.DiscoverNextParams{},
 	})
 	if err != nil {
 		t.Error("err:", err, "info:", info)

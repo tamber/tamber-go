@@ -9,7 +9,7 @@ import (
 type UserParams struct {
 	Id       string                 `json:"id"`
 	Events   []EventParams          `json:"events,omitempty"`
-	GetRecs  *DiscoverParams        `json:"get_recs,omitempty"` //DiscoverParams.User field is not needed and wll be ignored if set.
+	GetRecs  *DiscoverNextParams    `json:"get_recs,omitempty"` //DiscoverParams.User field is not needed and wll be ignored if set.
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	Created  *int64                 `json:"created,omitempty"`
 }

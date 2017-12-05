@@ -14,6 +14,23 @@ type Client struct {
 
 var object = "discover"
 
+func Next(params *tamber.DiscoverNextParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
+	return getClient().Next(params)
+}
+
+func (c Client) Next(params *tamber.DiscoverNextParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
+	body := &url.Values{}
+	params.AppendToBody(body)
+
+	discoveries := &tamber.DiscoverResponse{}
+	err := c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "next", body, discoveries)
+
+	if err == nil && !discoveries.Succ {
+		err = errors.New(discoveries.Error)
+	}
+	return &discoveries.Result, &discoveries.ResponseInfo, err
+}
+
 func Recommended(params *tamber.DiscoverParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
 	return getClient().Recommended(params)
 }
