@@ -48,11 +48,11 @@ type EventResponse struct {
 	Succ   bool        `json:"success"`
 	Result EventResult `json:"result"`
 	Error  string      `json:"error"`
-	Time   float64     `json:"time"`
 	ResponseInfo
 }
 
 func (r *EventResponse) SetInfo(info ResponseInfo) {
+	info.Time = r.Time
 	r.ResponseInfo = info
 }
 

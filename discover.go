@@ -43,11 +43,11 @@ type DiscoverResponse struct {
 	Succ   bool        `json:"success"`
 	Result Discoveries `json:"result"`
 	Error  string      `json:"error"`
-	Time   float64     `json:"time"`
 	ResponseInfo
 }
 
 func (r *DiscoverResponse) SetInfo(info ResponseInfo) {
+	info.Time = r.Time
 	r.ResponseInfo = info
 }
 

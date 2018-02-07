@@ -80,6 +80,23 @@ func (c Client) Retrieve(params *tamber.UserParams) (*tamber.User, *tamber.Respo
 	return &user.Result, &user.ResponseInfo, err
 }
 
+func List(params *tamber.UserListParams) (*tamber.Users, *tamber.ResponseInfo, error) {
+	return getClient().List(params)
+}
+
+func (c Client) List(params *tamber.UserListParams) (*tamber.Users, *tamber.ResponseInfo, error) {
+	body := &url.Values{}
+	params.AppendToBody(body)
+	result := &tamber.UsersResponse{}
+
+	err := c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "list", body, result)
+
+	if err == nil && !result.Succ {
+		err = errors.New(result.Error)
+	}
+	return &result.Result, &result.ResponseInfo, err
+}
+
 func Search(params *tamber.UserSearchParams) (*tamber.Users, *tamber.ResponseInfo, error) {
 	return getClient().Search(params)
 }
@@ -87,13 +104,13 @@ func Search(params *tamber.UserSearchParams) (*tamber.Users, *tamber.ResponseInf
 func (c Client) Search(params *tamber.UserSearchParams) (*tamber.Users, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
-	result := &tamber.UserSearchResponse{}
+	result := &tamber.UsersResponse{}
 	var err error
 
 	if params.Filter != nil {
 		err = c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "retrieve", body, result)
 	} else {
-		err = errors.New("Invalid user params: id needs to be set")
+		err = errors.New("Invalid user search params: filter needs to be set")
 	}
 
 	if err == nil && !result.Succ {

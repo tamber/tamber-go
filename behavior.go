@@ -30,11 +30,11 @@ type BehaviorResponse struct {
 	Succ   bool     `json:"success"`
 	Result Behavior `json:"result"`
 	Error  string   `json:"error"`
-	Time   float64  `json:"time"`
 	ResponseInfo
 }
 
 func (r *BehaviorResponse) SetInfo(info ResponseInfo) {
+	info.Time = r.Time
 	r.ResponseInfo = info
 }
 
