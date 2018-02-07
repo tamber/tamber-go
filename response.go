@@ -15,10 +15,11 @@ type Response interface {
 }
 
 type ResponseInfo struct {
-	HTTPCode           int // HTTP status code
-	RateLimit          int // Limit-per-period for request method
-	RateLimitRemaining int // Requests remaining in current window for request method
-	RateLimitReset     int // Time in seconds until rate limits are reset
+	HTTPCode           int     // HTTP status code
+	RateLimit          int     // Limit-per-period for request method
+	RateLimitRemaining int     // Requests remaining in current window for request method
+	RateLimitReset     int     // Time in seconds until rate limits are reset
+	Time               float64 `json:"time"`
 }
 
 func (s *SessionConfig) NewResponse(HTTPCode int, Headers map[string][]string) ResponseInfo {

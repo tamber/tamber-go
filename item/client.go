@@ -215,6 +215,23 @@ func (c Client) Retrieve(params *tamber.ItemParams) (*tamber.Item, *tamber.Respo
 	return &item.Result, &item.ResponseInfo, err
 }
 
+func List(params *tamber.ItemListParams) (*tamber.Items, *tamber.ResponseInfo, error) {
+	return getClient().List(params)
+}
+
+func (c Client) List(params *tamber.ItemListParams) (*tamber.Items, *tamber.ResponseInfo, error) {
+	body := &url.Values{}
+	params.AppendToBody(body)
+	result := &tamber.ItemsResponse{}
+
+	err := c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "list", body, result)
+
+	if err == nil && !result.Succ {
+		err = errors.New(result.Error)
+	}
+	return &result.Result, &result.ResponseInfo, err
+}
+
 func Hide(id string) (*tamber.Item, *tamber.ResponseInfo, error) {
 	return getClient().Hide(id)
 }

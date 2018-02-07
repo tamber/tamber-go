@@ -453,16 +453,17 @@ func TestTamberGo(t *testing.T) {
 	} else {
 		t.Logf("Behavior: %+v\n", *b)
 	}
+	t.Log("info.time", info.Time)
 
 	//Remove Tests
-	t.Log("Item - Remove")
-	i, info, err = item.Remove(&tamber.ItemParams{
-		Id: "item_nqzd5w00s9",
-	})
-	if err != nil {
-		t.Error("err:", err, "info:", info)
-	} else {
-		t.Logf("\nItem: %+v\n", *i)
-	}
+	// t.Log("Item - Remove")
+	// i, info, err = item.Hide(&tamber.ItemParams{
+	// 	Id: "item_nqzd5w00s9",
+	// })
+	// if err != nil {
+	// 	t.Error("err:", err, "info:", info)
+	// } else {
+	// 	t.Logf("\nItem: %+v\n", *i)
+	// }
 
 }

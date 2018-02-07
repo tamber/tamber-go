@@ -14,6 +14,12 @@ type UserParams struct {
 	Created  *int64                 `json:"created,omitempty"`
 }
 
+type UserListParams struct {
+	Number *int                   `json:"number,omitempty"`
+	Page   *int                   `json:"page,omitempty"`
+	Filter map[string]interface{} `json:"filter,omitempty"`
+}
+
 type UserSearchParams struct {
 	Filter map[string]interface{} `json:"filter,omitempty"`
 }
@@ -34,28 +40,28 @@ type User struct {
 }
 
 type UserResponse struct {
-	Succ   bool    `json:"success"`
-	Result User    `json:"result"`
-	Error  string  `json:"error"`
-	Time   float64 `json:"time"`
+	Succ   bool   `json:"success"`
+	Result User   `json:"result"`
+	Error  string `json:"error"`
 	ResponseInfo
 }
 
 type Users []User
 
-type UserSearchResponse struct {
-	Succ   bool    `json:"success"`
-	Result Users   `json:"result"`
-	Error  string  `json:"error"`
-	Time   float64 `json:"time"`
+type UsersResponse struct {
+	Succ   bool   `json:"success"`
+	Result Users  `json:"result"`
+	Error  string `json:"error"`
 	ResponseInfo
 }
 
 func (r *UserResponse) SetInfo(info ResponseInfo) {
+	info.Time = r.Time
 	r.ResponseInfo = info
 }
 
-func (r *UserSearchResponse) SetInfo(info ResponseInfo) {
+func (r *UsersResponse) SetInfo(info ResponseInfo) {
+	info.Time = r.Time
 	r.ResponseInfo = info
 }
 
@@ -87,6 +93,21 @@ func (params *UserMergeParams) AppendToBody(v *url.Values) {
 	v.Add("from", params.From)
 	v.Add("to", params.To)
 	v.Add("no_create", strconv.FormatBool(params.NoCreate))
+}
+
+func (params *UserListParams) AppendToBody(v *url.Values) {
+
+	if params.Number != nil {
+		v.Add("number", strconv.Itoa(*params.Number))
+	}
+	if params.Page != nil {
+		v.Add("page", strconv.Itoa(*params.Page))
+	}
+
+	filter, _ := json.Marshal(params.Filter)
+	if filter != nil {
+		v.Add("filter", string(filter))
+	}
 }
 
 func (params *UserSearchParams) AppendToBody(v *url.Values) {
