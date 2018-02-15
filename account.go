@@ -22,11 +22,20 @@ type CreateProjectParams struct {
 	Name string `json:"name"`
 }
 
+type EngineConfig struct {
+	DiscoverConfigs            map[string]interface{} `bson:"discover_configs,omitempty" json:"discover_configs,omitempty"`
+	Notifications              map[string]interface{} `bson:"notifications,omitempty" json:"notifications,omitempty"`
+	RecOnlyContexts            map[string]struct{}    `bson:"rec_only_ctx" json:"rec_only_ctx"`
+	HideItemBehaviorThresholds map[string]float64     `bson:"hide_item_behavior_thresh,omitempty" json:"hide_item_behavior_thresh,omitempty"`
+}
+
 type CreateEngineParams struct {
-	Name        string                 `json:"name"`
-	ProjectId   uint32                 `json:"projectid"`
-	Behaviors   map[string]Behavior    `json:"behaviors"`
-	ItemsFilter map[string]interface{} `json:"filter"`
+	Name           string                 `json:"name"`
+	ProjectId      uint32                 `json:"projectid"`
+	Behaviors      map[string]Behavior    `json:"behaviors"`
+	ItemsFilter    map[string]interface{} `json:"filter"`
+	ProjectDefault *bool                  `json:"project_default"`
+	Config         *EngineConfig          `json:"conf"`
 }
 
 // Types
@@ -172,9 +181,15 @@ func (params *CreateEngineParams) AppendToBody(v *url.Values) {
 	if len(params.Name) > 0 {
 		v.Add("name", params.Name)
 	}
+	if params.ProjectDefault != nil {
+		v.Add("project_default", strconv.FormatBool(*params.ProjectDefault))
+	}
 	v.Add("projectid", strconv.FormatUint(uint64(params.ProjectId), 10))
 	behaviors, _ := json.Marshal(params.Behaviors)
 	v.Add("behaviors", string(behaviors))
 	filter, _ := json.Marshal(params.ItemsFilter)
 	v.Add("filter", string(filter))
+	config, _ := json.Marshal(params.Config)
+	v.Add("config", string(config))
+
 }
