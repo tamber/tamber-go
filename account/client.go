@@ -185,7 +185,7 @@ func DeleteEngine(engineId uint32) error {
 func (a *Account) DeleteEngine(engineId uint32) error {
 	body := &url.Values{}
 	body.Add("id", strconv.FormatUint(uint64(engineId), 10))
-	resp := &tamber.DeleteEngineResponse{}
+	resp := &tamber.DeleteProjectResponse{}
 	var err error
 
 	err = a.updateToken()

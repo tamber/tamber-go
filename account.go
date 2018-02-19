@@ -136,8 +136,6 @@ type DeleteProjectResponse struct {
 	ResponseInfo
 }
 
-type DeleteEngineResponse DeleteProjectResponse
-
 type CreateEngineResponse struct {
 	Succ   bool    `json:"success"`
 	Result Engine  `json:"result"`
