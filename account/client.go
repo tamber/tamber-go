@@ -178,6 +178,29 @@ func (a *Account) RetrainEngine(engineId uint32) (*tamber.Engine, error) {
 	return &engine.Result, err
 }
 
+func DeleteEngine(engineId uint32) error {
+	return getAccount().DeleteEngine(engineId)
+}
+
+func (a *Account) DeleteEngine(engineId uint32) error {
+	body := &url.Values{}
+	body.Add("id", strconv.FormatUint(uint64(engineId), 10))
+	resp := &tamber.DeleteEngineResponse{}
+	var err error
+
+	err = a.updateToken()
+	if err != nil {
+		return err
+	}
+
+	err = a.S.Call("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, engineObject, "delete", body, resp)
+
+	if !resp.Succ {
+		err = errors.New(resp.Error)
+	}
+	return err
+}
+
 func Retrieve() (*tamber.AccountInfo, error) {
 	return getAccount().Retrieve()
 }
