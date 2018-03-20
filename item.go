@@ -56,7 +56,7 @@ type ItemResponse struct {
 	ResponseInfo
 }
 
-type Items []Item
+type Items []*Item
 
 type ItemsResponse struct {
 	Succ   bool   `json:"success"`
