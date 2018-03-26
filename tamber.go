@@ -15,7 +15,7 @@ import (
 
 var (
 	ApiUrl    = "https://api.tamber.com/v1"
-	RateLimit = 40000
+	RateLimit int
 )
 
 // apiversion is the currently supported API version
