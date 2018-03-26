@@ -73,6 +73,12 @@ func (params *EventParams) AppendToBody(v *url.Values) {
 	if params.Created != nil {
 		v.Add("created", strconv.FormatInt(*(params.Created), 10))
 	}
+	if params.Context != nil {
+		context, _ := json.Marshal(params.Context)
+		if context != nil {
+			v.Add("context", string(context))
+		}
+	}
 
 	getRecs, _ := json.Marshal(params.GetRecs)
 	if getRecs != nil {
