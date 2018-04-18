@@ -10,6 +10,7 @@ type Client struct {
 	S          *tamber.SessionConfig
 	ProjectKey string
 	EngineKey  string
+	Meta       MetaClient
 }
 
 var object = "event"
@@ -76,6 +77,11 @@ func (c Client) Batch(params *tamber.EventBatchParams) (*tamber.BatchResult, *ta
 	return &event.Result, &event.ResponseInfo, err
 }
 
+func NewClient(s *tamber.SessionConfig, project, engine string) *Client {
+	meta := MetaClient{s, project, engine}
+	return &Client{s, project, engine, meta}
+}
+
 func getClient() Client {
-	return Client{tamber.GetDefaultSessionConfig(), tamber.DefaultProjectKey, tamber.DefaultEngineKey}
+	return *NewClient(tamber.GetDefaultSessionConfig(), tamber.DefaultProjectKey, tamber.DefaultEngineKey)
 }

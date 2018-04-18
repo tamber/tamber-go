@@ -15,7 +15,7 @@ type EventParams struct {
 	Context  []string `json:"context,omitempty"`
 	Created  *int64   `json:"created,omitempty"`
 	// GetRecs can only be set when making event track requests.
-	GetRecs *DiscoverNextParams `json:"get_recs,omitempty"`
+	GetRecs *DiscoverParams `json:"get_recs,omitempty"`
 }
 
 type EventRetrieveParams struct {
@@ -51,7 +51,32 @@ type EventResponse struct {
 	ResponseInfo
 }
 
+type EventMetaParams struct {
+	User     string      `json:"user"`     // required
+	Property string      `json:"property"` // required
+	Value    interface{} `json:"value"`    // required
+	Amount   *float64    `json:"amount,omitempty"`
+}
+
+type MetaPreference struct {
+	Property string      `json:"property"`
+	Value    interface{} `json:"value"`
+	Amount   float64     `json:"amount"`
+}
+
+type EventMetaResponse struct {
+	Succ   bool           `json:"success"`
+	Result MetaPreference `json:"result"`
+	Error  string         `json:"error"`
+	ResponseInfo
+}
+
 func (r *EventResponse) SetInfo(info ResponseInfo) {
+	info.Time = r.Time
+	r.ResponseInfo = info
+}
+
+func (r *EventMetaResponse) SetInfo(info ResponseInfo) {
 	info.Time = r.Time
 	r.ResponseInfo = info
 }
@@ -98,6 +123,47 @@ func (params *EventRetrieveParams) AppendToBody(v *url.Values) {
 	}
 	if params.Number != nil {
 		v.Add("number", strconv.Itoa(*params.Number))
+	}
+}
+
+func (params *EventMetaParams) AppendToBody(v *url.Values) {
+	if len(params.User) > 0 {
+		v.Add("user", params.User)
+	}
+	if len(params.Property) > 0 {
+		v.Add("property", params.Property)
+	}
+
+	if params.Value != nil {
+		switch value := params.Value.(type) {
+		case string:
+			v.Add("value", value)
+		case int:
+			v.Add("value", strconv.FormatInt(int64(value), 10))
+		case int64:
+			v.Add("value", strconv.FormatInt(value, 10))
+		case int32:
+			v.Add("value", strconv.FormatInt(int64(value), 10))
+		case uint:
+			v.Add("value", strconv.FormatUint(uint64(value), 10))
+		case uint64:
+			v.Add("value", strconv.FormatUint(value, 10))
+		case uint32:
+			v.Add("value", strconv.FormatUint(uint64(value), 10))
+		case float64:
+			v.Add("value", strconv.FormatFloat(value, 'f', -1, 64))
+		case bool:
+			v.Add("value", strconv.FormatBool(value))
+		default:
+			jv, _ := json.Marshal(params.Value)
+			if jv != nil {
+				v.Add("value", string(jv))
+			}
+		}
+	}
+
+	if params.Amount != nil {
+		v.Add("amount", strconv.FormatFloat(*(params.Amount), 'f', -1, 64))
 	}
 }
 

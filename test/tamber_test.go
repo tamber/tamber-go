@@ -18,8 +18,11 @@ import (
 )
 
 var (
-	TestProjectKey = "Mu6DUPXdDYe98cv5JIfX"
-	TestEngineKey  = "SbWYPBNdARfIDa0IIO9L"
+	// TestProjectKey = "Mu6DUPXdDYe98cv5JIfX"
+	// TestEngineKey  = "SbWYPBNdARfIDa0IIO9L"
+
+	TestProjectKey = "BTOb2k1KdzHXb3o3E59l"
+	TestEngineKey  = ""
 )
 
 func errFunc(exp string, err interface{}) {
@@ -176,7 +179,7 @@ func PartialTest(t *testing.T) {
 	//Check User - w/ get recs
 	u, info, err := user.Retrieve(&tamber.UserParams{
 		Id:      "user_jctzgisbru",
-		GetRecs: &tamber.DiscoverNextParams{},
+		GetRecs: &tamber.DiscoverParams{},
 	})
 	if err != nil {
 		t.Error("err:", err, "info:", info)
@@ -208,7 +211,7 @@ func PartialTest(t *testing.T) {
 	}
 
 	//Get Item's Similar Items
-	d, info, err = discover.Similar(&tamber.DiscoverParams{
+	d, info, err = discover.Basic.Similar(&tamber.DiscoverBasicParams{
 		Item:   "item_i5gq90scc1",
 		Number: tamber.Int(100),
 	})
@@ -224,6 +227,7 @@ func PartialTest(t *testing.T) {
 func TestTamberGo(t *testing.T) {
 	tamber.DefaultProjectKey = TestProjectKey
 	tamber.DefaultEngineKey = TestEngineKey
+	tamber.ApiUrl = "https://works.tamber.com/v1"
 
 	t.Logf("\n\nBasic Test\n---------\n\n")
 	BasicTest(t)
@@ -394,7 +398,7 @@ func TestTamberGo(t *testing.T) {
 
 	//discover
 	t.Log("Discover - Recommended (w/ TestEvents and Filter)")
-	d, info, err := discover.Recommended(&tamber.DiscoverParams{
+	d, info, err := discover.Basic.Recommended(&tamber.DiscoverBasicParams{
 		User:   "user_jctzgisbru",
 		Number: tamber.Int(100),
 		TestEvents: []tamber.EventParams{
