@@ -4,19 +4,17 @@ You can sign up for a Tamber account at https://tamber.com.
 
 For full API documentation, refer to https://tamber.com/docs/api.
 
-Installation
-============
+## Installation
 
 ```sh
 go get github.com/tamber/tamber-go
 ```
 
-Usage
-=====
+## Usage
 
 Tamber learns from user behaviors, so to get started all you need to do is track Events (user-item interactions) just as you would for any analytics service. Then you can initialize learning by launching an engine in the [dashboard][dashboard] and start discovering recommendations!
 
-## Track real time events
+### Track real time events
 
 Track all events (user-item interactions in your app like 'clicked', 'shared', 'purchased', etc.) to your project in real time, just like you would for a data analytics service. Note that novel users and items will automatically be created.
 
@@ -42,7 +40,7 @@ if err != nil {
 }
 ```
 
-## Discover
+### Discover
 
 Once you have tracked enough events and created your engine, you may begin using `discover` to put personalized recommendations in your app.
 
@@ -50,7 +48,7 @@ The primary methods of discovery in Tamber are the `discover.Next` and `discover
 
 `discover.Recommended` works similarly, but is optimized for a recommended section, often located on a homepage.
 
-### Up Next
+#### Up Next
 
 Keep users engaged by creating a path of discovery as they navigate from item to item, always showing the right mix of items they should check out next. Just set the user's id and the id of the item that they are navigating to / looking at.
 
@@ -83,7 +81,7 @@ for _, rec := range recommendations{
 }
 ```
 
-### Recommended
+#### Recommended
 
 To put personalized recommendations on your homepage, or in any recommended section, just call `discover.Recommended` with the user's id and the number of recommendations you want to display.
 
@@ -102,7 +100,7 @@ recommendations, info, err := discover.Recommended(&tamber.DiscoverParams{
 })
 ```
 
-#### Weekly and Daily Periodicals
+##### Weekly and Daily Periodicals
 
 Instantly deploy your own Spotify-style Discover Weekly feature, or a daily periodical with fresh recommendations updated every 24 hours.
 
@@ -118,7 +116,7 @@ recommendations, info, err := discover.Daily(&tamber.DiscoverParams{
 })
 ```
 
-#### Build Your Own Features
+##### Build Your Own Features
 
 Tamber allows you to use lower-level methods to get lists of recommended items, similar item matches, and similar items for a given user with which you can build your own discovery experiences. Importantly, these methods return raw recommendation data and are not intended to be pushed directly to users.
 
@@ -137,12 +135,11 @@ recommendations, info, err := discover.Basic.RecommendedSimilar(&tamber.Discover
 })
 ```
 
-Features
-========
+## Features
 
 The Tamber client library provides additional features that make it easy to build and run your engines.
 
-## Create historical events dataset
+### Create historical events dataset
 
 If you have historical events data you would like to upload to your project, the `tamber-go` library makes it easy to stream events to a csv file, ready for upload ([head here][historic-events] for proper instructions).
 
@@ -180,7 +177,7 @@ func main() {
 }
 ```
 
-## Stream Items
+### Stream Items
 
 If you want to add properties or tags to your items, the Stream method allows you to efficiently stream item updates. By default, item updates will automatically create novel items (you may deactivate this behavior by setting the `NoCreate` field to false).
 
@@ -220,7 +217,7 @@ if err != nil {
 }
 ```
 
-## Multiple Projects / Engines
+### Multiple Projects / Engines
 
 If you have multiple Tamber projects or engines, use the client module to separate instances.
 
@@ -243,7 +240,7 @@ if err != nil {
 }
 ```
 
-### API Response Info
+#### API Response Info
 
 The Tamber API includes useful HTTP status codes and headers in its responses. The ResponseInfo type provides access to these values, and is returned by all methods (see the `info` value in the examples).
 
