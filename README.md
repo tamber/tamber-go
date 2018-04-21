@@ -104,7 +104,7 @@ recommendations, info, err := discover.Recommended(&tamber.DiscoverParams{
 
 Instantly deploy your own Spotify-style Discover Weekly feature, or a daily periodical with fresh recommendations updated every 24 hours.
 
-```js
+```go
 recommendations, info, err := discover.Weekly(&tamber.DiscoverParams{
     User: "user_rlox8k927z7p",
     Number: 35,
@@ -120,7 +120,7 @@ recommendations, info, err := discover.Daily(&tamber.DiscoverParams{
 
 Tamber allows you to use lower-level methods to get lists of recommended items, similar item matches, and similar items for a given user with which you can build your own discovery experiences. Importantly, these methods return raw recommendation data and are not intended to be pushed directly to users.
 
-```js
+```go
 recommendations, info, err := discover.Basic.Recommended(&tamber.DiscoverBasicParams{
     User: "user_rlox8k927z7p",
 })
@@ -244,7 +244,7 @@ if err != nil {
 
 The Tamber API includes useful HTTP status codes and headers in its responses. The ResponseInfo type provides access to these values, and is returned by all methods (see the `info` value in the examples).
 
-```
+```go
 type ResponseInfo struct {
     HTTPCode           int // HTTP status code
     RateLimit          int // Limit-per-period for request method
