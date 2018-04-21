@@ -42,7 +42,7 @@ if err != nil {
 }
 ```
 
-### Discover
+## Discover
 
 Once you have tracked enough events and created your engine, you may begin using `discover` to put personalized recommendations in your app.
 
@@ -50,7 +50,7 @@ The primary methods of discovery in Tamber are the `discover.Next` and `discover
 
 `discover.Recommended` works similarly, but is optimized for a recommended section, often located on a homepage.
 
-#### Up Next
+### Up Next
 
 Keep users engaged by creating a path of discovery as they navigate from item to item, always showing the right mix of items they should check out next. Just set the user's id and the id of the item that they are navigating to / looking at.
 
@@ -83,7 +83,7 @@ for _, rec := range recommendations{
 }
 ```
 
-#### Recommended
+### Recommended
 
 To put personalized recommendations on your homepage, or in any recommended section, just call `discover.Recommended` with the user's id and the number of recommendations you want to display.
 
