@@ -23,8 +23,8 @@ func (a *API) Init(projectKey string, engineKey string, config *tamber.SessionCo
 	if config == nil {
 		config = tamber.GetDefaultSessionConfig()
 	}
-	a.Event = &event.Client{S: config, ProjectKey: projectKey, EngineKey: engineKey}
-	a.Discover = &discover.Client{S: config, ProjectKey: projectKey, EngineKey: engineKey}
+	a.Event = event.NewClient(config, projectKey, engineKey)
+	a.Discover = discover.NewClient(config, projectKey, engineKey)
 	a.User = &user.Client{S: config, ProjectKey: projectKey, EngineKey: engineKey}
 	a.Item = &item.Client{S: config, ProjectKey: projectKey, EngineKey: engineKey}
 	a.Behavior = &behavior.Client{S: config, ProjectKey: projectKey, EngineKey: engineKey}

@@ -10,19 +10,21 @@ type DiscoverParams struct {
 	User          string                 `json:"user"` // ignores empty string
 	Item          string                 `json:"item"` // ignores empty string
 	Number        *int                   `json:"number,omitempty"`
-	Page          *int                   `json:"page,omitempty"`
-	Filter        map[string]interface{} `json:"filter,omitempty"`
-	TestEvents    []EventParams          `json:"test_events,omitempty"`
-	GetProperties bool                   `json:"get_properties"`
-}
-
-type DiscoverNextParams struct {
-	User          string                 `json:"user"` // ignores empty string
-	Item          string                 `json:"item"` // ignores empty string
-	Number        *int                   `json:"number,omitempty"`
 	Filter        map[string]interface{} `json:"filter,omitempty"`
 	ExcludeItems  []string               `json:"exclude_items,omitempty"`
 	Variability   *float64               `json:"variability,omitempty"`
+	GetProperties bool                   `json:"get_properties"`
+	Continuation  bool                   `json:"continuation"`
+	NoCreate      string                 `json:"no_create"`
+}
+
+type DiscoverBasicParams struct {
+	User          string                 `json:"user"` // ignores empty string
+	Item          string                 `json:"item"` // ignores empty string
+	Number        *int                   `json:"number,omitempty"`
+	Page          *int                   `json:"page,omitempty"`
+	Filter        map[string]interface{} `json:"filter,omitempty"`
+	TestEvents    []EventParams          `json:"test_events,omitempty"`
 	GetProperties bool                   `json:"get_properties"`
 }
 
@@ -61,6 +63,37 @@ func (params *DiscoverParams) AppendToBody(v *url.Values) {
 	if params.Number != nil {
 		v.Add("number", strconv.Itoa(*params.Number))
 	}
+	if params.Variability != nil {
+		v.Add("variability", strconv.FormatFloat(*params.Variability, 'f', -1, 64))
+	}
+	filter, _ := json.Marshal(params.Filter)
+	if filter != nil {
+		v.Add("filter", string(filter))
+	}
+
+	exclude_items, _ := json.Marshal(params.ExcludeItems)
+	if exclude_items != nil {
+		v.Add("exclude_items", string(exclude_items))
+	}
+
+	v.Add("get_properties", strconv.FormatBool(params.GetProperties))
+	v.Add("continuation", strconv.FormatBool(params.Continuation))
+
+	if len(params.NoCreate) > 0 {
+		v.Add("no_create", params.NoCreate)
+	}
+}
+
+func (params *DiscoverBasicParams) AppendToBody(v *url.Values) {
+	if len(params.User) > 0 {
+		v.Add("user", params.User)
+	}
+	if len(params.Item) > 0 {
+		v.Add("item", params.Item)
+	}
+	if params.Number != nil {
+		v.Add("number", strconv.Itoa(*params.Number))
+	}
 	if params.Page != nil {
 		v.Add("page", strconv.Itoa(*params.Page))
 	}
@@ -73,32 +106,6 @@ func (params *DiscoverParams) AppendToBody(v *url.Values) {
 	test_events, _ := json.Marshal(params.TestEvents)
 	if test_events != nil {
 		v.Add("test_events", string(test_events))
-	}
-
-	v.Add("get_properties", strconv.FormatBool(params.GetProperties))
-}
-
-func (params *DiscoverNextParams) AppendToBody(v *url.Values) {
-	if len(params.User) > 0 {
-		v.Add("user", params.User)
-	}
-	if len(params.Item) > 0 {
-		v.Add("item", params.Item)
-	}
-	if params.Number != nil {
-		v.Add("number", strconv.Itoa(*params.Number))
-	}
-	if params.Variability != nil {
-		v.Add("variability", strconv.FormatFloat(*params.Variability, 'f', -1, 64))
-	}
-	filter, _ := json.Marshal(params.Filter)
-	if filter != nil {
-		v.Add("filter", string(filter))
-	}
-
-	exclude_items, _ := json.Marshal(params.ExcludeItems)
-	if exclude_items != nil {
-		v.Add("exclude_items", string(exclude_items))
 	}
 
 	v.Add("get_properties", strconv.FormatBool(params.GetProperties))
