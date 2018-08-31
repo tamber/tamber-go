@@ -2,6 +2,7 @@ package tamber
 
 import (
 	"strconv"
+	"time"
 )
 
 const (
@@ -20,6 +21,10 @@ type ResponseInfo struct {
 	RateLimitRemaining int     // Requests remaining in current window for request method
 	RateLimitReset     int     // Time in seconds until rate limits are reset
 	Time               float64 `json:"time"`
+}
+
+func (info ResponseInfo) Duration() time.Duration {
+	return time.Duration(int64(info.Time*1000)) * time.Millisecond
 }
 
 func (s *SessionConfig) NewResponse(HTTPCode int, Headers map[string][]string) ResponseInfo {

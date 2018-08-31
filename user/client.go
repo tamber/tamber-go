@@ -80,11 +80,11 @@ func (c Client) Retrieve(params *tamber.UserParams) (*tamber.User, *tamber.Respo
 	return &user.Result, &user.ResponseInfo, err
 }
 
-func List(params *tamber.UserListParams) (*tamber.Users, *tamber.ResponseInfo, error) {
+func List(params *tamber.UserListParams) (tamber.Users, *tamber.ResponseInfo, error) {
 	return getClient().List(params)
 }
 
-func (c Client) List(params *tamber.UserListParams) (*tamber.Users, *tamber.ResponseInfo, error) {
+func (c Client) List(params *tamber.UserListParams) (tamber.Users, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	result := &tamber.UsersResponse{}
@@ -94,7 +94,7 @@ func (c Client) List(params *tamber.UserListParams) (*tamber.Users, *tamber.Resp
 	if err == nil && !result.Succ {
 		err = errors.New(result.Error)
 	}
-	return &result.Result, &result.ResponseInfo, err
+	return result.Result, &result.ResponseInfo, err
 }
 
 func Search(params *tamber.UserSearchParams) (*tamber.Users, *tamber.ResponseInfo, error) {
