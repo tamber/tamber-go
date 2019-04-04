@@ -76,7 +76,6 @@ type DiscoverNextParams struct {
 	Number        *int                   `json:"number,omitempty"`
 	ExcludeItems  []string               `json:"exclude_items,omitempty"`
 	GetProperties bool                   `json:"get_properties"`
-	// NoCreate      bool                   `json:"no_create"`
 
 	Item          DiscoverItem           `json:"item"` // ignores empty string
 	Filter        map[string]interface{} `json:"filter,omitempty"`
@@ -223,50 +222,3 @@ func (r *DiscoverResponse) SetInfo(info ResponseInfo) {
 	info.Time = r.Time
 	r.ResponseInfo = info
 }
-
-/*
-type DiscoverParams struct {
-	User          DiscoverUser           `json:"user"` // ignores empty string
-	Number        *int                   `json:"number,omitempty"`
-	Filter        map[string]interface{} `json:"filter,omitempty"`
-	ExcludeItems  []string               `json:"exclude_items,omitempty"`
-	Variability   *float64               `json:"variability,omitempty"`
-	GetProperties bool                   `json:"get_properties"`
-	Continuation  bool                   `json:"continuation"`
-	NoCreate      bool                   `json:"no_create"`
-}
-
-func (params *DiscoverParams) AppendToBody(v *url.Values) {
-	user, _ := json.Marshal(params.User.GetUserParams())
-	if user != nil {
-		v.Add("user", string(user))
-	}
-	item, _ := json.Marshal(params.Item.GetItemParams())
-	if item != nil {
-		v.Add("item", string(item))
-	}
-	if params.Number != nil {
-		v.Add("number", strconv.Itoa(*params.Number))
-	}
-	if params.Variability != nil {
-		v.Add("variability", strconv.FormatFloat(*params.Variability, 'f', -1, 64))
-	}
-	filter, _ := json.Marshal(params.Filter)
-	if filter != nil {
-		v.Add("filter", string(filter))
-	}
-
-	exclude_items, _ := json.Marshal(params.ExcludeItems)
-	if exclude_items != nil {
-		v.Add("exclude_items", string(exclude_items))
-	}
-
-	v.Add("get_properties", strconv.FormatBool(params.GetProperties))
-	v.Add("continuation", strconv.FormatBool(params.Continuation))
-
-	if len(params.NoCreate) > 0 {
-		v.Add("no_create", params.NoCreate)
-	}
-}
-
- */
