@@ -17,10 +17,10 @@ var (
 )
 
 // apiversion is the currently supported API version
-const apiversion = "2018-4-16"
+const apiversion = "2019-3-31"
 
 // clientversion is the binding version
-const clientversion = "0.1.1"
+const clientversion = "0.2.0"
 
 // defaultHTTPTimeout is the default timeout on the http.Client used by the library.
 const defaultHTTPTimeout = 80 * time.Second

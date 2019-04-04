@@ -43,3 +43,13 @@ func Int(v int) *int {
 func Float(v float64) *float64 {
 	return &v
 }
+
+type StringId string
+
+func (s StringId) GetUserParams() *UserParams {
+	return &UserParams{Id: string(s)}
+}
+
+func (s StringId) GetItemParams() *ItemParams {
+	return &ItemParams{Id: string(s)}
+}
