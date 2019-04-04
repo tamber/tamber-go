@@ -11,15 +11,16 @@ type Client struct {
 	ProjectKey string
 	EngineKey  string
 	Basic      BasicClient
+	UserTrend  UserTrendClient
 }
 
 var object = "discover"
 
-func Next(params *tamber.DiscoverParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
+func Next(params *tamber.DiscoverNextParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
 	return getClient().Next(params)
 }
 
-func (c Client) Next(params *tamber.DiscoverParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
+func (c Client) Next(params *tamber.DiscoverNextParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 
@@ -32,11 +33,11 @@ func (c Client) Next(params *tamber.DiscoverParams) (*tamber.Discoveries, *tambe
 	return &discoveries.Result, &discoveries.ResponseInfo, err
 }
 
-func Recommended(params *tamber.DiscoverParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
+func Recommended(params *tamber.DiscoverRecommendedParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
 	return getClient().Recommended(params)
 }
 
-func (c Client) Recommended(params *tamber.DiscoverParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
+func (c Client) Recommended(params *tamber.DiscoverRecommendedParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 
@@ -49,11 +50,11 @@ func (c Client) Recommended(params *tamber.DiscoverParams) (*tamber.Discoveries,
 	return &discoveries.Result, &discoveries.ResponseInfo, err
 }
 
-func Weekly(params *tamber.DiscoverParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
+func Weekly(params *tamber.DiscoverPeriodicParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
 	return getClient().Weekly(params)
 }
 
-func (c Client) Weekly(params *tamber.DiscoverParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
+func (c Client) Weekly(params *tamber.DiscoverPeriodicParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 
@@ -66,11 +67,11 @@ func (c Client) Weekly(params *tamber.DiscoverParams) (*tamber.Discoveries, *tam
 	return &discoveries.Result, &discoveries.ResponseInfo, err
 }
 
-func Daily(params *tamber.DiscoverParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
+func Daily(params *tamber.DiscoverPeriodicParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
 	return getClient().Daily(params)
 }
 
-func (c Client) Daily(params *tamber.DiscoverParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
+func (c Client) Daily(params *tamber.DiscoverPeriodicParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 
@@ -119,7 +120,8 @@ func (c Client) Hot(params *tamber.DiscoverBasicParams) (*tamber.Discoveries, *t
 
 func NewClient(s *tamber.SessionConfig, project, engine string) *Client {
 	basic := BasicClient{s, project, engine}
-	return &Client{s, project, engine, basic}
+	userTrend := UserTrendClient{s, project, engine}
+	return &Client{s, project, engine, basic, userTrend}
 }
 
 func getClient() Client {

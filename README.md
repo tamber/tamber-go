@@ -66,8 +66,8 @@ tamber.DefaultProjectKey = "Mu6DUPXdDYe98cv5JIfX"
 // tamber.DefaultEngineKey = "SbWYPBNdARfIDa0IIO9L"
 
 // Get items to display directly to the user on a given item page
-recommendations, info, err := discover.Next(&tamber.DiscoverParams{
-    User: "user_rlox8k927z7p",
+recommendations, info, err := discover.Next(&tamber.DiscoverNextParams{
+    User: tamber.StringId("user_rlox8k927z7p"),
     Item: "item_wmt4fn6o4zlk",
     Number: 8,
 })

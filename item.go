@@ -13,6 +13,23 @@ type ItemParams struct {
 	Created    *int64                 `json:"created,omitempty"`
 }
 
+func (params *ItemParams) GetItemParams() *ItemParams {
+	return params
+}
+
+func (params *ItemParams) AppendToBody(v *url.Values) {
+	v.Add("id", params.Id)
+	if props, _ := json.Marshal(params.Properties); props != nil {
+		v.Add("properties", string(props))
+	}
+	if tags, _ := json.Marshal(params.Tags); tags != nil {
+		v.Add("tags", string(tags))
+	}
+	if params.Created != nil {
+		v.Add("created", strconv.FormatInt(*params.Created, 10))
+	}
+}
+
 type ItemListParams struct {
 	Number        *int                   `json:"number,omitempty"`
 	Page          *int                   `json:"page,omitempty"`
@@ -49,6 +66,21 @@ type Item struct {
 	Hotness    float64 `json:"hotness"`
 }
 
+func (item *Item) GetItemParams() *ItemParams {
+	if item == nil {
+		return nil
+	}
+	p := &ItemParams{
+		Id: item.Id,
+		Properties: item.Properties,
+		Tags: item.Tags,
+	}
+	if item.Created > 0 {
+		p.Created = &item.Created
+	}
+	return p
+}
+
 type ItemResponse struct {
 	Succ   bool   `json:"success"`
 	Result Item   `json:"result"`
@@ -73,24 +105,6 @@ func (r *ItemResponse) SetInfo(info ResponseInfo) {
 func (r *ItemsResponse) SetInfo(info ResponseInfo) {
 	info.Time = r.Time
 	r.ResponseInfo = info
-}
-
-func (params *ItemParams) AppendToBody(v *url.Values) {
-
-	v.Add("id", params.Id)
-
-	props, _ := json.Marshal(params.Properties)
-	if props != nil {
-		v.Add("properties", string(props))
-	}
-	tags, _ := json.Marshal(params.Tags)
-	if tags != nil {
-		v.Add("tags", string(tags))
-	}
-
-	if params.Created != nil {
-		v.Add("created", strconv.FormatInt(*params.Created, 10))
-	}
 }
 
 func (params *ItemUpdateParams) AppendToBody(v *url.Values) {

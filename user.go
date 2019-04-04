@@ -14,6 +14,10 @@ type UserParams struct {
 	Created  *int64                 `json:"created,omitempty"`
 }
 
+func (params *UserParams) GetUserParams() *UserParams {
+	return params
+}
+
 type UserListParams struct {
 	Number *int                   `json:"number,omitempty"`
 	Page   *int                   `json:"page,omitempty"`
@@ -37,6 +41,20 @@ type User struct {
 	Recs     Discoveries            `json:"recommended, omitempty"`
 	Metadata map[string]interface{} `json:"metadata"`
 	Created  int64                  `json:"created"`
+}
+
+func (user *User) GetUserParams() *UserParams {
+	if user == nil {
+		return nil
+	}
+	p := &UserParams{
+		Id: user.Id,
+		Metadata: user.Metadata,
+	}
+	if user.Created != 0 {
+		p.Created = &user.Created
+	}
+	return p
 }
 
 type UserResponse struct {

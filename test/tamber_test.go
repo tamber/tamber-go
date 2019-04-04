@@ -18,11 +18,8 @@ import (
 )
 
 var (
-	// TestProjectKey = "Mu6DUPXdDYe98cv5JIfX"
-	// TestEngineKey  = "SbWYPBNdARfIDa0IIO9L"
-
-	TestProjectKey = "BTOb2k1KdzHXb3o3E59l"
-	TestEngineKey  = ""
+	TestProjectKey = "Mu6DUPXdDYe98cv5JIfX"
+	TestEngineKey  = "SbWYPBNdARfIDa0IIO9L"
 )
 
 func errFunc(exp string, err interface{}) {
@@ -116,8 +113,8 @@ func BasicTest(t *testing.T) {
 	} else {
 		t.Logf("Event: %+v\n", *e)
 	}
-	d, info, err := discover.Recommended(&tamber.DiscoverParams{
-		User:   "user_jctzgisbru",
+	d, info, err := discover.Recommended(&tamber.DiscoverRecommendedParams{
+		User:   tamber.StringId("user_jctzgisbru"),
 		Number: tamber.Int(100),
 	})
 	if err != nil {
@@ -188,8 +185,8 @@ func PartialTest(t *testing.T) {
 	}
 
 	//Get User's Recommended Items
-	d, info, err := discover.Recommended(&tamber.DiscoverParams{
-		User:   "user_jctzgisbru",
+	d, info, err := discover.Recommended(&tamber.DiscoverRecommendedParams{
+		User:   tamber.StringId("user_jctzgisbru"),
 		Number: tamber.Int(100),
 	})
 	if err != nil {
@@ -227,7 +224,6 @@ func PartialTest(t *testing.T) {
 func TestTamberGo(t *testing.T) {
 	tamber.DefaultProjectKey = TestProjectKey
 	tamber.DefaultEngineKey = TestEngineKey
-	tamber.ApiUrl = "https://works.tamber.com/v1"
 
 	t.Logf("\n\nBasic Test\n---------\n\n")
 	BasicTest(t)
