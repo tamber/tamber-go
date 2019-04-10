@@ -15,6 +15,10 @@ type UserTrendClient struct {
 var UserTrend UserTrendClient
 
 func (c UserTrendClient) Popular(params *tamber.DiscoverUserTrendParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
+	if params.User == nil {
+		return nil, nil, errors.New("Nil `User` invalid. `User` must be set to either an `User` object or `StringId`.")
+	}
+
 	if c.S == nil {
 		return getClient().UserTrend.Popular(params)
 	}
@@ -31,6 +35,10 @@ func (c UserTrendClient) Popular(params *tamber.DiscoverUserTrendParams) (*tambe
 }
 
 func (c UserTrendClient) Hot(params *tamber.DiscoverUserTrendParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
+	if params.User == nil {
+		return nil, nil, errors.New("Nil `User` invalid. `User` must be set to either an `User` object or `StringId`.")
+	}
+
 	if c.S == nil {
 		return getClient().UserTrend.Hot(params)
 	}

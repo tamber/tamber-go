@@ -22,6 +22,10 @@ func Next(params *tamber.DiscoverNextParams) (*tamber.Discoveries, *tamber.Respo
 
 func (c Client) Next(params *tamber.DiscoverNextParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
+
+	if params.Item == nil {
+		return nil, nil, errors.New("Nil `Item` invalid. `Item` must be set to either an `Item` object or `StringId`.")
+	}
 	params.AppendToBody(body)
 
 	discoveries := &tamber.DiscoverResponse{}
@@ -39,6 +43,11 @@ func Recommended(params *tamber.DiscoverRecommendedParams) (*tamber.Discoveries,
 
 func (c Client) Recommended(params *tamber.DiscoverRecommendedParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
+
+	if params.User == nil {
+		return nil, nil, errors.New("Nil `User` invalid. `User` must be set to either an `User` object or `StringId`.")
+	}
+
 	params.AppendToBody(body)
 
 	discoveries := &tamber.DiscoverResponse{}
@@ -55,6 +64,10 @@ func Weekly(params *tamber.DiscoverPeriodicParams) (*tamber.Discoveries, *tamber
 }
 
 func (c Client) Weekly(params *tamber.DiscoverPeriodicParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
+	if params.User == nil {
+		return nil, nil, errors.New("Nil `User` invalid. `User` must be set to either an `User` object or `StringId`.")
+	}
+
 	body := &url.Values{}
 	params.AppendToBody(body)
 
@@ -72,6 +85,10 @@ func Daily(params *tamber.DiscoverPeriodicParams) (*tamber.Discoveries, *tamber.
 }
 
 func (c Client) Daily(params *tamber.DiscoverPeriodicParams) (*tamber.Discoveries, *tamber.ResponseInfo, error) {
+	if params.User == nil {
+		return nil, nil, errors.New("Nil `User` invalid. `User` must be set to either an `User` object or `StringId`.")
+	}
+
 	body := &url.Values{}
 	params.AppendToBody(body)
 
