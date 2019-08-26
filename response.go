@@ -15,6 +15,17 @@ type Response interface {
 	SetInfo(ResponseInfo)
 }
 
+type TamberResponse struct {
+	Succ  bool    `json:"success"`
+	Error string  `json:"error"`
+	Time  float64 `json:"time"`
+	ResponseInfo
+}
+
+func (r *TamberResponse) SetInfo(info ResponseInfo) {
+	r.ResponseInfo = info
+}
+
 type ResponseInfo struct {
 	HTTPCode           int     // HTTP status code
 	RateLimit          int     // Limit-per-period for request method

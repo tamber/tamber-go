@@ -104,6 +104,7 @@ type AuthToken struct {
 }
 
 // Responses
+
 type AccountResponse struct {
 	Succ   bool        `json:"success"`
 	Result AccountInfo `json:"result"`

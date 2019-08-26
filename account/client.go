@@ -2,10 +2,11 @@ package account
 
 import (
 	"errors"
-	tamber "github.com/tamber/tamber-go"
 	"net/url"
 	"strconv"
 	"time"
+
+	tamber "github.com/tamber/tamber-go"
 )
 
 var (
@@ -13,6 +14,7 @@ var (
 	projectObject       = "project"
 	projectParentObject = "project_parent"
 	engineObject        = "engine"
+	blockObject         = "block"
 )
 
 func UploadEventsDataset(projectId uint32, filepath string) (*tamber.Dataset, error) {
@@ -199,6 +201,60 @@ func (a *Account) DeleteEngine(engineId uint32) error {
 		err = errors.New(resp.Error)
 	}
 	return err
+}
+
+func CreateBlock(params *tamber.CreateBlockParams) (*tamber.Block, error) {
+	return getAccount().CreateBlock(params)
+}
+
+func (a *Account) CreateBlock(params *tamber.CreateBlockParams) (*tamber.Block, error) {
+	body := &url.Values{}
+	params.AppendToBody(body)
+	response := &tamber.BlockResponse{}
+	var err error
+
+	err = a.updateToken()
+	if err != nil {
+		return nil, err
+	}
+
+	if len(params.Name) > 0 {
+		err = a.S.Call("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, blockObject, "create", body, response)
+	} else {
+		err = errors.New("Invalid create engine params: name needs to be set")
+	}
+
+	if !response.Succ {
+		err = errors.New(response.Error)
+	}
+	return &response.Result, err
+}
+
+func RemoveBlock(params *tamber.RemoveBlockParams) (*tamber.Block, error) {
+	return getAccount().RemoveBlock(params)
+}
+
+func (a *Account) RemoveBlock(params *tamber.RemoveBlockParams) (*tamber.Block, error) {
+	body := &url.Values{}
+	params.AppendToBody(body)
+	response := &tamber.BlockResponse{}
+	var err error
+
+	err = a.updateToken()
+	if err != nil {
+		return nil, err
+	}
+
+	if len(params.Name) > 0 {
+		err = a.S.Call("POST", "", a.AuthToken.AccountId, a.AuthToken.Token, blockObject, "create", body, response)
+	} else {
+		err = errors.New("Invalid create engine params: name needs to be set")
+	}
+
+	if !response.Succ {
+		err = errors.New(response.Error)
+	}
+	return &response.Result, err
 }
 
 func Retrieve() (*tamber.AccountInfo, error) {
