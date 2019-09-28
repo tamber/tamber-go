@@ -6,20 +6,20 @@ import (
 	"strconv"
 )
 
-type DiscoverUser interface{
+type DiscoverUser interface {
 	GetUserParams() *UserParams
 }
 
-type DiscoverItem interface{
+type DiscoverItem interface {
 	GetItemParams() *ItemParams
 }
 
 type DiscoverCommonParams struct {
-	User          DiscoverUser           `json:"user"`
-	Number        *int                   `json:"number,omitempty"`
-	ExcludeItems  []string               `json:"exclude_items,omitempty"`
-	GetProperties bool                   `json:"get_properties"`
-	NoCreate      bool                   `json:"no_create"`
+	User          DiscoverUser `json:"user"`
+	Number        *int         `json:"number,omitempty"`
+	ExcludeItems  []string     `json:"exclude_items,omitempty"`
+	GetProperties bool         `json:"get_properties"`
+	NoCreate      bool         `json:"no_create"`
 }
 
 func (params *DiscoverCommonParams) AppendToBody(v *url.Values) {
@@ -39,24 +39,24 @@ func (params *DiscoverCommonParams) AppendToBody(v *url.Values) {
 }
 
 type DiscoverRecommendedParams struct {
-	User          DiscoverUser           `json:"user"`
-	Number        *int                   `json:"number,omitempty"`
-	ExcludeItems  []string               `json:"exclude_items,omitempty"`
-	GetProperties bool                   `json:"get_properties"`
-	NoCreate      bool                   `json:"no_create"`
+	User          DiscoverUser `json:"user"`
+	Number        *int         `json:"number,omitempty"`
+	ExcludeItems  []string     `json:"exclude_items,omitempty"`
+	GetProperties bool         `json:"get_properties"`
+	NoCreate      bool         `json:"no_create"`
 
-	Filter        map[string]interface{} `json:"filter,omitempty"`
-	Variability   *float64               `json:"variability,omitempty"`
-	Continuation  bool                   `json:"continuation"`
+	Filter       map[string]interface{} `json:"filter,omitempty"`
+	Variability  *float64               `json:"variability,omitempty"`
+	Continuation bool                   `json:"continuation"`
 }
 
 func (p *DiscoverRecommendedParams) GetDiscoverCommonParams() *DiscoverCommonParams {
 	return &DiscoverCommonParams{
-		User: p.User,
-		Number: p.Number,
-		ExcludeItems: p.ExcludeItems,
+		User:          p.User,
+		Number:        p.Number,
+		ExcludeItems:  p.ExcludeItems,
 		GetProperties: p.GetProperties,
-		NoCreate: p.NoCreate,
+		NoCreate:      p.NoCreate,
 	}
 }
 
@@ -72,23 +72,23 @@ func (params *DiscoverRecommendedParams) AppendToBody(v *url.Values) {
 }
 
 type DiscoverNextParams struct {
-	User          DiscoverUser           `json:"user"`
-	Number        *int                   `json:"number,omitempty"`
-	ExcludeItems  []string               `json:"exclude_items,omitempty"`
-	GetProperties bool                   `json:"get_properties"`
+	User          DiscoverUser `json:"user"`
+	Number        *int         `json:"number,omitempty"`
+	ExcludeItems  []string     `json:"exclude_items,omitempty"`
+	GetProperties bool         `json:"get_properties"`
 
-	Item          DiscoverItem           `json:"item"` // ignores empty string
-	Filter        map[string]interface{} `json:"filter,omitempty"`
-	Variability   *float64               `json:"variability,omitempty"`
-	Continuation  bool                   `json:"continuation"`
-	NoCreate      string                 `json:"no_create"`
+	Item         DiscoverItem           `json:"item"` // ignores empty string
+	Filter       map[string]interface{} `json:"filter,omitempty"`
+	Variability  *float64               `json:"variability,omitempty"`
+	Continuation bool                   `json:"continuation"`
+	NoCreate     string                 `json:"no_create"`
 }
 
 func (p *DiscoverNextParams) GetDiscoverCommonParams() *DiscoverCommonParams {
 	return &DiscoverCommonParams{
-		User: p.User,
-		Number: p.Number,
-		ExcludeItems: p.ExcludeItems,
+		User:          p.User,
+		Number:        p.Number,
+		ExcludeItems:  p.ExcludeItems,
 		GetProperties: p.GetProperties,
 	}
 }
@@ -111,10 +111,6 @@ func (params *DiscoverNextParams) AppendToBody(v *url.Values) {
 }
 
 type DiscoverPeriodicParams DiscoverCommonParams
-
-func (params *DiscoverPeriodicParams) AppendToBody(v *url.Values) {
-	params.AppendToBody(v)
-}
 
 type DiscoverUserTrendParams struct {
 	User          DiscoverUser           `json:"user"`
