@@ -110,7 +110,7 @@ func (params *DiscoverNextParams) AppendToBody(v *url.Values) {
 	}
 }
 
-type DiscoverPeriodicParams DiscoverCommonParams
+type DiscoverPeriodicParams = DiscoverCommonParams
 
 type DiscoverUserTrendParams struct {
 	User          DiscoverUser           `json:"user"`
