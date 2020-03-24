@@ -38,7 +38,7 @@ type User struct {
 	Id       string                 `json:"id"`
 	Object   string                 `json:"object"`
 	Events   []Event                `json:"events"`
-	Recs     Discoveries            `json:"recommended, omitempty"`
+	Recs     Discoveries            `json:"recommended,omitempty"`
 	Metadata map[string]interface{} `json:"metadata"`
 	Created  int64                  `json:"created"`
 }
@@ -48,7 +48,7 @@ func (user *User) GetUserParams() *UserParams {
 		return nil
 	}
 	p := &UserParams{
-		Id: user.Id,
+		Id:       user.Id,
 		Metadata: user.Metadata,
 	}
 	if user.Created != 0 {

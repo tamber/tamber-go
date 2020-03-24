@@ -7,13 +7,13 @@ import (
 )
 
 type EventParams struct {
-	User     string   `json:"user"`     // required
-	Item     string   `json:"item"`     // required
-	Behavior string   `json:"behavior"` // required
-	Amount   *float64 `json:"amount,omitempty"`
-	Hit      *bool    `json:"hit,omitempty"`
-	Context  []string `json:"context,omitempty"`
-	Created  *int64   `json:"created,omitempty"`
+	User     string                 `json:"user"`     // required
+	Item     string                 `json:"item"`     // required
+	Behavior string                 `json:"behavior"` // required
+	Amount   *float64               `json:"amount,omitempty"`
+	Hit      *bool                  `json:"hit,omitempty"`
+	Context  map[string]interface{} `json:"context,omitempty"`
+	Created  *int64                 `json:"created,omitempty"`
 	// GetRecs can only be set when making event track requests.
 	GetRecs *DiscoverParams `json:"get_recs,omitempty"`
 }
