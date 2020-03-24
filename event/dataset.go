@@ -2,23 +2,33 @@ package event
 
 import (
 	"encoding/csv"
+	"encoding/json"
 	"errors"
 	"fmt"
-	tamber "github.com/tamber/tamber-go"
 	"os"
 	"strconv"
+
+	tamber "github.com/tamber/tamber-go"
 )
 
-var lineCols = []string{"user", "item", "behavior", "value", "created"}
+var lineCols = []string{"user", "item", "behavior", "value", "created", "context"}
 
 func TrackToCSV(writer *csv.Writer, e *tamber.Event) error {
-	return writer.Write([]string{
+	out := []string{
 		e.User,
 		e.Item,
 		e.Behavior,
 		strconv.FormatFloat(e.Amount, 'f', -1, 64),
 		strconv.FormatInt(e.Created, 10),
-	})
+	}
+	if e.Context != nil {
+		context, err := json.Marshal(e.Context)
+		if err != nil {
+			return err
+		}
+		out = append(out, context)
+	}
+	return writer.Write(out)
 }
 
 // Returns csv writer for supplied filepath, a defer function, and an error.
@@ -84,6 +94,10 @@ func parseLine(line []string) (e *tamber.Event, err error) {
 		case "created":
 			e.Created, err = strconv.ParseInt(x, 10, 64)
 			if err != nil {
+				return nil, err
+			}
+		case "context":
+			if err := json.Unmarshal(x, &e.Context); err != nil {
 				return nil, err
 			}
 		}
