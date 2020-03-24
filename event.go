@@ -25,12 +25,14 @@ type EventRetrieveParams struct {
 }
 
 type Event struct {
-	User     string  `json:"user"`
-	Item     string  `json:"item"`
-	Behavior string  `json:"behavior"`
-	Amount   float64 `json:"amount"`
-	Created  int64   `json:"created"`
-	Object   string  `json:"object"`
+	User     string                 `json:"user"`
+	Item     string                 `json:"item"`
+	Behavior string                 `json:"behavior"`
+	Amount   float64                `json:"amount"`
+	Hit      *bool                  `json:"hit"`
+	Context  map[string]interface{} `json:"context"`
+	Created  int64                  `json:"created"`
+	Object   string                 `json:"object"`
 }
 
 type Events []*Event

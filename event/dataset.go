@@ -14,19 +14,21 @@ import (
 var lineCols = []string{"user", "item", "behavior", "value", "created", "context"}
 
 func TrackToCSV(writer *csv.Writer, e *tamber.Event) error {
+	var context string
+	if e.Context != nil {
+		_context, err := json.Marshal(e.Context)
+		if err != nil {
+			return err
+		}
+		context = string(_context)
+	}
 	out := []string{
 		e.User,
 		e.Item,
 		e.Behavior,
 		strconv.FormatFloat(e.Amount, 'f', -1, 64),
 		strconv.FormatInt(e.Created, 10),
-	}
-	if e.Context != nil {
-		context, err := json.Marshal(e.Context)
-		if err != nil {
-			return err
-		}
-		out = append(out, context)
+		context,
 	}
 	return writer.Write(out)
 }
@@ -97,7 +99,7 @@ func parseLine(line []string) (e *tamber.Event, err error) {
 				return nil, err
 			}
 		case "context":
-			if err := json.Unmarshal(x, &e.Context); err != nil {
+			if err := json.Unmarshal([]byte(x), &e.Context); err != nil {
 				return nil, err
 			}
 		}
