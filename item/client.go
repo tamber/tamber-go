@@ -2,10 +2,11 @@ package item
 
 import (
 	"errors"
-	tamber "github.com/tamber/tamber-go"
 	"net/url"
 	"sync"
 	"time"
+
+	tamber "github.com/tamber/tamber-go"
 )
 
 type Client struct {
@@ -38,6 +39,28 @@ func (c Client) Create(params *tamber.ItemParams) (*tamber.Item, *tamber.Respons
 	return &item.Result, &item.ResponseInfo, err
 }
 
+func Save(params *tamber.ItemSaveParams) (*tamber.Item, *tamber.ResponseInfo, error) {
+	return getClient().Save(params)
+}
+
+func (c Client) Save(params *tamber.ItemSaveParams) (*tamber.Item, *tamber.ResponseInfo, error) {
+	body := &url.Values{}
+	params.AppendToBody(body)
+	item := &tamber.ItemResponse{}
+	var err error
+
+	if len(params.Id) > 0 {
+		err = c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "save", body, item)
+	} else {
+		err = errors.New("Invalid item params: id needs to be set")
+	}
+
+	if err == nil && !item.Succ {
+		err = errors.New(item.Error)
+	}
+	return &item.Result, &item.ResponseInfo, err
+}
+
 func Update(params *tamber.ItemUpdateParams) (*tamber.Item, *tamber.ResponseInfo, error) {
 	return getClient().Update(params)
 }
@@ -52,6 +75,28 @@ func (c Client) Update(params *tamber.ItemUpdateParams) (*tamber.Item, *tamber.R
 		err = c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "update", body, item)
 	} else {
 		err = errors.New("Invalid item params: id needs to be set")
+	}
+
+	if err == nil && !item.Succ {
+		err = errors.New(item.Error)
+	}
+	return &item.Result, &item.ResponseInfo, err
+}
+
+func Batch(params *tamber.ItemBatchParams) (*tamber.Items, *tamber.ResponseInfo, error) {
+	return getClient().Batch(params)
+}
+
+func (c Client) Batch(params *tamber.ItemBatchParams) (*tamber.Items, *tamber.ResponseInfo, error) {
+	body := &url.Values{}
+	params.AppendToBody(body)
+	item := &tamber.ItemsResponse{}
+	var err error
+
+	if len(params.Items) > 0 {
+		err = c.S.Call("POST", "", c.ProjectKey, c.EngineKey, object, "batch", body, item)
+	} else {
+		err = errors.New("Invalid batch params: `Items` needs to be set")
 	}
 
 	if err == nil && !item.Succ {

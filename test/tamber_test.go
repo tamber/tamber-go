@@ -3,6 +3,12 @@ package test
 import (
 	"encoding/csv"
 	"fmt"
+	"net/http"
+	"os"
+	"strings"
+	"testing"
+	"time"
+
 	tamber "github.com/tamber/tamber-go"
 	"github.com/tamber/tamber-go/behavior"
 	"github.com/tamber/tamber-go/client"
@@ -10,11 +16,6 @@ import (
 	"github.com/tamber/tamber-go/event"
 	"github.com/tamber/tamber-go/item"
 	"github.com/tamber/tamber-go/user"
-	"net/http"
-	"os"
-	"strings"
-	"testing"
-	"time"
 )
 
 var (
@@ -258,7 +259,7 @@ func TestTamberGo(t *testing.T) {
 	}
 
 	t.Log("User -- Update")
-	u, info, err = user.Update(&tamber.UserParams{
+	u, info, err = user.Save(&tamber.UserParams{
 		Id: "user_fwu592pwmo",
 		Metadata: map[string]interface{}{
 			"city": "Mountain View, CA",

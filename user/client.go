@@ -2,8 +2,9 @@ package user
 
 import (
 	"errors"
-	tamber "github.com/tamber/tamber-go"
 	"net/url"
+
+	tamber "github.com/tamber/tamber-go"
 )
 
 type Client struct {
@@ -36,11 +37,11 @@ func (c Client) Create(params *tamber.UserParams) (*tamber.User, *tamber.Respons
 	return &user.Result, &user.ResponseInfo, err
 }
 
-func Update(params *tamber.UserParams) (*tamber.User, *tamber.ResponseInfo, error) {
-	return getClient().Update(params)
+func Save(params *tamber.UserParams) (*tamber.User, *tamber.ResponseInfo, error) {
+	return getClient().Save(params)
 }
 
-func (c Client) Update(params *tamber.UserParams) (*tamber.User, *tamber.ResponseInfo, error) {
+func (c Client) Save(params *tamber.UserParams) (*tamber.User, *tamber.ResponseInfo, error) {
 	body := &url.Values{}
 	params.AppendToBody(body)
 	user := &tamber.UserResponse{}
@@ -56,6 +57,16 @@ func (c Client) Update(params *tamber.UserParams) (*tamber.User, *tamber.Respons
 		err = errors.New(user.Error)
 	}
 	return &user.Result, &user.ResponseInfo, err
+}
+
+// User `Update()` deprecated, use `Save()` instead.
+func Update(params *tamber.UserParams) (*tamber.User, *tamber.ResponseInfo, error) {
+	return getClient().Save(params)
+}
+
+// User `Update()` deprecated, use `Save()` instead.
+func (c Client) Update(params *tamber.UserParams) (*tamber.User, *tamber.ResponseInfo, error) {
+	return c.Save(params)
 }
 
 func Retrieve(params *tamber.UserParams) (*tamber.User, *tamber.ResponseInfo, error) {

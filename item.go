@@ -10,6 +10,7 @@ type ItemParams struct {
 	Id         string                 `json:"id"`
 	Properties map[string]interface{} `json:"properties,omitempty"`
 	Tags       []string               `json:"tags,omitempty"`
+	Hidden     *bool                  `json:"hidden,omitempty"`
 	Created    *int64                 `json:"created,omitempty"`
 }
 
@@ -37,6 +38,33 @@ type ItemListParams struct {
 	IncludeHidden *bool                  `json:"include_hidden,omitempty"`
 }
 
+type ItemSaveParams struct {
+	ItemParams
+	Mode *string `json:"mode,omitempty"`
+}
+
+func (params *ItemSaveParams) AppendToBody(v *url.Values) {
+	params.ItemParams.AppendToBody(v)
+	if params.Mode != nil {
+		v.Add("mode", *params.Mode)
+	}
+}
+
+type ItemBatchParams struct {
+	Items []ItemParams `json:"items"`
+	Mode  *string      `json:"mode,omitempty"`
+}
+
+func (params *ItemBatchParams) AppendToBody(v *url.Values) {
+	items, _ := json.Marshal(params.Items)
+	if items != nil {
+		v.Add("items", string(items))
+	}
+	if params.Mode != nil {
+		v.Add("mode", *params.Mode)
+	}
+}
+
 type ItemFeatures struct {
 	Properties map[string]interface{} `json:"properties"`
 	Tags       []string               `json:"tags"`
@@ -61,9 +89,6 @@ type Item struct {
 	Tags       []string               `json:"tags"`
 	Created    int64                  `json:"created"`
 	Hidden     bool                   `json:"hidden"`
-	// Trends data only returned if the engine key is set, or the project has a default engine
-	Popularity float64 `json:"popularity"`
-	Hotness    float64 `json:"hotness"`
 }
 
 func (item *Item) GetItemParams() *ItemParams {
@@ -71,9 +96,9 @@ func (item *Item) GetItemParams() *ItemParams {
 		return nil
 	}
 	p := &ItemParams{
-		Id: item.Id,
+		Id:         item.Id,
 		Properties: item.Properties,
-		Tags: item.Tags,
+		Tags:       item.Tags,
 	}
 	if item.Created > 0 {
 		p.Created = &item.Created
